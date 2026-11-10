@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>E-Spec — Form Spesifikasi Barang</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="toolbar no-print">
+  <div class="brand">
+    <b class="mark">E</b>
+    <div>
+      <strong>E-Spec</strong>
+      <small>FORM SPESIFIKASI BARANG</small>
+    </div>
+  </div>
+
+  <div>
+    <button type="button" id="resetBtn">Reset form</button>
+    <button type="button" id="saveAdminBtn">Simpan untuk Admin</button>
+    <button type="button" class="primary" id="pdfBtn">
+      Unduh / Cetak PDF ↗
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <!-- JUDUL HALAMAN -->
+  <div class="intro no-print">
+    <small>QUESTIONNAIRE WORKSPACE</small>
+    <h1>Form spesifikasi <em>Barang.</em></h1>
+    <p>
+      Isi pertanyaan berikut. Jawaban akan otomatis dimasukkan
+      ke dokumen spesifikasi barang.
+    </p>
+  </div>
+
+  <!-- NAVIGASI -->
+  <div class="service-actions no-print">
+    <a href="pilih-spesifikasi.html">
+      ← Kembali ke pilihan spesifikasi
+    </a>
+  </div>
+
+
+  <!-- ==================================================
+       KUESIONER SPESIFIKASI BARANG
+  =================================================== -->
+
+
+<form id="questionnaireForm" class="questionnaire-screen no-print">
+
+  <p class="questionnaire-help">
+    Lengkapi seluruh parameter spesifikasi barang. Field bertanda * wajib diisi.
+    Data akan dimasukkan ke dalam dokumen spesifikasi PDF.
+  </p>
+
+  <!-- 01. VERSION & IDENTITY -->
+  <section class="q-section">
+    <div class="q-section-heading">
+      <span class="q-number">01</span>
+      <h2>VERSION & IDENTITY</h2>
+    </div>
+
+    <div class="q-grid">
+
+      <label class="q-field">
+        Version
+<input
+  type="text"
+  id="version"
+  name="version"
+  value="00"
+  readonly
+>
+      </label>
+
+      <label class="q-field">
+        Created Date
+        <input
+  type="date"
+  id="createdDate"
+  name="createdDate"
+  readonly
+>
+      </label>
+
+      <label class="q-field">
+        Plant *
+        <select id="plantCodeSelect" name="plant" required>
+          <option value="">-- Pilih Plant --</option>
+          <option value="1210 - Plant Gending">1210 - Plant Gending</option>
+          <option value="1220 - Plant Cikarang">1220 - Plant Cikarang</option>
+          <option value="1230 - Plant Minahasa Selatan">1230 - Plant Minahasa Selatan</option>
+        </select>
+      </label>
+
+      <label class="q-field">
+        Plant Description
+        <input type="text" id="plantDescInput" readonly>
+      </label>
+
+      <label class="q-field">
+        Requestor *
+        <input type="text" name="requestor" required placeholder="Nama pemohon">
+      </label>
+
+      <label class="q-field">
+        Departemen / Sub Departemen *
+        <select name="department" id="deptSelect" required>
+          <option value="">-- Pilih Plant Terlebih Dahulu --</option>
+        </select>
+      </label>
+
+      <label class="q-field">
+        Material Group *
+        <select name="materialGroup" required>
+          <option value="">-- Pilih Material Group --</option>
+          <option value="Barang Umum">Barang Umum</option>
+          <option value="Barang Teknik">Barang Teknik</option>
+          <option value="Raw Material Sasa">Raw Material Sasa</option>
+          <option value="Chemical">Chemical</option>
+          <option value="Packaging Material Sasa">Packaging Material Sasa</option>
+          <option value="Bahan Bakar">Bahan Bakar</option>
+          <option value="Asset">Asset</option>
+          <option value="Peralatan Lab">Peralatan Lab</option>
+          <option value="Contractor & Service">Contractor & Service</option>
+          <option value="Trade Goods">Trade Goods</option>
+          <option value="Advertising">Advertising</option>
+          <option value="Promotion">Promotion</option>
+          <option value="Shipment Cost">Shipment Cost</option>
+          <option value="Research">Research</option>
+          <option value="Inventory">Inventory</option>
+          <option value="Packaging Material">Packaging Material</option>
+          <option value="Others">Others</option>
+        </select>
+      </label>
+
+<div class="q-field">
+  <span>Material Category *</span>
+
+  <div class="q-checks material-category-checks">
+
+    <label class="q-check">
+      <input
+        type="checkbox"
+        name="materialCategory"
+        value="Asset Barang"
+      >
+      Asset Barang
+    </label>
+
+    <label class="q-check">
+      <input
+        type="checkbox"
+        name="materialCategory"
+        value="Expense Barang Umum / Teknik"
+      >
+      Expense Barang Umum / Teknik
+    </label>
+
+    <label class="q-check">
+      <input
+        type="checkbox"
+        name="materialCategory"
+        value="Expense Bahan Kimia / Sanitasi / Pelumas"
+      >
+      Expense Bahan Kimia / Sanitasi / Pelumas
+    </label>
+
+  </div>
+</div>
+
+      <!-- Checkbox tersembunyi untuk kompatibilitas template PDF lama -->
+      <div hidden>
+        <input type="checkbox" name="category" value="Asset Barang">
+        <input type="checkbox" name="category" value="Expense Barang General">
+        <input type="checkbox" name="category" value="Expense Barang Kimia">
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- 02. PURCHASE OBJECTIVE -->
+  <section class="q-section">
+    <div class="q-section-heading">
+      <span class="q-number">02</span>
+      <h2>PURCHASE OBJECTIVE</h2>
+    </div>
+
+    <div class="q-grid">
+
+      <label class="q-field">
+        Reason to Procure *
+        <select name="reasonChoice" id="reasonChoice" required>
+          <option value="">-- Pilih Reason --</option>
+          <option value="Replacement">Replacement</option>
+          <option value="Stock Replenishment">Stock Replenishment</option>
+          <option value="New Project">New Project</option>
+          <option value="Trial">Trial</option>
+          <option value="Others">Others</option>
+        </select>
+      </label>
+
+      <label class="q-field" id="reasonOthersBarang" hidden>
+        Reason Others *
+
+
+        <input
+  type="text"
+  name="reasonOther"
+  id="reasonOther"
+  placeholder="Masukkan alasan lainnya"
+  disabled
+>
+      </label>
+
+      <label class="q-field">
+        Location
+        <input
+          type="text"
+          name="location"
+          placeholder="Lokasi penggunaan barang"
+        >
+      </label>
+
+      <input type="hidden" name="reason" id="reasonFinal">
+
+    </div>
+  </section>
+
+
+  <!-- 03. SPECIFICATION -->
+  <section class="q-section">
+    <div class="q-section-heading">
+      <span class="q-number">03</span>
+      <h2>SPECIFICATION</h2>
+    </div>
+
+    <!-- GENERAL SPECIFICATION -->
+    <div class="q-subsection">
+      <h3>A. GENERAL SPECIFICATION</h3>
+
+      <div class="q-grid">
+
+        <label class="q-field wide">
+          Material Description *
+          <input
+            type="text"
+            name="materialDescription"
+            placeholder="Masukkan deskripsi material"
+            required
+          >
+        </label>
+
+        <label class="q-field">
+          Material Code
+          <input type="text" name="materialCode" placeholder="Kode material">
+        </label>
+
+        <label class="q-field">
+          Type / Model / Part Number
+          <input type="text" name="partNumber">
+        </label>
+
+        <label class="q-field">
+          Varians
+          <input type="text" name="variant">
+        </label>
+
+
+<!-- DIMENSION -->
+<div class="q-field dimension-field">
+  <span>Dimension</span>
+
+<div id="dimensionRows">
+  <div class="dimension-row">
+    <select class="dimension-type">
+      <option value="">-- Pilih Dimension --</option>
+      <option value="Length">Length</option>
+      <option value="Width">Width</option>
+      <option value="Height">Height</option>
+      <option value="Thickness">Thickness</option>
+      <option value="Inner Diameter">Inner Diameter</option>
+      <option value="Outer Diameter">Outer Diameter</option>
+      <option value="Diameter Nominal">Diameter Nominal</option>
+      <option value="Phase">Phase</option>
+    </select>
+
+    <input
+      type="number"
+      class="dimension-value"
+      placeholder="Masukkan nilai"
+      step="any"
+    >
+
+    <select class="dimension-symbol">
+      <option value="x">x</option>
+      <option value="~">~</option>
+      <option value="/">/</option>
+      <option value="±">±</option>
+      <option value="-">-</option>
+    </select>
+
+    <button
+      type="button"
+      class="remove-dimension"
+      title="Hapus"
+    >&times;</button>
+  </div>
+</div>
+
+  <button
+    type="button"
+    id="addDimensionBtn"
+    class="add-dimension-btn"
+  >
+    + Tambah Dimension
+  </button>
+</div>
+        <input type="hidden" name="dimension" id="dimensionFinal">
+
+        <label class="q-field">
+          Brand
+          <input type="text" name="brand">
+        </label>
+
+        <label class="q-field">
+          Catalogue *
+          <input type="text" name="catalogue" required>
+        </label>
+
+        
+<label class="q-field">
+  UoM *
+  <select name="uom" required>
+    <option value="">-- Pilih UoM --</option>
+    <option value='"'>"</option>
+    <option value='2"'>2"</option>
+    <option value='3"'>3"</option>
+    <option value="%">%</option>
+    <option value="%B">%B</option>
+    <option value="%O">%O</option>
+    <option value="%T">%T</option>
+    <option value="%V">%V</option>
+    <option value="°B">°B</option>
+    <option value="000">000</option>
+    <option value="001">001</option>
+    <option value="10M">10M</option>
+    <option value="ABS">ABS</option>
+    <option value="ACR">ACR</option>
+    <option value="AU">AU</option>
+    <option value="Bar">Bar</option>
+    <option value="BAG">BAG</option>
+    <option value="BB">BB</option>
+    <option value="BD">BD</option>
+    <option value="BDK">BDK</option>
+    <option value="BLD">BLD</option>
+    <option value="BOX">BOX</option>
+    <option value="BTG">BTG</option>
+    <option value="BTL">BTL</option>
+    <option value="C1M">C1M</option>
+    <option value="C3S">C3S</option>
+    <option value="CAN">CAN</option>
+    <option value="CAR">CAR</option>
+    <option value="CCM">CCM</option>
+    <option value="CD3">CD3</option>
+    <option value="CFG">CFG</option>
+    <option value="CFMg">CFMg</option>
+    <option value="CFU">CFU</option>
+    <option value="CFM">CFM</option>
+    <option value="CL">CL</option>
+    <option value="CM">CM</option>
+    <option value="CM2">CM2</option>
+    <option value="CMS">CMS</option>
+    <option value="cP">cP</option>
+    <option value="cPs">cPs</option>
+    <option value="CR">CR</option>
+    <option value="CRT">CRT</option>
+    <option value="CS">CS</option>
+    <option value="D">D</option>
+    <option value="DAY">DAY</option>
+    <option value="DEG">DEG</option>
+    <option value="DM">DM</option>
+    <option value="DR">DR</option>
+    <option value="DUS">DUS</option>
+    <option value="DZ">DZ</option>
+    <option value="EA">EA</option>
+    <option value="EML">EML</option>
+    <option value="EU">EU</option>
+    <option value="FAU">FAU</option>
+    <option value="FOZ">FOZ</option>
+    <option value="FT">FT</option>
+    <option value="FT2">FT2</option>
+    <option value="FT3">FT3</option>
+    <option value="G">G</option>
+    <option value="G/L">G/L</option>
+    <option value="GAI">GAI</option>
+    <option value="GAL">GAL</option>
+    <option value="GAU">GAU</option>
+    <option value="GJ">GJ</option>
+    <option value="GLI">GLI</option>
+    <option value="GLN">GLN</option>
+    <option value="GM">GM</option>
+    <option value="GM2">GM2</option>
+    <option value="GM3">GM3</option>
+    <option value="GOH">GOH</option>
+    <option value="GPH">GPH</option>
+    <option value="GPM">GPM</option>
+    <option value="GR">GR</option>
+    <option value="GRO">GRO</option>
+    <option value="H">H</option>
+    <option value="HA">HA</option>
+    <option value="HL">HL</option>
+    <option value="HR">HR</option>
+    <option value="IB">IB</option>
+    <option value="JKG">JKG</option>
+    <option value="JKK">JKK</option>
+    <option value="JMO">JMO</option>
+    <option value="JRG">JRG</option>
+    <option value="KAI">KAI</option>
+    <option value="KD3">KD3</option>
+    <option value="KG">KG</option>
+    <option value="kgb">kgb</option>
+    <option value="KGM">KGM</option>
+    <option value="KGS">KGS</option>
+    <option value="KGV">KGV</option>
+    <option value="KIK">KIK</option>
+    <option value="KJK">KJK</option>
+    <option value="KJM">KJM</option>
+    <option value="KL">KL</option>
+    <option value="KLG">KLG</option>
+    <option value="KM">KM</option>
+    <option value="KM2">KM2</option>
+    <option value="KMH">KMH</option>
+    <option value="KMN">KMN</option>
+    <option value="KMS">KMS</option>
+    <option value="KPA">KPA</option>
+    <option value="KRG">KRG</option>
+    <option value="KT">KT</option>
+    <option value="KVA">KVA</option>
+    <option value="L">L</option>
+    <option value="LB">LB</option>
+    <option value="LBR">LBR</option>
+    <option value="LHK">LHK</option>
+    <option value="LJR">LJR</option>
+    <option value="LMI">LMI</option>
+    <option value="LMS">LMS</option>
+    <option value="LOT">LOT</option>
+    <option value="LPH">LPH</option>
+    <option value="M">M</option>
+    <option value="M-2">M-2</option>
+    <option value="M/H">M/H</option>
+    <option value="M/L">M/L</option>
+    <option value="M/M">M/M</option>
+    <option value="M/S">M/S</option>
+    <option value="M1">M1</option>
+    <option value="M2">M2</option>
+    <option value="M2S">M2S</option>
+    <option value="M3">M3</option>
+    <option value="M3D">M3D</option>
+    <option value="M3H">M3H</option>
+    <option value="M3S">M3S</option>
+    <option value="MEJ">MEJ</option>
+    <option value="MEQ">MEQ</option>
+    <option value="MG">MG</option>
+    <option value="MGL">MGL</option>
+    <option value="MGO">MGO</option>
+    <option value="MGQ">MGQ</option>
+    <option value="MHV">MHV</option>
+    <option value="MI">MI</option>
+    <option value="MI2">MI2</option>
+    <option value="MIN">MIN</option>
+    <option value="MIS">MIS</option>
+    <option value="ML">ML</option>
+    <option value="MLI">MLI</option>
+    <option value="MM">MM</option>
+    <option value="MM2">MM2</option>
+    <option value="MM3">MM3</option>
+    <option value="MN">MN</option>
+    <option value="MNM">MNM</option>
+    <option value="MON">MON</option>
+    <option value="MPG">MPG</option>
+    <option value="MPL">MPL</option>
+    <option value="MPS">MPS</option>
+    <option value="MS2">MS2</option>
+    <option value="MSC">MSC</option>
+    <option value="MSE">MSE</option>
+    <option value="MT">MT</option>
+    <option value="MVA">MVA</option>
+    <option value="MWH">MWH</option>
+    <option value="NA">NA</option>
+    <option value="NAM">NAM</option>
+    <option value="NI">NI</option>
+    <option value="NM">NM</option>
+    <option value="NM3">NM3</option>
+    <option value="NMM">NMM</option>
+    <option value="NS">NS</option>
+    <option value="OCM">OCM</option>
+    <option value="OM">OM</option>
+    <option value="OZ">OZ</option>
+    <option value="P">P</option>
+    <option value="PA">PA</option>
+    <option value="PAA">PAA</option>
+    <option value="PAC">PAC</option>
+    <option value="PAL">PAL</option>
+    <option value="PAS">PAS</option>
+    <option value="PC">PC</option>
+    <option value="pH">pH</option>
+    <option value="PL">PL</option>
+    <option value="PMI">PMI</option>
+    <option value="PMR">PMR</option>
+    <option value="PPB">PPB</option>
+    <option value="PPM">PPM</option>
+    <option value="PPT">PPT</option>
+    <option value="PRC">PRC</option>
+    <option value="PRM">PRM</option>
+    <option value="PRS">PRS</option>
+    <option value="PS">PS</option>
+    <option value="PSG">PSG</option>
+    <option value="PSI">PSI</option>
+    <option value="PT">PT</option>
+    <option value="Q01">Q01</option>
+    <option value="Q02">Q02</option>
+    <option value="Q03">Q03</option>
+    <option value="Q04">Q04</option>
+    <option value="Q05">Q05</option>
+    <option value="Q07">Q07</option>
+    <option value="Q08">Q08</option>
+    <option value="Q09">Q09</option>
+    <option value="Q10">Q10</option>
+    <option value="Q11">Q11</option>
+    <option value="Q12">Q12</option>
+    <option value="Q13">Q13</option>
+    <option value="QML">QML</option>
+    <option value="QT">QT</option>
+    <option value="R-U">R-U</option>
+    <option value="REN">REN</option>
+    <option value="RF">RF</option>
+    <option value="RHO">RHO</option>
+    <option value="RIM">RIM</option>
+    <option value="RIT">RIT</option>
+    <option value="ROL">ROL</option>
+    <option value="RPM">RPM</option>
+    <option value="RTH">RTH</option>
+    <option value="S/M">S/M</option>
+    <option value="SET">SET</option>
+    <option value="TBG">TBG</option>
+    <option value="TO">TO</option>
+    <option value="TOM">TOM</option>
+    <option value="TS">TS</option>
+    <option value="TUB">TUB</option>
+    <option value="UNT">UNT</option>
+    <option value="VAL">VAL</option>
+    <option value="VAM">VAM</option>
+    <option value="WK">WK</option>
+    <option value="WKY">WKY</option>
+    <option value="WMK">WMK</option>
+    <option value="YD">YD</option>
+    <option value="YD2">YD2</option>
+    <option value="YD3">YD3</option>
+    <option value="YR">YR</option>
+    <option value="ZAK">ZAK</option>
+    <option value="µA">µA</option>
+    <option value="µF">µF</option>
+    <option value="µGL">µGL</option>
+    <option value="µGQ">µGQ</option>
+    <option value="µL">µL</option>
+    <option value="µM">µM</option>
+  </select>
+</label>
+
+
+        <label class="q-field">
+          Pack Size Quantity
+          <input type="number" id="packQuantity" min="0" placeholder="Jumlah">
+        </label>
+
+        <label class="q-field">
+          Pack Size UoM
+          <select id="packUom">
+            <option value="">-- Pilih Satuan --</option>
+            <option value="PCS">PCS</option>
+            <option value="UNIT">UNIT</option>
+            <option value="SET">SET</option>
+            <option value="KG">KG</option>
+            <option value="L">L</option>
+            <option value="M">M</option>
+          </select>
+        </label>
+
+        <label class="q-field">
+          Package UoM
+          <select id="packageUom">
+            <option value="">-- Pilih Kemasan --</option>
+            <option value="BOX">BOX</option>
+            <option value="PACK">PACK</option>
+            <option value="ROLL">ROLL</option>
+            <option value="DRUM">DRUM</option>
+            <option value="BAG">BAG</option>
+            <option value="UNIT">UNIT</option>
+          </select>
+        </label>
+
+        <input type="hidden" name="packSize" id="packSizeFinal">
+
+      </div>
+    </div>
+
+
+    <!-- TECHNICAL SPECIFICATION -->
+    <div class="q-subsection">
+      <h3>B. TECHNICAL SPECIFICATION</h3>
+
+      <p class="q-description">
+        Isi hanya atribut teknis yang diperlukan. Atribut yang tidak diisi
+        tidak perlu ditampilkan pada dokumen spesifikasi.
+      </p>
+
+      <!-- ELECTRIC -->
+      <div class="q-technical-group">
+        <h4>A. ELECTRIC</h4>
+
+        <div class="q-grid">
+
+          <label class="q-field">
+            Voltage
+            <input type="text" data-tech-label="Voltage" placeholder="Nilai Voltage">
+          </label>
+
+          <label class="q-field">
+            Voltage UoM
+            <select data-tech-unit="Voltage">
+              <option value="">-- UoM --</option>
+              <option value="V">V</option>
+              <option value="mV">mV</option>
+              <option value="kV">kV</option>
+            </select>
+          </label>
+
+          <label class="q-field">
+            Phase
+            <input type="text" data-tech-label="Phase" placeholder="Nilai Phase">
+          </label>
+
+          <label class="q-field">
+            Power
+            <input type="text" data-tech-label="Power" placeholder="Nilai Power">
+          </label>
+
+          <label class="q-field">
+            Power UoM
+            <select data-tech-unit="Power">
+              <option value="">-- UoM --</option>
+              <option value="W">W</option>
+              <option value="kW">kW</option>
+              <option value="HP">HP</option>
+              <option value="kVA">kVA</option>
+            </select>
+          </label>
+
+          <label class="q-field">
+            Current
+            <input type="text" data-tech-label="Current" placeholder="Nilai Current">
+          </label>
+
+          <label class="q-field">
+            Current UoM
+            <select data-tech-unit="Current">
+              <option value="">-- UoM --</option>
+              <option value="A">A</option>
+              <option value="mA">mA</option>
+              <option value="kA">kA</option>
+            </select>
+          </label>
+
+          <label class="q-field">
+            Frequency
+            <input type="text" data-tech-label="Frequency" placeholder="Nilai Frequency">
+          </label>
+
+          <label class="q-field">
+            Frequency UoM
+            <select data-tech-unit="Frequency">
+              <option value="">-- UoM --</option>
+              <option value="Hz">Hz</option>
+              <option value="kHz">kHz</option>
+            </select>
+          </label>
+
+          <label class="q-field">
+            Temperature
+            <input type="text" data-tech-label="Temperature" placeholder="Nilai Temperature">
+          </label>
+
+          <label class="q-field">
+            Temperature UoM
+            <select data-tech-unit="Temperature">
+              <option value="">-- UoM --</option>
+              <option value="°C">°C</option>
+              <option value="°F">°F</option>
+              <option value="K">K</option>
+            </select>
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- MECHANICAL -->
+      <div class="q-technical-group">
+        <h4>B. MECHANICAL</h4>
+
+        <div class="q-grid">
+
+          <label class="q-field">
+            Material
+            <input type="text" data-tech-label="Material">
+          </label>
+
+          <label class="q-field">
+            Capacity
+            <input type="text" data-tech-label="Capacity">
+          </label>
+
+          <label class="q-field">
+            Capacity UoM
+            <select data-tech-unit="Capacity">
+              <option value="">-- UoM --</option>
+              <option value="L">L</option>
+              <option value="m³">m³</option>
+              <option value="kg">kg</option>
+              <option value="ton">ton</option>
+            </select>
+          </label>
+
+          <label class="q-field">
+            Connection Type
+            <input type="text" data-tech-label="Connection Type">
+          </label>
+
+          <label class="q-field">
+            Pressure
+            <input type="text" data-tech-label="Pressure">
+          </label>
+
+          <label class="q-field">
+            Pressure UoM
+            <select data-tech-unit="Pressure">
+              <option value="">-- UoM --</option>
+              <option value="Bar">Bar</option>
+              <option value="PSI">PSI</option>
+              <option value="MPa">MPa</option>
+            </select>
+          </label>
+
+          <label class="q-field">
+            Flowrate
+            <input type="text" data-tech-label="Flowrate">
+          </label>
+
+          <label class="q-field">
+            Flowrate UoM
+            <select data-tech-unit="Flowrate">
+              <option value="">-- UoM --</option>
+              <option value="L/min">L/min</option>
+              <option value="m³/h">m³/h</option>
+            </select>
+          </label>
+
+          <label class="q-field">
+            Speed
+            <input type="text" data-tech-label="Speed">
+          </label>
+
+          <label class="q-field">
+            Speed UoM
+            <select data-tech-unit="Speed">
+              <option value="">-- UoM --</option>
+              <option value="RPM">RPM</option>
+              <option value="m/s">m/s</option>
+            </select>
+          </label>
+
+          <label class="q-field">
+            Tolerance
+            <input type="text" data-tech-label="Tolerance">
+          </label>
+
+          <label class="q-field">
+            Tolerance UoM
+            <select data-tech-unit="Tolerance">
+              <option value="">-- UoM --</option>
+              <option value="mm">mm</option>
+              <option value="cm">cm</option>
+              <option value="%">%</option>
+            </select>
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- LIQUID -->
+      <div class="q-technical-group">
+        <h4>C. LIQUID</h4>
+
+        <div class="q-grid">
+
+          <label class="q-field">
+            Konsentrasi
+            <input type="text" data-tech-label="Konsentrasi">
+          </label>
+
+          <label class="q-field">
+            Viscositas
+            <input type="text" data-tech-label="Viscositas">
+          </label>
+
+        </div>
+      </div>
+
+
+      <!-- OTHER TECHNICAL -->
+      <div class="q-technical-group">
+        <div class="q-subheading-row">
+          <h4>D. OTHER / CUSTOM ATTRIBUTE</h4>
+
+          <button type="button" class="q-add-button" id="addTechnicalBtn">
+            + Tambah Atribut
+          </button>
+        </div>
+
+        <div id="dynamicCustomTechnicalContainer"></div>
+      </div>
+
+      <!-- Kompatibilitas dengan template PDF lama -->
+      <input type="hidden" name="technical1" id="technical1">
+      <input type="hidden" name="technicalUnit1" id="technicalUnit1">
+      <input type="hidden" name="technical2" id="technical2">
+      <input type="hidden" name="technicalUnit2" id="technicalUnit2">
+      <input type="hidden" name="technical3" id="technical3">
+      <input type="hidden" name="technicalUnit3" id="technicalUnit3">
+      <input type="hidden" name="technical4" id="technical4">
+      <input type="hidden" name="technicalUnit4" id="technicalUnit4">
+      <input type="hidden" name="technical5" id="technical5">
+      <input type="hidden" name="technicalUnit5" id="technicalUnit5">
+
+    </div>
+
+
+    <!-- UNIQUE SPECIFICATION -->
+    <div class="q-subsection">
+      <div class="q-subheading-row">
+        <h3>C. UNIQUE SPECIFICATION</h3>
+
+        <button type="button" class="q-add-button" id="addUniqueBtn">
+          + Tambah Unique Attribute
+        </button>
+      </div>
+
+      <div class="q-grid">
+
+        <label class="q-field">
+          Accessories
+          <input type="text" name="unique1" value="Accessories" readonly>
+        </label>
+
+        <label class="q-field">
+          Accessories Detail
+          <input type="text" name="uniqueDetail1" placeholder="Detail accessories">
+        </label>
+
+        <label class="q-field">
+          Others
+          <input type="text" name="unique2" value="Others">
+        </label>
+
+        <label class="q-field">
+          Others Detail
+          <input type="text" name="uniqueDetail2" placeholder="Detail lainnya">
+        </label>
+
+      </div>
+
+      <div id="dynamicCustomUniqueContainer"></div>
+    </div>
+
+  </section>
+
+
+  <!-- 04. SCOPE -->
+  <section class="q-section">
+    <div class="q-section-heading">
+      <span class="q-number">04</span>
+      <h2>SCOPE</h2>
+    </div>
+
+    <div class="q-grid">
+
+      <label class="q-field wide">
+        Design / Drawing / Visual / Illustration *
+        <input
+          type="file"
+          id="questionDrawingUpload"
+          accept="image/png,image/jpeg,image/webp"
+        >
+        <small>Format gambar: PNG, JPG, atau WEBP.</small>
+      </label>
+
+      <label class="q-field">
+        Additional Service *
+        <select name="additionalService" required>
+          <option value="">-- Pilih Additional Service --</option>
+          <option value="Installation">Installation</option>
+          <option value="Commissioning">Commissioning</option>
+          <option value="None">None</option>
+        </select>
+      </label>
+
+      <label class="q-field">
+        Health, Safety & Environment Standard
+        <textarea name="hse" rows="3"></textarea>
+      </label>
+
+      <label class="q-field">
+        License & Regulation
+        <textarea name="license" rows="3"></textarea>
+      </label>
+
+      <label class="q-field">
+        Warranty / After Sales Service
+        <textarea name="warranty" rows="3"></textarea>
+      </label>
+
+    </div>
+
+
+    <!-- REQUIRED DOCUMENTS -->
+    <div class="q-subsection">
+      <h3>REQUIRED DOCUMENTS</h3>
+
+      <p class="q-description">
+        Pilih dokumen yang wajib disertakan. Jika memilih Others,
+        tuliskan nama dokumen tambahan.
+      </p>
+
+      <div class="q-checks">
+
+        <label class="q-check">
+          <input type="checkbox" name="documentCheck1">
+          MSDS
+        </label>
+
+        <label class="q-check">
+          <input type="checkbox" name="documentCheck2">
+          COA
+        </label>
+
+        <label class="q-check">
+          <input type="checkbox" name="documentCheck3">
+          Halal
+        </label>
+
+        <label class="q-check">
+          <input type="checkbox" name="documentCheck4">
+          Food Grade
+        </label>
+
+        <label class="q-check">
+          <input type="checkbox" name="documentCheck5">
+          Sertifikat Keamanan
+        </label>
+
+        <label class="q-check">
+          <input type="checkbox" name="documentCheck6">
+          Sertifikat Kalibrasi
+        </label>
+
+        <label class="q-check">
+          <input type="checkbox" name="documentCheck7">
+          Sertifikat Garansi
+        </label>
+
+        <label class="q-check">
+          <input type="checkbox" name="documentCheck8">
+          Manual Book / User Manual
+        </label>
+
+      </div>
+
+      <div class="q-grid" style="margin-top:16px">
+        <label class="q-field wide">
+          Others - Required Document
+          <input type="text" name="requiredDocuments" placeholder="Nama dokumen lainnya">
+        </label>
+      </div>
+
+      <input type="hidden" name="document1" value="MSDS">
+      <input type="hidden" name="document2" value="COA">
+      <input type="hidden" name="document3" value="Halal">
+      <input type="hidden" name="document4" value="Food Grade">
+      <input type="hidden" name="document5" value="Sertifikat Keamanan">
+      <input type="hidden" name="document6" value="Sertifikat Kalibrasi">
+      <input type="hidden" name="document7" value="Sertifikat Garansi">
+      <input type="hidden" name="document8" value="Manual Book / User Manual">
+
+    </div>
+  </section>
+
+
+  <!-- 05. APPROVAL -->
+  <section class="q-section">
+    <div class="q-section-heading">
+      <span class="q-number">05</span>
+      <h2>APPROVAL</h2>
+    </div>
+
+    <div class="q-approval-group">
+      <h3>Requestor</h3>
+
+      <div class="q-grid">
+        <label class="q-field">
+          Date
+          <input type="date" name="requestorDate">
+        </label>
+
+        <label class="q-field">
+          Name
+          <input type="text" name="requestorName">
+        </label>
+
+        <label class="q-field">
+          Signature
+          <input type="text" name="requestorSign">
+        </label>
+      </div>
+    </div>
+
+    <div class="q-approval-group">
+      <h3>Manager</h3>
+
+      <div class="q-grid">
+        <label class="q-field">
+          Date
+          <input type="date" name="managerDate">
+        </label>
+
+        <label class="q-field">
+          Name
+          <input type="text" name="managerName">
+        </label>
+
+        <label class="q-field">
+          Signature
+          <input type="text" name="managerSign">
+        </label>
+      </div>
+    </div>
+
+    <div class="q-approval-group">
+      <h3>Plant Head</h3>
+
+      <div class="q-grid">
+        <label class="q-field">
+          Date
+          <input type="date" name="plantHeadDate">
+        </label>
+
+        <label class="q-field">
+          Name
+          <input type="text" name="plantHeadName">
+        </label>
+
+        <label class="q-field">
+          Signature
+          <input type="text" name="plantHeadSign">
+        </label>
+      </div>
+    </div>
+  </section>
+
+</form>
+
+
+<!-- PENGATURAN PLANT, REASON, DIMENSION, DAN TECHNICAL -->
+<script>
+(() => {
+  "use strict";
+
+  const form = document.getElementById("questionnaireForm");
+  if (!form) return;
+
+  const plantSelect = document.getElementById("plantCodeSelect");
+  const plantDesc = document.getElementById("plantDescInput");
+  const deptSelect = document.getElementById("deptSelect");
+
+  const plantData = {
+    "1210 - Plant Gending": [
+      "HRGA",
+      "Fermentation - Decalcium",
+      "Fermentation - Glucose",
+      "Fermentation - Fermentation",
+      "Isolation & Purification - Isolation",
+      "Isolation & Purification - Purification",
+      "Packing",
+      "Polycello & Technic Packing",
+      "Liquid Fertilizer Sales",
+      "SCM - PPIC",
+      "SCM - Inderect Sourcing",
+      "Engineering & Technical Development",
+      "Utility",
+      "Electrical Instrument",
+      "Mechanical & Maintenance",
+      "Logistic & Warehouse",
+      "QA & QC",
+      "SHE",
+      "IT",
+      "Costing Associate"
+    ],
+
+    "1220 - Plant Cikarang": [
+      "HRGA",
+      "Production - Dry",
+      "Production - Wet",
+      "SCM - PPIC",
+      "SCM - Inderect Sourcing",
+      "Maintenance",
+      "Project",
+      "Warehouse",
+      "QA & QC",
+      "SHE",
+      "IT",
+      "Supply Chain Finance"
+    ],
+
+    "1230 - Plant Minahasa Selatan": [
+      "Production - Opening & Processing",
+      "Production - Production & TCA",
+      "PPIC",
+      "Indirect Sourcing",
+      "Maintenance",
+      "Utility",
+      "Warehouse",
+      "QA & QC",
+      "SHE",
+      "IT",
+      "Plant Operation Controller"
+    ]
+  };
+
+  function updateDepartment(restoreValue = "") {
+    const selected = plantSelect.value;
+    const description = selected.split(" - ")[1] || "";
+
+    plantDesc.value = description;
+    deptSelect.innerHTML =
+      '<option value="">-- Pilih Departemen --</option>';
+
+    (plantData[selected] || []).forEach(dept => {
+      const option = document.createElement("option");
+      option.value = dept;
+      option.textContent = dept;
+      deptSelect.appendChild(option);
+    });
+
+    if (restoreValue) deptSelect.value = restoreValue;
+  }
+
+  plantSelect.addEventListener("change", () => {
+    updateDepartment();
+    form.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+
+
+// MATERIAL CATEGORY: MULTIPLE CHECKBOX
+function updateCategory() {
+
+  const selectedCategories = Array.from(
+    form.querySelectorAll('[name="materialCategory"]:checked')
+  ).map(check => check.value);
+
+  const mapping = {
+    "Asset Barang": "Asset Barang",
+    "Expense Barang Umum / Teknik": "Expense Barang General",
+    "Expense Bahan Kimia / Sanitasi / Pelumas": "Expense Barang Kimia"
+  };
+
+  form.querySelectorAll('[name="category"]').forEach(check => {
+
+    check.checked = selectedCategories.some(
+      category => mapping[category] === check.value
+    );
+
+  });
+}
+
+// Sinkronisasi saat checkbox berubah
+form.querySelectorAll('[name="materialCategory"]').forEach(check => {
+  check.addEventListener("change", updateCategory);
+});
+
+
+  // REASON TO PROCURE
+  const reasonChoice = document.getElementById("reasonChoice");
+  const reasonOther = document.getElementById("reasonOther");
+  const reasonOthers = document.getElementById("reasonOthersBarang");
+  const reasonFinal = document.getElementById("reasonFinal");
+
+  function updateReason() {
+    const isOther = reasonChoice.value === "Others";
+
+    reasonOthers.hidden = !isOther;
+    reasonOther.required = isOther;
+
+    reasonFinal.value = isOther
+      ? reasonOther.value.trim()
+      : reasonChoice.value;
+  }
+
+  reasonChoice.addEventListener("change", updateReason);
+  reasonOther.addEventListener("input", updateReason);
+
+
+  // DIMENSION
+
+function updateDimension() {
+  const rows = document.querySelectorAll(
+    "#dimensionRows .dimension-row"
+  );
+
+  const unit = document.getElementById("dimensionUom")?.value || "";
+  const finalField = document.getElementById("dimensionFinal");
+
+  if (!finalField) return;
+
+  const items = Array.from(rows)
+    .map(row => ({
+      type: row.querySelector(".dimension-type")?.value || "",
+      value: row.querySelector(".dimension-value")?.value.trim() || "",
+      symbol: row.querySelector(".dimension-symbol")?.value || "x"
+    }))
+    .filter(item => item.type && item.value !== "");
+
+  finalField.value = items.length
+    ? items.map((item, index) => {
+        const text = `${item.type} ${item.value}`;
+
+        return index === 0
+          ? text
+          : `${item.symbol} ${text}`;
+      }).join(" ") + (unit ? ` ${unit}` : "")
+    : "";
+}
+
+
+
+  // PACK SIZE
+  function updatePackSize() {
+    const quantity = document.getElementById("packQuantity").value;
+    const uom = document.getElementById("packUom").value;
+    const packageUom = document.getElementById("packageUom").value;
+
+    document.getElementById("packSizeFinal").value =
+      [quantity, uom, packageUom].filter(Boolean).join(" ");
+  }
+
+
+  // TECHNICAL SPECIFICATION
+  function updateTechnical() {
+    const items = [];
+
+    form.querySelectorAll("[data-tech-label]").forEach(input => {
+      const label = input.dataset.techLabel;
+      const value = input.value.trim();
+
+      if (!value) return;
+
+      const unitInput = form.querySelector(
+        `[data-tech-unit="${label}"]`
+      );
+
+      const unit = unitInput ? unitInput.value : "";
+
+      items.push({
+        label,
+        value,
+        unit
+      });
+    });
+
+    form.querySelectorAll(".custom-tech-row").forEach(row => {
+      const label = row.querySelector("[data-custom-tech-name]")?.value.trim();
+      const value = row.querySelector("[data-custom-tech-value]")?.value.trim();
+      const unit = row.querySelector("[data-custom-tech-unit]")?.value.trim();
+
+      if (label && value) items.push({ label, value, unit });
+    });
+
+    for (let i = 1; i <= 5; i++) {
+      const item = items[i - 1];
+
+      document.getElementById(`technical${i}`).value =
+        item ? item.label : "";
+
+      document.getElementById(`technicalUnit${i}`).value =
+        item ? `${item.value} ${item.unit || ""}`.trim() : "";
+    }
+  }
+
+
+  // TAMBAH TECHNICAL ATTRIBUTE
+  let technicalCounter = 0;
+
+  document.getElementById("addTechnicalBtn").addEventListener("click", () => {
+    technicalCounter++;
+
+    const container = document.getElementById(
+      "dynamicCustomTechnicalContainer"
+    );
+
+    const row = document.createElement("div");
+    row.className = "custom-tech-row q-grid";
+
+    row.innerHTML = `
+      <label class="q-field">
+        Nama Atribut
+        <input type="text" data-custom-tech-name placeholder="Nama atribut">
+      </label>
+
+      <label class="q-field">
+        Nilai
+        <input type="text" data-custom-tech-value placeholder="Nilai teknis">
+      </label>
+
+      <label class="q-field">
+        UoM
+        <input type="text" data-custom-tech-unit placeholder="Satuan">
+      </label>
+
+      <button type="button" class="q-remove-button">Hapus</button>
+    `;
+
+    row.querySelector(".q-remove-button").addEventListener("click", () => {
+      row.remove();
+      updateTechnical();
+      form.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+
+    container.appendChild(row);
+  });
+
+
+  // TAMBAH UNIQUE ATTRIBUTE
+  let uniqueCounter = 0;
+
+  document.getElementById("addUniqueBtn").addEventListener("click", () => {
+    uniqueCounter++;
+
+    const container = document.getElementById(
+      "dynamicCustomUniqueContainer"
+    );
+
+    const row = document.createElement("div");
+    row.className = "q-grid custom-unique-row";
+
+    row.innerHTML = `
+      <label class="q-field">
+        Nama Unique Attribute
+        <input type="text" name="customUniqueName${uniqueCounter}">
+      </label>
+
+      <label class="q-field">
+        Detail Unique Attribute
+        <input type="text" name="customUniqueDetail${uniqueCounter}">
+      </label>
+
+      <button type="button" class="q-remove-button">Hapus</button>
+    `;
+
+    row.querySelector(".q-remove-button").addEventListener("click", () => {
+      row.remove();
+    });
+
+    container.appendChild(row);
+  });
+
+
+  form.addEventListener("input", () => {
+    updateReason();
+    updateDimension();
+    updatePackSize();
+    updateTechnical();
+  });
+
+  form.addEventListener("change", () => {
+    updateCategory();
+    updateReason();
+    updateDimension();
+    updatePackSize();
+    updateTechnical();
+  });
+
+  updateDepartment();
+  updateCategory();
+  updateReason();
+  updateDimension();
+  updatePackSize();
+  updateTechnical();
+
+})();
+</script>
+
+  <!-- ==================================================
+       TEMPLATE PDF SPESIFIKASI BARANG
+       FORMAT DOKUMEN ASLI
+  =================================================== -->
+
+  <form id="printSpecForm" class="document print-document">
+
+    <!-- HEADER DOKUMEN -->
+    <div class="doc-top">
+
+<div class="logo">
+  <img src="img/sasa-logo.png" alt="Sasa Melezatkan!" class="sasa-logo">
+</div>
+
+      <h2>
+        Form Spesifikasi<br>
+        Barang
+      </h2>
+
+      <div class="meta">
+
+        <label>
+          No Doc <b>:</b>
+          <input name="docNo" value="F/SCW05" readonly>
+        </label>
+
+        <label>
+          Revisi <b>:</b>
+          <input name="revision" value="02" readonly>
+        </label>
+
+        <label>
+          Tgl Rev <b>:</b>
+          <input name="revisionDate" readonly>
+        </label>
+
+        <label>
+          Halaman <b>:</b>
+          <span>1 / 1</span>
+        </label>
+
+      </div>
+    </div>
+
+
+    <!-- INFORMASI VERSI -->
+    <div class="version">
+
+      <label>
+        Version <b>:</b>
+        <input name="version" readonly>
+      </label>
+
+      <label>
+        Created Date <b>:</b>
+        <input name="createdDate" readonly>
+      </label>
+
+    </div>
+
+
+    <!-- IDENTITY -->
+    <section>
+
+      <h3>IDENTITY</h3>
+
+      <div class="identity">
+
+        <div class="lines">
+
+          <label>
+            <span>1 Plant</span>
+            <b>:</b>
+            <input name="plant" readonly>
+          </label>
+
+          <label>
+            <span>2 Requestor</span>
+            <b>:</b>
+            <input name="requestor" readonly>
+          </label>
+
+          <label>
+            <span>3 Departement</span>
+            <b>:</b>
+            <input name="department" readonly>
+          </label>
+
+          <label>
+            <span>4 Material Group</span>
+            <b>:</b>
+            <input name="materialGroup" readonly>
+          </label>
+
+          <label>
+            <span>5 Material Category</span>
+            <b>:</b>
+            <input name="materialCategory" readonly>
+          </label>
+
+        </div>
+
+        <div class="checks">
+
+          <label>
+            <input
+              type="checkbox"
+              name="category"
+              value="Asset Barang"
+              disabled
+            >
+            Asset Barang
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="category"
+              value="Expense Barang General"
+              disabled
+            >
+            Expense Barang General
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="category"
+              value="Expense Barang Kimia"
+              disabled
+            >
+            Expense Barang Kimia
+          </label>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- PURCHASE OBJECTIVE -->
+    <section>
+
+      <h3>PURCHASE OBJECTIVE</h3>
+
+      <div class="lines objective">
+
+        <label>
+          <span>1 Reason to Procure</span>
+          <b>:</b>
+          <input name="reason" readonly>
+        </label>
+
+        <label>
+          <span>2 Location</span>
+          <b>:</b>
+          <input name="location" readonly>
+        </label>
+
+      </div>
+    </section>
+
+
+    <!-- MATERIAL SPECIFICATION -->
+    <section>
+
+      <h3>MATERIAL SPECIFICATION</h3>
+
+      <div class="spec-head">
+        <span>General Specification*</span>
+        <span>Technical Specification*</span>
+      </div>
+
+      <div class="spec-grid">
+
+        <!-- GENERAL SPECIFICATION -->
+        <div class="general lines">
+
+          <label>
+            <span>1 Material Description</span>
+            <b>:</b>
+            <input name="materialDescription" readonly>
+          </label>
+
+          <label>
+            <span>2 Material Code</span>
+            <b>:</b>
+            <input name="materialCode" readonly>
+          </label>
+
+          <label>
+            <span>3 Type/Model/Part Number</span>
+            <b>:</b>
+            <input name="partNumber" readonly>
+          </label>
+
+          <label>
+            <span>4 Varians</span>
+            <b>:</b>
+            <input name="variant" readonly>
+          </label>
+
+          <label>
+            <span>5 Dimension</span>
+            <b>:</b>
+            <input name="dimension" readonly>
+          </label>
+
+          <label>
+            <span>6 Brand</span>
+            <b>:</b>
+            <input name="brand" readonly>
+          </label>
+
+          <label>
+            <span>7 Catalogue</span>
+            <b>:</b>
+            <input name="catalogue" readonly>
+          </label>
+
+          <label>
+            <span>8 UoM</span>
+            <b>:</b>
+            <input name="uom" readonly>
+          </label>
+
+          <label>
+            <span>9 Pack Size</span>
+            <b>:</b>
+            <input name="packSize" readonly>
+            <i>PC / Box</i>
+          </label>
+
+        </div>
+
+
+        <!-- TECHNICAL SPECIFICATION -->
+        <div class="technical">
+
+          <div class="techrows">
+
+            <label>
+              <span>1</span>
+              <input name="technical1" readonly placeholder="........................">
+              <b>:</b>
+              <input name="technicalUnit1" readonly placeholder="a CM × a CM × a CM">
+            </label>
+
+            <label>
+              <span>2</span>
+              <input name="technical2" readonly placeholder="........................">
+              <b>:</b>
+              <input name="technicalUnit2" readonly placeholder="a CM × a CM × a CM">
+            </label>
+
+            <label>
+              <span>3</span>
+              <input name="technical3" readonly placeholder="........................">
+              <b>:</b>
+              <input name="technicalUnit3" readonly placeholder="a CM × a CM × a CM">
+            </label>
+
+            <label>
+              <span>4</span>
+              <input name="technical4" readonly placeholder="........................">
+              <b>:</b>
+              <input name="technicalUnit4" readonly placeholder="a CM × a CM × a CM">
+            </label>
+
+            <label>
+              <span>5</span>
+              <input name="technical5" readonly placeholder="........................">
+              <b>:</b>
+              <input name="technicalUnit5" readonly placeholder="a CM × a CM × a CM">
+            </label>
+
+          </div>
+
+
+          <!-- UNIQUE SPECIFICATION -->
+          <div class="unique">
+
+            <div class="subhead">
+              Unique Specification
+            </div>
+
+            <label>
+              <span>1</span>
+              <input name="unique1" readonly>
+              <b>:</b>
+              <input name="uniqueDetail1" readonly>
+            </label>
+
+            <label>
+              <span>2</span>
+              <input name="unique2" readonly placeholder="........................">
+              <b>:</b>
+              <input name="uniqueDetail2" readonly>
+            </label>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- SCOPE -->
+    <section>
+
+      <h3>SCOPE</h3>
+
+      <div class="scope-grid">
+
+        <div class="drawing">
+
+          <div class="subhead">
+            Design / Drawing / Visual / Illustration*
+          </div>
+
+
+
+          <img id="drawingPreview" alt="Pratinjau gambar">
+
+        </div>
+
+
+        <div class="scope">
+
+          <label>
+            <span>2 Additional Service</span>
+            <b>:</b>
+            <input name="additionalService" readonly>
+          </label>
+
+          <label class="tall">
+            <span>3 Health, Safety &amp;<br>Environment Standard</span>
+            <b>:</b>
+            <textarea name="hse" readonly></textarea>
+          </label>
+
+          <label>
+            <span>4 Warranty/After Sales<br>Service</span>
+            <b>:</b>
+            <input name="warranty" readonly>
+          </label>
+
+          <label>
+            <span>5 License &amp; Regulation</span>
+            <b>:</b>
+            <input name="license" readonly>
+          </label>
+
+          <label>
+            <span>6 Required Documents</span>
+            <b>:</b>
+            <input name="requiredDocuments" readonly>
+          </label>
+
+
+          <!-- DOKUMEN PENDUKUNG -->
+          <div class="doc-checks">
+
+            <label>
+              <input type="checkbox" name="documentCheck1" disabled>
+              <input name="document1" readonly placeholder="........................">
+            </label>
+
+            <label>
+              <input type="checkbox" name="documentCheck2" disabled>
+              <input name="document2" readonly placeholder="........................">
+            </label>
+
+            <label>
+              <input type="checkbox" name="documentCheck3" disabled>
+              <input name="document3" readonly placeholder="........................">
+            </label>
+
+            <label>
+              <input type="checkbox" name="documentCheck4" disabled>
+              <input name="document4" readonly placeholder="........................">
+            </label>
+
+            <label>
+              <input type="checkbox" name="documentCheck5" disabled>
+              <input name="document5" readonly placeholder="........................">
+            </label>
+
+            <label>
+              <input type="checkbox" name="documentCheck6" disabled>
+              <input name="document6" readonly placeholder="........................">
+            </label>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- PERSETUJUAN -->
+    <div class="approval">
+
+      <div class="role">Requestor*</div>
+      <div class="role">Manager*</div>
+      <div class="role white">Plant Head</div>
+
+
+      <div class="approve">
+
+        <label>
+          Tgl Approve
+          <input name="requestorDate" readonly>
+        </label>
+
+        <label>
+          Nama
+          <input name="requestorName" readonly>
+        </label>
+
+        <label>
+          Tanda tangan
+          <input name="requestorSign" readonly>
+        </label>
+
+      </div>
+
+
+      <div class="approve">
+
+        <label>
+          Tgl Approve
+          <input name="managerDate" readonly>
+        </label>
+
+        <label>
+          Nama
+          <input name="managerName" readonly>
+        </label>
+
+        <label>
+          Tanda tangan
+          <input name="managerSign" readonly>
+        </label>
+
+      </div>
+
+
+      <div class="approve">
+
+        <label>
+          Tgl Approve
+          <input name="plantHeadDate" readonly>
+        </label>
+
+        <label>
+          Nama
+          <input name="plantHeadName" readonly>
+        </label>
+
+        <label>
+          Tanda tangan
+          <input name="plantHeadSign" readonly>
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <p class="note">
+      Note: Pastikan seluruh informasi dan dokumen pendukung
+      telah dilengkapi sebelum form spesifikasi barang diajukan.
+    </p>
+
+  </form>
+
+
+  <p class="no-print footnote">
+    Template awal E-Spec — sesuaikan logo dan ketentuan
+    dokumen perusahaan sebelum digunakan secara resmi.
+  </p>
+
+</main>
+
+
+<!-- JAVASCRIPT -->
+<script src="barang.js"></script>
+
+</body>
+</html>

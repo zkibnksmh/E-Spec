@@ -1,0 +1,594 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Spec | Form Spesifikasi Jasa</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="toolbar no-print">
+  <div class="brand">
+    <b class="mark">E</b>
+    <div>
+      <strong>E-Spec</strong>
+      <small>FORM SPESIFIKASI JASA</small>
+    </div>
+  </div>
+
+  <div>
+    <button type="button" id="resetJasaBtn">Reset Form</button>
+    <button type="button" id="saveJasaAdminBtn">Simpan untuk Admin</button>
+    <button type="button" class="primary" id="pdfJasaBtn">
+      Unduh / Cetak PDF ↗
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <div class="intro no-print">
+    <small>QUESTIONNAIRE WORKSPACE</small>
+    <h1>Form spesifikasi <em>Jasa.</em></h1>
+    <p>
+      Isi pertanyaan berikut. Jawaban akan otomatis dimasukkan
+      ke dokumen spesifikasi jasa.
+    </p>
+  </div>
+
+  <div class="service-actions no-print">
+    <a href="pilih-spesifikasi.html">
+      ← Kembali ke pilihan spesifikasi
+    </a>
+    <span id="draftStatus">Draft tersimpan otomatis di browser</span>
+  </div>
+
+  <!-- KUESIONER JASA -->
+  <form id="questionnaireJasaForm" class="questionnaire-screen no-print">
+
+    <!-- 01 INFORMASI DOKUMEN -->
+    <section class="q-section">
+      <h2>01. Informasi Dokumen</h2>
+
+      <div class="q-grid">
+
+        <label class="q-field">
+          Nomor Dokumen
+          <input name="docNo" value="F/SJ-001">
+        </label>
+
+        <label class="q-field">
+          Revisi
+          <input name="revision" value="00">
+        </label>
+
+        <label class="q-field">
+          Tanggal Revisi
+          <input name="revisionDate" type="date">
+        </label>
+
+        <label class="q-field">
+          Versi
+          <input name="version" value="01">
+        </label>
+
+        <label class="q-field">
+          Tanggal Dibuat
+          <input name="createdDate" type="date">
+        </label>
+
+      </div>
+    </section>
+
+    <!-- 02 IDENTITAS -->
+    <section class="q-section">
+      <h2>02. Identitas Pemohon</h2>
+
+      <div class="q-grid">
+
+        <label class="q-field">
+          Plant
+          <input name="plant">
+        </label>
+
+        <label class="q-field">
+          Requestor *
+          <input name="requestor" required>
+        </label>
+
+        <label class="q-field">
+          Departemen
+          <input name="department">
+        </label>
+
+        <label class="q-field">
+          Service Group
+          <input name="serviceGroup">
+        </label>
+
+        <label class="q-field">
+          Service Category
+          <select name="serviceCategory">
+            <option value="">Pilih kategori jasa</option>
+            <option>Jasa Maintenance</option>
+            <option>Jasa Engineering</option>
+            <option>Jasa Konsultan</option>
+            <option>Jasa Konstruksi / Instalasi</option>
+            <option>Jasa Transportasi</option>
+            <option>Jasa Kebersihan</option>
+            <option>Jasa Lainnya</option>
+          </select>
+        </label>
+
+        <label class="q-field">
+          Cost Center / Budget
+          <input name="costCenter">
+        </label>
+
+      </div>
+    </section>
+
+    <!-- 03 SERVICE OBJECTIVE -->
+    <section class="q-section">
+      <h2>03. Tujuan Pengadaan Jasa</h2>
+
+      <div class="q-grid">
+
+        <label class="q-field">
+          Nama Jasa / Service Description *
+          <input name="serviceName" required>
+        </label>
+
+        <label class="q-field">
+          Background / Reason to Procure
+          <textarea name="reason" rows="3"></textarea>
+        </label>
+
+        <label class="q-field">
+          Lokasi Pekerjaan
+          <input name="location">
+        </label>
+
+        <label class="q-field">
+          Target Mulai Pekerjaan
+          <input name="startDate" type="date">
+        </label>
+
+        <label class="q-field">
+          Target Selesai Pekerjaan
+          <input name="endDate" type="date">
+        </label>
+
+        <label class="q-field">
+          Durasi / Periode Kontrak
+          <input name="duration" placeholder="Contoh: 30 hari / 1 tahun">
+        </label>
+
+      </div>
+    </section>
+
+    <!-- 04 SERVICE SPECIFICATION -->
+    <section class="q-section">
+      <h2>04. Spesifikasi Jasa</h2>
+
+      <div class="q-grid">
+
+        <label class="q-field">
+          Tujuan dan Hasil yang Diharapkan
+          <textarea name="objective"></textarea>
+        </label>
+
+        <label class="q-field">
+          Ruang Lingkup Pekerjaan / Scope of Work *
+          <textarea name="scopeOfWork" required></textarea>
+        </label>
+
+        <label class="q-field">
+          Persyaratan Teknis
+          <textarea name="technicalRequirements"></textarea>
+        </label>
+
+        <label class="q-field">
+          Standar / Regulasi yang Harus Dipenuhi
+          <textarea name="standards"></textarea>
+        </label>
+
+        <label class="q-field">
+          Kualifikasi Tenaga Kerja
+          <textarea name="personnel"></textarea>
+        </label>
+
+        <label class="q-field">
+          Peralatan / Tools dari Penyedia
+          <textarea name="tools"></textarea>
+        </label>
+
+      </div>
+    </section>
+
+    <!-- 05 SCOPE DAN DELIVERABLES -->
+    <section class="q-section">
+      <h2>05. Lingkup, Hasil Pekerjaan & Penerimaan</h2>
+
+      <div class="q-grid">
+
+        <label class="q-field">
+          Tanggung Jawab Penyedia Jasa
+          <textarea name="vendorResponsibility"></textarea>
+        </label>
+
+        <label class="q-field">
+          Tanggung Jawab User / Perusahaan
+          <textarea name="userResponsibility"></textarea>
+        </label>
+
+        <label class="q-field">
+          Deliverables / Output Pekerjaan *
+          <textarea name="deliverables" required></textarea>
+        </label>
+
+        <label class="q-field">
+          Kriteria Penerimaan / Acceptance Criteria *
+          <textarea name="acceptanceCriteria" required></textarea>
+        </label>
+
+        <label class="q-field">
+          HSE / Safety Requirements
+          <textarea name="hse"></textarea>
+        </label>
+
+        <label class="q-field">
+          Dokumen yang Wajib Diserahkan
+          <textarea name="requiredDocuments"></textarea>
+        </label>
+
+        <label class="q-field">
+          Garansi / Masa Pemeliharaan
+          <input name="warranty">
+        </label>
+
+        <label class="q-field">
+          Ketentuan Tambahan
+          <textarea name="additionalTerms"></textarea>
+        </label>
+
+      </div>
+    </section>
+
+    <!-- 06 APPROVAL -->
+    <section class="q-section">
+      <h2>06. Persetujuan</h2>
+
+      <div class="q-grid">
+
+        <label class="q-field">
+          Tanggal Persetujuan Requestor
+          <input name="requestorDate" type="date">
+        </label>
+
+        <label class="q-field">
+          Nama Requestor
+          <input name="requestorName">
+        </label>
+
+        <label class="q-field">
+          Tanda Tangan Requestor
+          <input name="requestorSign">
+        </label>
+
+        <label class="q-field">
+          Tanggal Persetujuan Manager
+          <input name="managerDate" type="date">
+        </label>
+
+        <label class="q-field">
+          Nama Manager
+          <input name="managerName">
+        </label>
+
+        <label class="q-field">
+          Tanda Tangan Manager
+          <input name="managerSign">
+        </label>
+
+        <label class="q-field">
+          Tanggal Persetujuan Plant Head
+          <input name="plantHeadDate" type="date">
+        </label>
+
+        <label class="q-field">
+          Nama Plant Head
+          <input name="plantHeadName">
+        </label>
+
+        <label class="q-field">
+          Tanda Tangan Plant Head
+          <input name="plantHeadSign">
+        </label>
+
+      </div>
+    </section>
+
+  </form>
+
+  <!-- TEMPLATE PDF JASA -->
+  <form id="printJasaForm" class="document service-document">
+
+    <div class="doc-top">
+
+      <div class="logo">
+        <img src="img/sasa-logo.png" alt="Logo Sasa" class="sasa-logo">
+      </div>
+
+      <h2>
+        Form Spesifikasi<br>
+        Jasa
+      </h2>
+
+      <div class="meta">
+        <label>
+          No Doc <b>:</b>
+          <input name="docNo" readonly value="F/SJ-001">
+        </label>
+
+        <label>
+          Revisi <b>:</b>
+          <input name="revision" readonly value="00">
+        </label>
+
+        <label>
+          Tgl Rev <b>:</b>
+          <input name="revisionDate" readonly>
+        </label>
+
+        <label>
+          Halaman <b>:</b>
+          <span>1 / 1</span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="version">
+      <label>
+        Version <b>:</b>
+        <input name="version" readonly value="01">
+      </label>
+
+      <label>
+        Created Date <b>:</b>
+        <input name="createdDate" readonly>
+      </label>
+    </div>
+
+    <!-- IDENTITY -->
+    <section>
+      <h3>IDENTITY</h3>
+
+      <div class="service-grid">
+
+        <label class="field">
+          <span>1. Plant</span>
+          <input name="plant" readonly>
+        </label>
+
+        <label class="field">
+          <span>2. Requestor</span>
+          <input name="requestor" readonly>
+        </label>
+
+        <label class="field">
+          <span>3. Departemen</span>
+          <input name="department" readonly>
+        </label>
+
+        <label class="field">
+          <span>4. Service Group</span>
+          <input name="serviceGroup" readonly>
+        </label>
+
+        <label class="field">
+          <span>5. Service Category</span>
+          <input name="serviceCategory" readonly>
+        </label>
+
+        <label class="field">
+          <span>6. Cost Center / Budget</span>
+          <input name="costCenter" readonly>
+        </label>
+
+      </div>
+    </section>
+
+    <!-- SERVICE OBJECTIVE -->
+    <section>
+      <h3>SERVICE OBJECTIVE</h3>
+
+      <div class="service-grid">
+
+        <label class="field wide">
+          <span>1. Nama Jasa / Service Description</span>
+          <input name="serviceName" readonly>
+        </label>
+
+        <label class="field wide">
+          <span>2. Background / Reason to Procure</span>
+          <textarea name="reason" readonly></textarea>
+        </label>
+
+        <label class="field">
+          <span>3. Lokasi Pekerjaan</span>
+          <input name="location" readonly>
+        </label>
+
+        <label class="field">
+          <span>4. Target Mulai Pekerjaan</span>
+          <input name="startDate" readonly>
+        </label>
+
+        <label class="field">
+          <span>5. Target Selesai Pekerjaan</span>
+          <input name="endDate" readonly>
+        </label>
+
+        <label class="field">
+          <span>6. Durasi / Periode Kontrak</span>
+          <input name="duration" readonly>
+        </label>
+
+      </div>
+    </section>
+
+    <!-- SERVICE SPECIFICATION -->
+    <section>
+      <h3>SERVICE SPECIFICATION</h3>
+
+      <div class="service-grid">
+
+        <label class="field wide">
+          <span>1. Tujuan dan Hasil yang Diharapkan</span>
+          <textarea name="objective" readonly></textarea>
+        </label>
+
+        <label class="field wide">
+          <span>2. Scope of Work</span>
+          <textarea name="scopeOfWork" readonly></textarea>
+        </label>
+
+        <label class="field">
+          <span>3. Persyaratan Teknis</span>
+          <textarea name="technicalRequirements" readonly></textarea>
+        </label>
+
+        <label class="field">
+          <span>4. Standar / Regulasi</span>
+          <textarea name="standards" readonly></textarea>
+        </label>
+
+        <label class="field">
+          <span>5. Kualifikasi Tenaga Kerja</span>
+          <textarea name="personnel" readonly></textarea>
+        </label>
+
+        <label class="field">
+          <span>6. Peralatan / Tools</span>
+          <textarea name="tools" readonly></textarea>
+        </label>
+
+      </div>
+    </section>
+
+    <!-- DELIVERABLES -->
+    <section>
+      <h3>SCOPE, DELIVERABLES &amp; ACCEPTANCE</h3>
+
+      <div class="service-grid">
+
+        <label class="field">
+          <span>1. Tanggung Jawab Penyedia Jasa</span>
+          <textarea name="vendorResponsibility" readonly></textarea>
+        </label>
+
+        <label class="field">
+          <span>2. Tanggung Jawab User / Perusahaan</span>
+          <textarea name="userResponsibility" readonly></textarea>
+        </label>
+
+        <label class="field">
+          <span>3. Deliverables / Output Pekerjaan</span>
+          <textarea name="deliverables" readonly></textarea>
+        </label>
+
+        <label class="field">
+          <span>4. Acceptance Criteria</span>
+          <textarea name="acceptanceCriteria" readonly></textarea>
+        </label>
+
+        <label class="field">
+          <span>5. HSE / Safety Requirements</span>
+          <textarea name="hse" readonly></textarea>
+        </label>
+
+        <label class="field">
+          <span>6. Dokumen yang Wajib Diserahkan</span>
+          <textarea name="requiredDocuments" readonly></textarea>
+        </label>
+
+        <label class="field">
+          <span>7. Garansi / Masa Pemeliharaan</span>
+          <input name="warranty" readonly>
+        </label>
+
+        <label class="field">
+          <span>8. Ketentuan Tambahan</span>
+          <textarea name="additionalTerms" readonly></textarea>
+        </label>
+
+      </div>
+    </section>
+
+    <!-- APPROVAL -->
+    <div class="approval">
+
+      <div class="role">Requestor</div>
+      <div class="role">Manager</div>
+      <div class="role white">Plant Head</div>
+
+      <div class="approve">
+        <label>Tgl Approve
+          <input name="requestorDate" readonly>
+        </label>
+        <label>Nama
+          <input name="requestorName" readonly>
+        </label>
+        <label>Tanda tangan
+          <input name="requestorSign" readonly>
+        </label>
+      </div>
+
+      <div class="approve">
+        <label>Tgl Approve
+          <input name="managerDate" readonly>
+        </label>
+        <label>Nama
+          <input name="managerName" readonly>
+        </label>
+        <label>Tanda tangan
+          <input name="managerSign" readonly>
+        </label>
+      </div>
+
+      <div class="approve">
+        <label>Tgl Approve
+          <input name="plantHeadDate" readonly>
+        </label>
+        <label>Nama
+          <input name="plantHeadName" readonly>
+        </label>
+        <label>Tanda tangan
+          <input name="plantHeadSign" readonly>
+        </label>
+      </div>
+
+    </div>
+
+    <p class="service-note">
+      Note: Pastikan ruang lingkup, hasil pekerjaan, kriteria penerimaan,
+      dan dokumen pendukung telah disepakati sebelum jasa diajukan.
+    </p>
+
+  </form>
+
+  <p class="no-print footnote">
+    E-Spec — Form Spesifikasi Jasa.
+  </p>
+
+</main>
+
+<script src="jasa.js"></script>
+
+</body>
+</html>

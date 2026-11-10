@@ -1,0 +1,1672 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+/* =========================================
+   E-SPEC - BARANG WORKSPACE
+========================================= */
+
+:root {
+  --primary: #6558e8;
+  --primary-dark: #5143d0;
+  --primary-light: #f0eeff;
+  --ink: #202b45;
+  --muted: #8791a5;
+  --bg: #f5f6fc;
+  --line: #e9ebf3;
+  --white: #fff;
+  --green: #24a982;
+  --shadow: 0 8px 28px rgba(39,42,90,.055);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================
+   TOP NAVIGATION
+========================================= */
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: 76px;
+  padding: 12px 5%;
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand .mark {
+  width: 43px;
+  height: 43px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg,#796cf5,#5143d0);
+  color: white;
+  font-family: 'Plus Jakarta Sans',sans-serif;
+  font-size: 22px;
+  box-shadow: 0 5px 15px rgba(101,88,232,.22);
+}
+
+.brand strong {
+  display: block;
+  font-family: 'Plus Jakarta Sans',sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.brand small {
+  display: block;
+  margin-top: 4px;
+  color: #9ba3b4;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.toolbar > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.toolbar button {
+  min-height: 39px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: white;
+  color: #626d83;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.toolbar button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+
+
+.toolbar button.primary {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(101,88,232,.2);
+}
+
+.toolbar button.primary:hover {
+  background: var(--primary-dark);
+  color: white;
+}
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+
+main {
+  width: 100%;
+  max-width: 1150px;
+  margin: auto;
+  padding: 42px 28px 55px;
+}
+
+.intro {
+  position: relative;
+  overflow: hidden;
+  padding: 32px 36px;
+  margin-bottom: 23px;
+  border: 1px solid #e5e2ff;
+  border-radius: 17px;
+  background:
+    radial-gradient(circle at 90% 10%,rgba(255,255,255,.9),transparent 28%),
+    linear-gradient(110deg,#ebe9ff,#f5f3ff,#e5e2ff);
+}
+
+.intro small {
+  display: inline-block;
+  padding: 7px 11px;
+  border-radius: 30px;
+  background: rgba(255,255,255,.75);
+  color: var(--primary);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.intro h1 {
+  margin: 17px 0 8px;
+  font-family: 'Plus Jakarta Sans',sans-serif;
+  font-size: clamp(27px,4vw,36px);
+  letter-spacing: -1.3px;
+}
+
+.intro h1 em {
+  color: var(--primary);
+  font-style: normal;
+}
+
+.intro p {
+  max-width: 650px;
+  margin: 0;
+  color: #78839c;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* =========================================
+   BACK LINK
+========================================= */
+
+.service-actions {
+  max-width: 100%;
+  margin: 0 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.service-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: .2s;
+}
+
+.service-actions a:hover {
+  color: var(--primary-dark);
+  transform: translateX(-3px);
+}
+
+/* =========================================
+   QUESTIONNAIRE
+========================================= */
+
+.questionnaire-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.q-section {
+  padding: 25px 27px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+  transition: .25s ease;
+  animation: fadeUp .4s ease both;
+}
+
+.q-section:hover {
+  border-color: #dedaff;
+}
+
+.q-section h2 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 23px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f1f6;
+  font-family: 'Plus Jakarta Sans',sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -.3px;
+}
+
+.q-section h2::before {
+  content: "";
+  width: 4px;
+  height: 23px;
+  border-radius: 5px;
+  background: var(--primary);
+}
+
+.q-section h3 {
+  margin: 28px 0 17px;
+  padding: 11px 14px;
+  border-radius: 8px;
+  background: #f7f6ff;
+  color: var(--primary);
+  font-family: 'Plus Jakarta Sans',sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* =========================================
+   GRID
+========================================= */
+
+.q-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 19px 22px;
+}
+
+/* =========================================
+   INPUT FIELDS
+========================================= */
+
+.q-field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+  color: #46516a;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.q-field input:not([type="checkbox"]):not([type="file"]),
+.q-field textarea,
+.q-field select {
+  width: 100%;
+  min-height: 43px;
+  padding: 11px 13px;
+  border: 1px solid #e3e6ef;
+  border-radius: 9px;
+  outline: none;
+  background: #fbfcff;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 500;
+  transition: .2s ease;
+}
+
+.q-field input::placeholder,
+.q-field textarea::placeholder {
+  color: #b0b7c5;
+  font-weight: 400;
+}
+
+.q-field input:focus,
+.q-field textarea:focus,
+.q-field select:focus {
+  border-color: var(--primary);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(101,88,232,.10);
+}
+
+.q-field textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.7;
+}
+
+.q-field input[type="date"] {
+  color: #68738a;
+}
+
+/* =========================================
+   CHECKBOX
+========================================= */
+
+fieldset.q-field {
+  min-width: 0;
+  margin: 0;
+  padding: 15px;
+  border: 1px solid #e5e7f0;
+  border-radius: 10px;
+  background: #fbfcff;
+}
+
+.q-field legend {
+  padding: 0 5px;
+  color: #46516a;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.q-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.q-check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 11px;
+  border: 1px solid #e8e9f1;
+  border-radius: 8px;
+  background: white;
+  color: #68738a;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.q-check:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.q-check input,
+.q-inline input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* =========================================
+   FILE UPLOAD
+========================================= */
+
+.q-field input[type="file"] {
+  width: 100%;
+  padding: 15px;
+  border: 1px dashed #c9c4f5;
+  border-radius: 10px;
+  background: #f8f7ff;
+  color: #7b8498;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.q-field input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 7px;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* =========================================
+   INLINE DOCUMENT INPUT
+========================================= */
+
+.q-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.q-inline input:not([type="checkbox"]) {
+  flex: 1;
+  min-width: 0;
+}
+
+/* =========================================
+   FOOTNOTE
+========================================= */
+
+.footnote {
+  margin: 22px 0 0;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: white;
+  color: #9ba3b4;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+/* =========================================
+   PDF TEMPLATE - SCREEN
+========================================= */
+
+.print-document {
+  display: none;
+}
+
+/* =========================================
+   ANIMATION
+========================================= */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================
+   RESPONSIVE TABLET
+========================================= */
+
+@media (max-width: 800px) {
+  .toolbar {
+    padding: 12px 20px;
+    flex-wrap: wrap;
+  }
+
+  main {
+    padding: 30px 20px 40px;
+  }
+
+  .q-section {
+    padding: 22px;
+  }
+
+  .toolbar > div:last-child {
+    flex-wrap: wrap;
+  }
+}
+
+/* =========================================
+   RESPONSIVE MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .toolbar {
+    position: relative;
+    padding: 13px 15px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .toolbar > div:last-child {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .toolbar button {
+    width: 100%;
+    padding: 0 8px;
+    font-size: 10px;
+  }
+
+  .toolbar button.primary {
+    grid-column: 1 / -1;
+  }
+
+  main {
+    padding: 23px 14px 35px;
+  }
+
+  .intro {
+    padding: 24px 20px;
+    border-radius: 13px;
+  }
+
+  .intro h1 {
+    font-size: 27px;
+  }
+
+  .intro p {
+    font-size: 11px;
+  }
+
+  .q-grid {
+    grid-template-columns: 1fr;
+    gap: 17px;
+  }
+
+  .q-section {
+    padding: 19px 16px;
+    border-radius: 12px;
+  }
+
+  .q-section h2 {
+    font-size: 14px;
+  }
+
+  .q-checks {
+    flex-direction: column;
+  }
+
+  .q-check {
+    width: 100%;
+  }
+
+  .service-actions {
+    flex-wrap: wrap;
+  }
+
+  .footnote {
+    font-size: 9px;
+  }
+}
+
+/* =========================================
+   PRINT / PDF - A4 LANDSCAPE
+   Template dokumen lama
+========================================= */
+
+@page {
+  size: A4 landscape;
+  margin: 6mm;
+}
+
+@media print {
+
+  html,
+  body {
+    width: 100%;
+    height: auto;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    color: black !important;
+    font-family: Arial, sans-serif !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    overflow: visible !important;
+  }
+
+  .no-print,
+  .toolbar,
+  .intro,
+  .service-actions,
+  .questionnaire-screen,
+  .footnote {
+    display: none !important;
+  }
+
+  main {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .print-document {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1px solid #333 !important;
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 8px !important;
+    line-height: 1.15 !important;
+    transform: none !important;
+    zoom: 1 !important;
+    break-inside: avoid !important;
+  }
+
+  .print-document * {
+    box-sizing: border-box !important;
+    color: black;
+    box-shadow: none !important;
+  }
+
+  .print-document input,
+  .print-document textarea {
+    background: transparent !important;
+    color: black !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 7.5px !important;
+    line-height: 1.1 !important;
+  }
+
+  .print-document input {
+    min-width: 0 !important;
+    height: auto !important;
+  }
+
+  .print-document textarea {
+    resize: none !important;
+    overflow: hidden !important;
+  }
+
+  .print-document section {
+    margin: 0 !important;
+    padding: 4px 7px !important;
+    border-bottom: 1px solid #333 !important;
+    break-inside: avoid !important;
+  }
+
+  /* HEADER */
+
+  .print-document .doc-top {
+    display: grid !important;
+    grid-template-columns: 1fr 1.5fr 1fr !important;
+    align-items: center !important;
+    min-height: 57px !important;
+    border-bottom: 1px solid #333 !important;
+  }
+
+  .print-document .logo {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 55px !important;
+    padding: 5px !important;
+    text-align: center !important;
+  }
+
+  /* Gunakan gambar logo asli jika tersedia */
+  .print-document .logo img,
+  .print-document .logo .sasa-logo {
+    display: block !important;
+    width: 125px !important;
+    max-width: 100% !important;
+    max-height: 45px !important;
+    object-fit: contain !important;
+    margin: auto !important;
+  }
+
+  .print-document .logo strong {
+    display: block;
+    color: #e52335 !important;
+    font-size: 24px !important;
+    font-weight: 800 !important;
+  }
+
+  .print-document .logo span {
+    font-size: 8px !important;
+  }
+
+  .print-document .doc-top h2 {
+    margin: 0 !important;
+    padding: 8px !important;
+    border-left: 1px solid #333 !important;
+    border-right: 1px solid #333 !important;
+    text-align: center !important;
+    font-size: 16px !important;
+  }
+
+  .print-document .meta {
+    padding: 5px !important;
+  }
+
+  .print-document .meta label,
+  .print-document .version label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    margin: 2px 0 !important;
+    font-size: 7px !important;
+  }
+
+  .print-document .meta input,
+  .print-document .version input {
+    flex: 1 !important;
+    width: 1px !important;
+    padding: 1px 2px !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+    border-radius: 0 !important;
+  }
+
+  .print-document .version {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 20px !important;
+    padding: 4px 8px !important;
+    border-bottom: 1px solid #333 !important;
+  }
+
+  /* SECTION TITLE */
+
+  .print-document section h3 {
+    margin: 0 -7px 4px !important;
+    padding: 4px !important;
+    background: #e8e8e8 !important;
+    border-bottom: 1px solid #333 !important;
+    text-align: center !important;
+    font-size: 8px !important;
+    font-weight: 800 !important;
+  }
+
+  /* IDENTITY */
+
+  .print-document .identity {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+  }
+
+  .print-document .lines label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    min-height: 14px !important;
+    margin: 0 !important;
+  }
+
+  .print-document .lines label span {
+    flex-shrink: 0 !important;
+    min-width: 115px !important;
+  }
+
+  .print-document .lines label b {
+    flex-shrink: 0 !important;
+  }
+
+  .print-document .lines input {
+    flex: 1 !important;
+    width: 1px !important;
+    padding: 1px 2px !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+    border-radius: 0 !important;
+  }
+
+  .print-document .checks {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+  }
+
+  .print-document .checks label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    font-size: 7px !important;
+  }
+
+  .print-document .checks input,
+  .print-document .doc-checks input[type="checkbox"] {
+    width: 10px !important;
+    height: 10px !important;
+    margin: 0 !important;
+    accent-color: black !important;
+  }
+
+  /* PURCHASE OBJECTIVE */
+
+  .print-document .objective label {
+    min-height: 14px !important;
+  }
+
+  .print-document .objective label span {
+    min-width: 115px !important;
+  }
+
+  /* MATERIAL SPECIFICATION */
+
+  .print-document .spec-head {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    background: #eee !important;
+    text-align: center !important;
+    font-weight: bold !important;
+    padding: 4px !important;
+    border-bottom: 1px solid #333 !important;
+  }
+
+  .print-document .spec-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .print-document .general {
+    padding-right: 8px !important;
+    border-right: 1px solid #333 !important;
+  }
+
+  .print-document .general label span {
+    min-width: 115px !important;
+  }
+
+  .print-document .general label i {
+    flex-shrink: 0 !important;
+    font-size: 7px !important;
+  }
+
+  .print-document .technical {
+    padding-left: 8px !important;
+  }
+
+  .print-document .techrows label,
+  .print-document .unique label {
+    display: grid !important;
+    grid-template-columns: 13px 1fr 8px 1fr !important;
+    align-items: center !important;
+    gap: 3px !important;
+    min-height: 15px !important;
+    margin: 0 !important;
+    font-size: 7px !important;
+  }
+
+  .print-document .techrows input,
+  .print-document .unique input {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 13px !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+    padding: 1px 2px !important;
+  }
+
+  .print-document .subhead {
+    padding: 3px !important;
+    margin: 3px 0 !important;
+    background: #eee !important;
+    text-align: center !important;
+    font-weight: bold !important;
+  }
+
+  /* SCOPE / SUPPORTING DOCUMENTS */
+
+  .print-document .scope-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .print-document .drawing {
+    min-height: 105px !important;
+    border-right: 1px solid #333 !important;
+    padding-right: 8px !important;
+  }
+
+  .print-document .drawing textarea {
+    width: 100% !important;
+    height: 55px !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+  }
+
+  .print-document #drawingPreview {
+    display: block !important;
+    max-width: 100% !important;
+    max-height: 65px !important;
+    object-fit: contain !important;
+  }
+
+  .print-document .scope > label {
+    display: grid !important;
+    grid-template-columns: 125px 7px 1fr !important;
+    gap: 4px !important;
+    align-items: center !important;
+    min-height: 15px !important;
+    margin: 0 !important;
+    font-size: 7px !important;
+  }
+
+  .print-document .scope > label input,
+  .print-document .scope > label textarea {
+    width: 100% !important;
+    min-width: 0 !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+    padding: 1px 2px !important;
+  }
+
+  .print-document .scope .tall textarea {
+    min-height: 25px !important;
+  }
+
+  .print-document .doc-checks {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2px 8px !important;
+    margin-top: 4px !important;
+  }
+
+  .print-document .doc-checks label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    font-size: 7px !important;
+  }
+
+  .print-document .doc-checks input:not([type="checkbox"]) {
+    flex: 1 !important;
+    width: 1px !important;
+    min-width: 0 !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+  }
+
+  /* APPROVAL */
+
+  .print-document .approval {
+    display: grid !important;
+    grid-template-columns: repeat(3,1fr) !important;
+    border-bottom: 1px solid #333 !important;
+  }
+
+  .print-document .role {
+    padding: 4px !important;
+    background: #e8e8e8 !important;
+    border-right: 1px solid #333 !important;
+    text-align: center !important;
+    font-weight: bold !important;
+  }
+
+  .print-document .role.white {
+    background: white !important;
+  }
+
+  .print-document .approve {
+    padding: 4px !important;
+    border-right: 1px solid #333 !important;
+  }
+
+  .print-document .approve label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    margin: 3px 0 !important;
+    font-size: 7px !important;
+  }
+
+  .print-document .approve input {
+    flex: 1 !important;
+    width: 1px !important;
+    min-width: 0 !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+  }
+
+  .print-document .note {
+    margin: 4px !important;
+    font-size: 7px !important;
+  }
+
+  /* HILANGKAN EFEK YANG TIDAK DIPERLUKAN SAAT PRINT */
+
+  .print-document button,
+  .print-document .no-print {
+    display: none !important;
+  }
+}
+
+
+
+/* =========================================
+   JASA - TEMPLATE PDF
+========================================= */
+
+.service-document {
+  display: none;
+}
+
+.sasa-logo {
+  display: block;
+  width: 125px;
+  max-width: 100%;
+  max-height: 45px;
+  height: auto;
+  object-fit: contain;
+  margin: auto;
+}
+
+@media print {
+
+  /* Tampilkan template Jasa */
+  #printJasaForm {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1px solid #333 !important;
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 8px !important;
+    line-height: 1.15 !important;
+    break-inside: avoid !important;
+  }
+
+  #printJasaForm * {
+    box-sizing: border-box !important;
+    color: black;
+    box-shadow: none !important;
+  }
+
+  #printJasaForm section {
+    margin: 0 !important;
+    padding: 4px 7px !important;
+    border-bottom: 1px solid #333 !important;
+    break-inside: avoid !important;
+  }
+
+  #printJasaForm .doc-top {
+    display: grid !important;
+    grid-template-columns: 1fr 1.5fr 1fr !important;
+    align-items: center !important;
+    min-height: 57px !important;
+    border-bottom: 1px solid #333 !important;
+  }
+
+  #printJasaForm .logo {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 55px !important;
+    padding: 5px !important;
+  }
+
+  #printJasaForm .logo img {
+    width: 125px !important;
+    max-width: 100% !important;
+    max-height: 45px !important;
+    object-fit: contain !important;
+  }
+
+  #printJasaForm .doc-top h2 {
+    margin: 0 !important;
+    padding: 8px !important;
+    border-left: 1px solid #333 !important;
+    border-right: 1px solid #333 !important;
+    text-align: center !important;
+    font-size: 16px !important;
+  }
+
+  #printJasaForm .meta {
+    padding: 5px !important;
+  }
+
+  #printJasaForm .meta label,
+  #printJasaForm .version label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    margin: 2px 0 !important;
+    font-size: 7px !important;
+  }
+
+  #printJasaForm .meta input,
+  #printJasaForm .version input {
+    flex: 1 !important;
+    width: 1px !important;
+    min-width: 0 !important;
+    padding: 1px 2px !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    font-size: 7.5px !important;
+  }
+
+  #printJasaForm .version {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 20px !important;
+    padding: 4px 8px !important;
+    border-bottom: 1px solid #333 !important;
+  }
+
+  #printJasaForm section h3 {
+    margin: 0 -7px 4px !important;
+    padding: 4px !important;
+    background: #e8e8e8 !important;
+    border-bottom: 1px solid #333 !important;
+    text-align: center !important;
+    font-size: 8px !important;
+    font-weight: 800 !important;
+  }
+
+  #printJasaForm .service-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 5px 12px !important;
+  }
+
+  #printJasaForm .field {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+    min-height: 16px !important;
+    margin: 0 !important;
+    font-size: 7px !important;
+  }
+
+  #printJasaForm .field.wide {
+    grid-column: 1 / -1 !important;
+  }
+
+  #printJasaForm .field span {
+    flex: 0 0 115px !important;
+    font-size: 7px !important;
+    font-weight: bold !important;
+  }
+
+  #printJasaForm .field input,
+  #printJasaForm .field textarea {
+    flex: 1 !important;
+    width: 1px !important;
+    min-width: 0 !important;
+    min-height: 14px !important;
+    padding: 1px 2px !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: black !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 7.5px !important;
+    line-height: 1.15 !important;
+  }
+
+  #printJasaForm .field textarea {
+    height: 25px !important;
+    resize: none !important;
+    overflow: hidden !important;
+  }
+
+  #printJasaForm .field.wide textarea {
+    height: 30px !important;
+  }
+
+  #printJasaForm .approval {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    border-bottom: 1px solid #333 !important;
+  }
+
+  #printJasaForm .role {
+    padding: 4px !important;
+    background: #e8e8e8 !important;
+    border-right: 1px solid #333 !important;
+    text-align: center !important;
+    font-size: 7px !important;
+    font-weight: bold !important;
+  }
+
+  #printJasaForm .role.white {
+    background: white !important;
+  }
+
+  #printJasaForm .approve {
+    min-width: 0 !important;
+    padding: 4px !important;
+    border-right: 1px solid #333 !important;
+  }
+
+  #printJasaForm .approve label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    margin: 3px 0 !important;
+    font-size: 7px !important;
+  }
+
+  #printJasaForm .approve input {
+    flex: 1 !important;
+    width: 1px !important;
+    min-width: 0 !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+    background: transparent !important;
+    font-size: 7px !important;
+  }
+
+  #printJasaForm .service-note {
+    margin: 4px !important;
+    font-size: 7px !important;
+  }
+
+  #printJasaForm button,
+  #printJasaForm .no-print {
+    display: none !important;
+  }
+}
+
+
+
+/* =========================================
+   DATABASE PRINT MODE - SCREEN PREVIEW
+   Tampilan dokumen sebelum dicetak
+========================================= */
+
+@media screen {
+
+  body.database-print-mode {
+    min-height: 100vh;
+    padding: 35px 20px;
+    background: #e9ebf2 !important;
+    color: #202b45;
+    font-family: Arial, sans-serif;
+  }
+
+  body.database-print-mode main {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  body.database-print-mode #printSpecForm {
+    display: block !important;
+
+    width: 100%;
+    max-width: 1120px;
+    min-height: 790px;
+
+    margin: 0 auto;
+    padding: 15px;
+
+    overflow: hidden;
+
+    border: 1px solid #d5d8e2;
+    border-radius: 3px;
+
+    background: #fff !important;
+    color: #111 !important;
+
+    box-shadow: 0 8px 35px rgba(25, 30, 55, .13);
+
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  body.database-print-mode #printSpecForm * {
+    box-sizing: border-box;
+  }
+
+  /* HEADER */
+
+  body.database-print-mode #printSpecForm .doc-top {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    align-items: center;
+    min-height: 75px;
+    border: 1px solid #333;
+  }
+
+  body.database-print-mode #printSpecForm .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 65px;
+    padding: 8px;
+    text-align: center;
+  }
+
+  body.database-print-mode #printSpecForm .logo img {
+    display: block;
+    width: 125px;
+    max-width: 100%;
+    max-height: 48px;
+    height: auto;
+    object-fit: contain;
+    margin: auto;
+  }
+
+  body.database-print-mode #printSpecForm .doc-top h2 {
+    margin: 0;
+    padding: 12px;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.35;
+  }
+
+  body.database-print-mode #printSpecForm .meta {
+    padding: 8px;
+  }
+
+  body.database-print-mode #printSpecForm .meta label,
+  body.database-print-mode #printSpecForm .version label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 4px 0;
+    font-size: 9px;
+  }
+
+  body.database-print-mode #printSpecForm .meta input,
+  body.database-print-mode #printSpecForm .version input {
+    flex: 1;
+    min-width: 0;
+    width: 1px;
+    padding: 2px 4px;
+    border: 0;
+    border-bottom: 1px dotted #777;
+    border-radius: 0;
+    background: transparent;
+    color: #111;
+  }
+
+  body.database-print-mode #printSpecForm .version {
+    display: flex;
+    justify-content: flex-end;
+    gap: 25px;
+    padding: 7px 10px;
+    border: 1px solid #333;
+    border-top: 0;
+  }
+
+  /* SECTION */
+
+  body.database-print-mode #printSpecForm section {
+    margin: 0;
+    padding: 8px 10px;
+    border: 1px solid #333;
+    border-top: 0;
+  }
+
+  body.database-print-mode #printSpecForm section h3 {
+    margin: 0 -10px 7px;
+    padding: 7px;
+    border-bottom: 1px solid #333;
+    background: #e9e9e9;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 800;
+  }
+
+  /* IDENTITY */
+
+  body.database-print-mode #printSpecForm .identity {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  body.database-print-mode #printSpecForm .lines label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 21px;
+    margin: 0;
+  }
+
+  body.database-print-mode #printSpecForm .lines label span {
+    flex-shrink: 0;
+    min-width: 125px;
+  }
+
+  body.database-print-mode #printSpecForm .lines label b {
+    flex-shrink: 0;
+  }
+
+  body.database-print-mode #printSpecForm .lines input {
+    flex: 1;
+    min-width: 0;
+    width: 1px;
+    padding: 2px 4px;
+    border: 0;
+    border-bottom: 1px dotted #888;
+    border-radius: 0;
+    background: transparent;
+    color: #111;
+    outline: none;
+  }
+
+  body.database-print-mode #printSpecForm .checks {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  body.database-print-mode #printSpecForm .checks label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9px;
+  }
+
+  /* PURCHASE OBJECTIVE */
+
+  body.database-print-mode #printSpecForm .objective label {
+    min-height: 21px;
+  }
+
+  /* MATERIAL SPECIFICATION */
+
+  body.database-print-mode #printSpecForm .spec-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 8px;
+    border-bottom: 1px solid #333;
+    background: #e9e9e9;
+    text-align: center;
+    font-weight: 800;
+  }
+
+  body.database-print-mode #printSpecForm .spec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  body.database-print-mode #printSpecForm .general {
+    padding-right: 10px;
+    border-right: 1px solid #333;
+  }
+
+  body.database-print-mode #printSpecForm .technical {
+    padding-left: 10px;
+  }
+
+  body.database-print-mode #printSpecForm .subhead {
+    padding: 6px;
+    border-bottom: 1px solid #aaa;
+    background: #f0f0f0;
+    text-align: center;
+    font-weight: 800;
+  }
+
+  body.database-print-mode #printSpecForm .techrows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  body.database-print-mode #printSpecForm .unique {
+    border-top: 1px solid #333;
+  }
+
+  /* SCOPE */
+
+  body.database-print-mode #printSpecForm .scope-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  body.database-print-mode #printSpecForm .drawing {
+    min-height: 150px;
+    padding: 8px;
+    border-right: 1px solid #333;
+  }
+
+  body.database-print-mode #printSpecForm .drawing img {
+    display: block;
+    max-width: 100%;
+    max-height: 170px;
+    object-fit: contain;
+  }
+
+  body.database-print-mode #printSpecForm .scope {
+    padding: 8px;
+  }
+
+  /* APPROVAL */
+
+  body.database-print-mode #printSpecForm .approval {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid #333;
+    border-top: 0;
+  }
+
+  body.database-print-mode #printSpecForm .role {
+    min-height: 95px;
+    padding: 8px;
+    border-right: 1px solid #333;
+  }
+
+  body.database-print-mode #printSpecForm .role:last-child {
+    border-right: 0;
+  }
+
+  body.database-print-mode #printSpecForm .role h4 {
+    margin: -8px -8px 8px;
+    padding: 7px;
+    border-bottom: 1px solid #333;
+    background: #e9e9e9;
+    text-align: center;
+  }
+
+  body.database-print-mode #printSpecForm .note,
+  body.database-print-mode #printSpecForm .footnote {
+    padding: 8px;
+    font-size: 9px;
+  }
+
+  /* INPUT DAN TEXTAREA */
+
+  body.database-print-mode #printSpecForm input,
+  body.database-print-mode #printSpecForm textarea {
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+  }
+
+  body.database-print-mode #printSpecForm textarea {
+    width: 100%;
+    resize: none;
+  }
+}
+
+/* Layar kecil */
+@media screen and (max-width: 700px) {
+  body.database-print-mode {
+    padding: 12px 5px;
+  }
+
+  body.database-print-mode #printSpecForm {
+    padding: 7px;
+    min-height: auto;
+    overflow-x: auto;
+  }
+}
+
+.material-category-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.material-category-checks .q-check {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+
+/* =========================================
+   DIMENSION DYNAMIC ROWS
+========================================= */
+
+.dimension-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* DIMENSION DYNAMIC ROWS */
+
+.dimension-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dimension-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 65px 36px;
+  gap: 8px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.dimension-row select,
+.dimension-row input {
+  width: 100%;
+  min-width: 0;
+}
+
+.remove-dimension {
+  border: 1px solid #f0caca;
+  background: #fff5f5;
+  color: #d64545;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.remove-dimension:hover {
+  background: #ffe5e5;
+}
+
+.add-dimension-btn {
+  width: fit-content;
+  padding: 9px 14px;
+  border: 1px solid #6558e8;
+  border-radius: 8px;
+  background: #f4f2ff;
+  color: #6558e8;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.add-dimension-btn:hover {
+  background: #e9e5ff;
+}
+
+@media (max-width: 600px) {
+  .dimension-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 55px 32px;
+    gap: 5px;
+  }
+}
