@@ -4,13 +4,13 @@
 
   // =====================================================
   // E-SPEC BARANG
-  // Mengikuti DESIGN FORM BRG - Design 2
   // =====================================================
 
   const API_URL = "http://localhost:3000/api/documents";
   const STORAGE_KEY = "eSpecBarangQuestionnaire.v2";
   const OLD_STORAGE_KEY = "eSpecBarangQuestionnaire.v1";
   const VERSION_STORAGE_KEY = "eSpecBarangVersion.v1";
+  const HISTORY_KEY = "eSpecBarangTransactions.v1";
 
   const questionnaire = document.getElementById("questionnaireForm");
   const printForm = document.getElementById("printSpecForm");
@@ -30,8 +30,20 @@
   const resetBtn = $("#resetBtn");
   const saveBtn = $("#saveAdminBtn");
   const draftStatus = $("#draftStatus");
+
   const drawingUpload = $("#questionDrawingUpload");
   const drawingPreview = $("#drawingPreview");
+
+  const DIMENSION_OPTIONS = [
+    "L",
+    "W",
+    "H",
+    "T",
+    "ID",
+    "OD",
+    "DN",
+    "Phase"
+  ];
 
   let drawingImage = "";
   let loadingDocument = false;
@@ -43,6 +55,7 @@
 
   function todayISO() {
     const now = new Date();
+
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
     const day = String(now.getDate()).padStart(2, "0");
@@ -73,259 +86,231 @@
   }
 
   function escapeSelector(value) {
-    return CSS.escape(String(value));
-  }
+    if (window.CSS && CSS.escape) {
+      return CSS.escape(String(value));
+    }
 
-  function isEmpty(value) {
-    return (
-      value === "" ||
-      value === null ||
-      value === undefined ||
-      (Array.isArray(value) && value.length === 0)
-    );
+    return String(value).replace(/["\\]/g, "\\$&");
   }
 
   // =====================================================
   // VERSION & CREATED DATE
   // =====================================================
 
-function initializeDocumentInfo() {
-  const versionInput = document.querySelector('[name="version"]');
-  const createdDateInput = document.querySelector('[name="createdDate"]');
+  function initializeDocumentInfo() {
+    const versionInput = $('[name="version"]', questionnaire);
+    const createdDateInput = $('[name="createdDate"]', questionnaire);
 
-  if (!versionInput || !createdDateInput) return;
+    if (!versionInput || !createdDateInput) return;
 
-  // Ambil nomor version berikutnya dari localStorage
-  const savedVersion = localStorage.getItem(VERSION_STORAGE_KEY);
+    const savedVersion = localStorage.getItem(VERSION_STORAGE_KEY);
 
-  // Jika belum ada transaksi, mulai dari 00
-  const currentVersion = savedVersion === null
-    ? 0
-    : Number(savedVersion);
+    const currentVersion = savedVersion === null
+      ? 0
+      : Number(savedVersion);
 
-  versionInput.value = String(currentVersion).padStart(2, "0");
+    versionInput.value = String(currentVersion).padStart(2, "0");
 
-  // Created Date hanya dibuat jika masih kosong
-  if (!createdDateInput.value) {
-    createdDateInput.value = todayISO();
+    if (!createdDateInput.value) {
+      createdDateInput.value = todayISO();
+    }
   }
-}
 
-function saveTransactionLocally() {
-  try {
-    const formData = getFormData();
+  function saveTransactionLocally() {
+    try {
+      const formData = getFormData();
 
-    const versionInput = document.querySelector('[name="version"]');
-    const createdDateInput = document.querySelector('[name="createdDate"]');
+      const versionInput = $('[name="version"]', questionnaire);
+      const createdDateInput = $('[name="createdDate"]', questionnaire);
 
-    const currentVersion = Number(versionInput.value || 0);
+      const currentVersion = Number(versionInput?.value || 0);
 
-    // Ambil riwayat transaksi
-    const historyKey = "eSpecBarangTransactions.v1";
+      const history = JSON.parse(
+        localStorage.getItem(HISTORY_KEY) || "[]"
+      );
 
-    const history = JSON.parse(
-      localStorage.getItem(historyKey) || "[]"
-    );
+      const transaction = {
+        id: Date.now(),
+        version: String(currentVersion).padStart(2, "0"),
+        createdDate: createdDateInput?.value || todayISO(),
+        submittedAt: new Date().toISOString(),
+        formData
+      };
 
-    // Simpan transaksi dengan version saat ini
-    const transaction = {
-      id: Date.now(),
-      version: String(currentVersion).padStart(2, "0"),
-      createdDate: createdDateInput.value,
-      submittedAt: new Date().toISOString(),
-      formData: formData
-    };
+      history.push(transaction);
 
-    history.push(transaction);
+      localStorage.setItem(
+        HISTORY_KEY,
+        JSON.stringify(history)
+      );
 
-    // Simpan riwayat transaksi
-    localStorage.setItem(historyKey, JSON.stringify(history));
+      const nextVersion = currentVersion + 1;
 
-    // Simpan nomor version berikutnya
-    const nextVersion = currentVersion + 1;
+      localStorage.setItem(
+        VERSION_STORAGE_KEY,
+        String(nextVersion)
+      );
 
-    localStorage.setItem(
-      VERSION_STORAGE_KEY,
-      String(nextVersion)
-    );
+      if (versionInput) {
+        versionInput.value = String(nextVersion).padStart(2, "0");
+      }
 
-    // Tampilkan version berikutnya pada form
-    versionInput.value = String(nextVersion).padStart(2, "0");
+      saveDraft();
 
-    // Simpan draft terbaru
+      return true;
+
+    } catch (error) {
+      console.error("Gagal menyimpan transaksi:", error);
+
+      alert(
+        "Transaksi gagal disimpan di browser. Periksa kapasitas penyimpanan."
+      );
+
+      return false;
+    }
+  }
+
+  // =====================================================
+  // REASON TO PROCURE
+  // =====================================================
+
+  function updateReason() {
+    const choice = $("#reasonChoice", questionnaire);
+    const other = $('[name="reasonOther"]', questionnaire);
+    const finalField = $("#reasonFinal", questionnaire);
+    const otherContainer = $("#reasonOthersBarang");
+
+    if (!choice || !finalField) return;
+
+    const isOthers = choice.value === "Others";
+
+    if (otherContainer) {
+      otherContainer.hidden = !isOthers;
+    }
+
+    if (other) {
+      other.disabled = !isOthers;
+    }
+
+    finalField.value = isOthers
+      ? other?.value.trim() || ""
+      : choice.value;
+  }
+
+  // =====================================================
+  // DIMENSION
+  // =====================================================
+
+  function createDimensionRow(item = {}) {
+    const container = $("#dimensionRows");
+
+    if (!container) return;
+
+    const row = document.createElement("div");
+    row.className = "dimension-row";
+
+    row.innerHTML = `
+      <select class="dimension-type">
+        <option value="">-- Pilih Dimension --</option>
+
+        ${DIMENSION_OPTIONS.map(option => `
+          <option value="${option}">${option}</option>
+        `).join("")}
+      </select>
+
+      <input
+        type="text"
+        class="dimension-value"
+        placeholder="Masukkan nilai"
+      >
+
+      <select class="dimension-symbol">
+        <option value="x">x</option>
+        <option value="~">~</option>
+        <option value="/">/</option>
+        <option value="±">±</option>
+        <option value="-">-</option>
+      </select>
+
+      <button
+        type="button"
+        class="remove-dimension"
+        title="Hapus"
+      >&times;</button>
+    `;
+
+    $(".dimension-type", row).value = item.type || "";
+    $(".dimension-value", row).value = item.value || "";
+    $(".dimension-symbol", row).value = item.symbol || "x";
+
+    container.appendChild(row);
+  }
+
+  function collectDimensionItems() {
+    const container = $("#dimensionRows");
+
+    if (!container) return [];
+
+    return $$(".dimension-row", container)
+      .map(row => ({
+        type: $(".dimension-type", row)?.value || "",
+        value: $(".dimension-value", row)?.value.trim() || "",
+        symbol: $(".dimension-symbol", row)?.value || "x"
+      }))
+      .filter(item => item.type && item.value !== "");
+  }
+
+  function updateDimension() {
+    const items = collectDimensionItems();
+    const finalField = $("#dimensionFinal");
+
+    if (!finalField) return;
+
+    finalField.value = items.map((item, index) => {
+      const dimension = `${item.type} ${item.value}`;
+
+      return index === 0
+        ? dimension
+        : `${item.symbol} ${dimension}`;
+    }).join(" ");
+  }
+
+  const dimensionRowsContainer = $("#dimensionRows");
+  const addDimensionBtn = $("#addDimensionBtn");
+
+  addDimensionBtn?.addEventListener("click", () => {
+    createDimensionRow();
+
+    updateDimension();
     saveDraft();
+  });
 
-    return true;
+  dimensionRowsContainer?.addEventListener("click", event => {
+    const removeButton = event.target.closest(".remove-dimension");
 
-  } catch (error) {
-    console.error("Gagal menyimpan transaksi:", error);
-    alert("Transaksi gagal disimpan di browser. Periksa kapasitas penyimpanan.");
-    return false;
-  }
-}
+    if (!removeButton) return;
+
+    const rows = $$(".dimension-row", dimensionRowsContainer);
+    const currentRow = removeButton.closest(".dimension-row");
+
+    if (rows.length > 1) {
+      currentRow.remove();
+    } else {
+      $(".dimension-type", currentRow).value = "";
+      $(".dimension-value", currentRow).value = "";
+      $(".dimension-symbol", currentRow).value = "x";
+    }
+
+    updateDimension();
+    saveDraft();
+  });
+
+  dimensionRowsContainer?.addEventListener("input", updateDimension);
+  dimensionRowsContainer?.addEventListener("change", updateDimension);
 
   // =====================================================
-  // UPDATE FIELD GABUNGAN
+  // PACK SIZE
   // =====================================================
-
-  
-function updateReason() {
-  const choice = $("#reasonChoice", questionnaire);
-  const other = $('[name="reasonOther"]', questionnaire);
-  const finalField = $("#reasonFinal", questionnaire);
-  const otherContainer = $("#reasonOthersBarang");
-
-  if (!choice || !finalField) return;
-
-  const isOthers = choice.value === "Others";
-
-  // Tampilkan atau sembunyikan field Reason Others
-  if (otherContainer) {
-    otherContainer.hidden = !isOthers;
-  }
-
-  // Aktifkan hanya ketika memilih Others
-  if (other) {
-    other.disabled = !isOthers;
-  }
-
-  // Gabungkan nilai Reason to Procure
-  finalField.value = isOthers
-    ? other?.value.trim() || ""
-    : choice.value;
-}
-
-
-
-// =====================================================
-// DIMENSION
-// =====================================================
-
-function createDimensionRow(item = {}) {
-  const container = document.getElementById("dimensionRows");
-  if (!container) return;
-
-  const row = document.createElement("div");
-  row.className = "dimension-row";
-
-  row.innerHTML = `
-    <select class="dimension-type">
-      <option value="">-- Pilih Dimension --</option>
-      <option value="Length">Length</option>
-      <option value="Width">Width</option>
-      <option value="Height">Height</option>
-      <option value="Thickness">Thickness</option>
-      <option value="Inner Diameter">Inner Diameter</option>
-      <option value="Outer Diameter">Outer Diameter</option>
-      <option value="Diameter Nominal">Diameter Nominal</option>
-      <option value="Phase">Phase</option>
-    </select>
-
-    <input
-      type="number"
-      class="dimension-value"
-      placeholder="Masukkan nilai"
-      step="any"
-    >
-
-    <select class="dimension-symbol">
-      <option value="x">x</option>
-      <option value="~">~</option>
-      <option value="/">/</option>
-      <option value="±">±</option>
-      <option value="-">-</option>
-    </select>
-
-    <button
-      type="button"
-      class="remove-dimension"
-      title="Hapus"
-    >&times;</button>
-  `;
-
-  row.querySelector(".dimension-type").value = item.type || "";
-  row.querySelector(".dimension-value").value = item.value || "";
-  row.querySelector(".dimension-symbol").value = item.symbol || "x";
-
-  container.appendChild(row);
-}
-
-function collectDimensionItems() {
-  const container = document.getElementById("dimensionRows");
-
-  if (!container) return [];
-
-  return Array.from(container.querySelectorAll(".dimension-row"))
-    .map(row => ({
-      type: row.querySelector(".dimension-type")?.value || "",
-      value: row.querySelector(".dimension-value")?.value.trim() || "",
-      symbol: row.querySelector(".dimension-symbol")?.value || "x"
-    }))
-    .filter(item => item.type && item.value !== "");
-}
-
-function updateDimension() {
-  const items = collectDimensionItems();
-
-  // Gunakan optional chaining agar tidak error jika elemen tidak ditemukan
-  const unit = document.getElementById("dimensionUom")?.value || "";
-  const finalField = document.getElementById("dimensionFinal");
-
-  if (!finalField) return;
-
-  if (items.length === 0) {
-    finalField.value = "";
-    return;
-  }
-
-  const dimensionText = items.map((item, index) => {
-    const dimension = `${item.type} ${item.value}`;
-
-    return index === 0
-      ? dimension
-      : `${item.symbol} ${dimension}`;
-  }).join(" ");
-
-  finalField.value = `${dimensionText} ${unit}`.trim();
-}
-
-// =====================================================
-// TOMBOL TAMBAH DIMENSION
-// =====================================================
-
-const addDimensionBtn = document.getElementById("addDimensionBtn");
-const dimensionRowsContainer = document.getElementById("dimensionRows");
-
-addDimensionBtn?.addEventListener("click", () => {
-  createDimensionRow();
-  updateDimension();
-  saveDraft();
-});
-
-// =====================================================
-// TOMBOL HAPUS DIMENSION
-// =====================================================
-
-dimensionRowsContainer?.addEventListener("click", event => {
-  const removeButton = event.target.closest(".remove-dimension");
-
-  if (!removeButton) return;
-
-  const rows = dimensionRowsContainer.querySelectorAll(".dimension-row");
-  const currentRow = removeButton.closest(".dimension-row");
-
-  if (rows.length > 1) {
-    currentRow.remove();
-  } else {
-    currentRow.querySelector(".dimension-type").value = "";
-    currentRow.querySelector(".dimension-value").value = "";
-    currentRow.querySelector(".dimension-symbol").value = "x";
-  }
-
-  updateDimension();
-  saveDraft();
-});
-
 
   function updatePackSize() {
     const quantity = $("#packQuantity", questionnaire)?.value || "";
@@ -350,9 +335,6 @@ dimensionRowsContainer?.addEventListener("click", event => {
   function collectTechnicalAttributes() {
     const attributes = [];
 
-    // Technical standar dari Excel:
-    // Electric, Mechanical, Liquid
-
     $$("[data-tech-label]", questionnaire).forEach(input => {
       const label = input.dataset.techLabel;
       const value = input.value.trim();
@@ -372,7 +354,6 @@ dimensionRowsContainer?.addEventListener("click", event => {
       });
     });
 
-    // Custom technical attribute
     $$(".custom-tech-row", questionnaire).forEach(row => {
       const label = $("[data-custom-tech-name]", row)?.value.trim() || "";
       const value = $("[data-custom-tech-value]", row)?.value.trim() || "";
@@ -403,7 +384,6 @@ dimensionRowsContainer?.addEventListener("click", event => {
   }
 
   function updateLegacyTechnicalFields(attributes) {
-    // Menjaga kompatibilitas dengan template PDF lama
     for (let i = 1; i <= 5; i++) {
       const item = attributes[i - 1];
 
@@ -462,7 +442,7 @@ dimensionRowsContainer?.addEventListener("click", event => {
   }
 
   // =====================================================
-  // SERIALISASI SELURUH DATA FORM
+  // SERIALISASI DATA FORM
   // =====================================================
 
   function getFormData() {
@@ -471,6 +451,7 @@ dimensionRowsContainer?.addEventListener("click", event => {
     updatePackSize();
 
     const technicalAttributes = collectTechnicalAttributes();
+
     updateLegacyTechnicalFields(technicalAttributes);
 
     const uniqueAttributes = collectUniqueAttributes();
@@ -511,22 +492,17 @@ dimensionRowsContainer?.addEventListener("click", event => {
       data[name] = first.value ?? "";
     });
 
-    // Data tambahan dari Excel
     data.technicalAttributes = technicalAttributes;
-data.uniqueAttributes = uniqueAttributes;
-data.dimensionItems = collectDimensionItems();
-
-    // Simpan gambar dalam bentuk Data URL
+    data.uniqueAttributes = uniqueAttributes;
+    data.dimensionItems = collectDimensionItems();
     data.drawingImage = drawingImage;
-
-    // Informasi jenis dokumen
     data.specType = "Barang";
 
     return data;
   }
 
   // =====================================================
-  // RESTORE FORM
+  // RESTORE FIELD
   // =====================================================
 
   function setFieldValue(name, value) {
@@ -554,8 +530,13 @@ data.dimensionItems = collectDimensionItems();
     });
   }
 
+  // =====================================================
+  // CUSTOM TECHNICAL ATTRIBUTE
+  // =====================================================
+
   function createCustomTechnicalRow(item = {}) {
     const container = $("#dynamicCustomTechnicalContainer");
+
     if (!container) return;
 
     const row = document.createElement("div");
@@ -606,8 +587,13 @@ data.dimensionItems = collectDimensionItems();
     container.appendChild(row);
   }
 
+  // =====================================================
+  // CUSTOM UNIQUE ATTRIBUTE
+  // =====================================================
+
   function createCustomUniqueRow(item = {}) {
     const container = $("#dynamicCustomUniqueContainer");
+
     if (!container) return;
 
     const index = container.querySelectorAll(".custom-unique-row").length + 1;
@@ -663,34 +649,40 @@ data.dimensionItems = collectDimensionItems();
       .forEach(createCustomUniqueRow);
   }
 
+  // =====================================================
+  // RESTORE FORM
+  // =====================================================
+
   function restoreForm(data) {
     if (!data || typeof data !== "object") return;
 
     restoreDynamicAttributes(data);
 
-    // Pulihkan baris Dimension
-const dimensionContainer = document.getElementById("dimensionRows");
+    const dimensionContainer = $("#dimensionRows");
 
-if (dimensionContainer) {
-  dimensionContainer.innerHTML = "";
+    if (dimensionContainer) {
+      dimensionContainer.innerHTML = "";
 
-  if (Array.isArray(data.dimensionItems) && data.dimensionItems.length) {
-    data.dimensionItems.forEach(createDimensionRow);
-  } else {
-    createDimensionRow();
-  }
-}
+      if (Array.isArray(data.dimensionItems) && data.dimensionItems.length) {
+        data.dimensionItems.forEach(createDimensionRow);
+      } else if (data.dimension) {
+        // Kompatibilitas dengan draft lama
+        createDimensionRow();
+      } else {
+        createDimensionRow();
+      }
+    }
 
     Object.entries(data).forEach(([name, value]) => {
       if (
-  name === "technicalAttributes" ||
-  name === "uniqueAttributes" ||
-  name === "dimensionItems" ||
-  name === "drawingImage" ||
-  name === "specType"
-) {
-  return;
-}
+        name === "technicalAttributes" ||
+        name === "uniqueAttributes" ||
+        name === "dimensionItems" ||
+        name === "drawingImage" ||
+        name === "specType"
+      ) {
+        return;
+      }
 
       setFieldValue(name, value);
     });
@@ -700,20 +692,22 @@ if (dimensionContainer) {
     if (drawingImage && drawingPreview) {
       drawingPreview.src = drawingImage;
       drawingPreview.style.display = "block";
+    } else if (drawingPreview) {
+      drawingPreview.removeAttribute("src");
+      drawingPreview.style.display = "none";
     }
 
-    // Jalankan ulang field gabungan
     updateReason();
     updateDimension();
     updatePackSize();
 
-    // Pulihkan pilihan plant dan department
     const plantSelect = $("#plantCodeSelect", questionnaire);
 
     if (plantSelect?.value) {
       plantSelect.dispatchEvent(new Event("change", { bubbles: true }));
 
       const department = $('[name="department"]', questionnaire);
+
       if (department && data.department) {
         department.value = data.department;
       }
@@ -750,7 +744,6 @@ if (dimensionContainer) {
     try {
       let saved = localStorage.getItem(STORAGE_KEY);
 
-      // Migrasi draft versi sebelumnya
       if (!saved) {
         saved = localStorage.getItem(OLD_STORAGE_KEY);
       }
@@ -771,6 +764,7 @@ if (dimensionContainer) {
       loadingDocument = false;
 
       console.error("Gagal memulihkan draft:", error);
+
       setStatus("Draft sebelumnya gagal dipulihkan");
 
       return false;
@@ -846,7 +840,6 @@ if (dimensionContainer) {
       target.value = value ?? "";
     });
 
-    // Material Category dari pilihan kategori
     const category = data.materialCategory || "";
 
     const categoryField = $('[name="materialCategory"]', printForm);
@@ -855,14 +848,12 @@ if (dimensionContainer) {
       categoryField.value = category;
     }
 
-    // Pastikan tanggal revisi memiliki nilai
     const revisionDate = $('[name="revisionDate"]', printForm);
 
     if (revisionDate && !revisionDate.value) {
       revisionDate.value = formatDate(data.createdDate);
     }
 
-    // Tampilkan drawing
     if (drawingPreview) {
       if (data.drawingImage) {
         drawingPreview.src = data.drawingImage;
@@ -887,7 +878,9 @@ if (dimensionContainer) {
 
     if (catalogue && !catalogue.value.trim()) {
       catalogue.focus();
+
       alert("Catalogue wajib diisi sesuai rancangan form.");
+
       return false;
     }
 
@@ -912,100 +905,37 @@ if (dimensionContainer) {
   });
 
   // =====================================================
-  // SIMPAN KE DATABASE / ADMIN
+  // SIMPAN TRANSAKSI LOKAL
   // =====================================================
 
-  // saveBtn?.addEventListener("click", async () => {
-  //   if (saving) return;
-  //   if (!validateForm()) return;
+  if (saveBtn) {
+    saveBtn.addEventListener("click", () => {
+      if (saving) return;
 
-  //   initializeDocumentInfo();
+      if (!validateForm()) return;
 
-  //   const data = getFormData();
+      saving = true;
+      saveBtn.disabled = true;
 
-  //   saving = true;
-  //   saveBtn.disabled = true;
+      try {
+        initializeDocumentInfo();
 
-  //   const originalText = saveBtn.textContent;
-  //   saveBtn.textContent = "Menyimpan...";
+        const success = saveTransactionLocally();
 
-  //   try {
-  //     // Simpan draft lokal terlebih dahulu
-  //     saveDraft();
+        if (!success) return;
 
-  //     const response = await fetch(API_URL, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json"
-  //       },
-  //       body: JSON.stringify({
-  //         specType: "Barang",
-  //         formData: data
-  //       })
-  //     });
+        alert(
+          "Transaksi berhasil disimpan!\n" +
+          "Version berikutnya: " +
+          ($('[name="version"]', questionnaire)?.value || "00")
+        );
 
-  //     const result = await response.json().catch(() => ({}));
-
-  //     if (!response.ok) {
-  //       throw new Error(
-  //         result.message ||
-  //         result.error ||
-  //         "Gagal menyimpan dokumen ke database."
-  //       );
-  //     }
-
-  //     setStatus("Dokumen berhasil disimpan ke Admin");
-
-  //     alert("Dokumen spesifikasi barang berhasil disimpan.");
-
-  //     console.log("Dokumen berhasil disimpan:", result);
-
-  //   } catch (error) {
-  //     console.error("Gagal menyimpan dokumen:", error);
-
-  //     alert(
-  //       error.message ||
-  //       "Gagal menyimpan dokumen. Pastikan backend E-Spec berjalan."
-  //     );
-
-  //   } finally {
-  //     saving = false;
-  //     saveBtn.disabled = false;
-  //     saveBtn.textContent = originalText;
-  //   }
-  // });
-
-if (saveBtn) {
-  saveBtn.addEventListener("click", () => {
-
-    // Cegah klik berulang
-    if (saving) return;
-
-    if (!validateForm()) return;
-
-    saving = true;
-    saveBtn.disabled = true;
-
-    try {
-      initializeDocumentInfo();
-
-      const success = saveTransactionLocally();
-
-      if (!success) return;
-
-      alert(
-        "Transaksi berhasil disimpan!\n" +
-        "Version berikutnya: " +
-        document.querySelector('[name="version"]').value
-      );
-
-    } finally {
-      saving = false;
-      saveBtn.disabled = false;
-    }
-
-  });
-}
+      } finally {
+        saving = false;
+        saveBtn.disabled = false;
+      }
+    });
+  }
 
   // =====================================================
   // RESET FORM
@@ -1037,11 +967,18 @@ if (saveBtn) {
     $("#dynamicCustomTechnicalContainer")?.replaceChildren();
     $("#dynamicCustomUniqueContainer")?.replaceChildren();
 
+    if (dimensionRowsContainer) {
+      dimensionRowsContainer.innerHTML = "";
+      createDimensionRow();
+    }
+
     initializeDocumentInfo();
 
     updateReason();
     updateDimension();
     updatePackSize();
+
+    saveDraft();
 
     setStatus("Form berhasil direset");
 
@@ -1059,6 +996,7 @@ if (saveBtn) {
   async function loadDocumentFromDatabase(id) {
     try {
       loadingDocument = true;
+
       setStatus("Mengambil dokumen dari database...");
 
       const response = await fetch(
@@ -1077,35 +1015,49 @@ if (saveBtn) {
 
       const row = result.document || result;
 
+      let formData = row.form_data || row.formData || {};
+
+      if (typeof formData === "string") {
+        try {
+          formData = JSON.parse(formData);
+        } catch {
+          formData = {};
+        }
+      }
+
       const data = {
-        ...(row.form_data || {}),
+        ...formData,
+
         id: row.id,
+
         docNo: row.doc_no ?? row.docNo ?? "",
         revision: row.revision ?? "",
-        plant: row.plant ?? row.form_data?.plant ?? "",
-        requestor: row.requestor ?? row.form_data?.requestor ?? "",
-        department: row.department ?? row.form_data?.department ?? "",
+
+        plant: row.plant ?? formData.plant ?? "",
+        requestor: row.requestor ?? formData.requestor ?? "",
+        department: row.department ?? formData.department ?? "",
+
         materialDescription:
           row.material_description ??
-          row.form_data?.materialDescription ??
+          formData.materialDescription ??
           "",
+
         materialCode:
           row.material_code ??
-          row.form_data?.materialCode ??
+          formData.materialCode ??
           "",
+
         specType: row.spec_type || "Barang"
       };
 
       restoreForm(data);
 
-      // Transfer seluruh data ke template cetak
       transferToPrint(data);
 
       loadingDocument = false;
 
       setStatus("Dokumen berhasil dimuat dari database");
 
-      // Dokumen dari dashboard dibuka dalam mode cetak
       setTimeout(() => {
         window.print();
       }, 500);
@@ -1126,52 +1078,53 @@ if (saveBtn) {
   // =====================================================
 
   function initialize() {
-  const params = new URLSearchParams(window.location.search);
-  const printId = params.get("printId");
+    const params = new URLSearchParams(window.location.search);
+    const printId = params.get("printId");
 
-  if (printId) {
-    loadDocumentFromDatabase(printId);
-    return;
+    if (printId) {
+      loadDocumentFromDatabase(printId);
+      return;
+    }
+
+    const restored = restoreDraft();
+
+    initializeDocumentInfo();
+
+    if (!restored) {
+      updateReason();
+      updateDimension();
+      updatePackSize();
+
+      if (dimensionRowsContainer &&
+          !dimensionRowsContainer.querySelector(".dimension-row")) {
+        createDimensionRow();
+      }
+    }
+
+    saveDraft();
+
+    questionnaire.addEventListener("input", () => {
+      updateReason();
+      updateDimension();
+      updatePackSize();
+      saveDraft();
+    });
+
+    questionnaire.addEventListener("change", () => {
+      updateReason();
+      updateDimension();
+      updatePackSize();
+      saveDraft();
+    });
+
+    $("#addTechnicalBtn")?.addEventListener("click", () => {
+      setTimeout(saveDraft, 0);
+    });
+
+    $("#addUniqueBtn")?.addEventListener("click", () => {
+      setTimeout(saveDraft, 0);
+    });
   }
-
-  const restored = restoreDraft();
-
-  // Selalu pastikan Version dan Created Date terisi
-  initializeDocumentInfo();
-
-  if (!restored) {
-    updateReason();
-    updateDimension();
-    updatePackSize();
-  }
-
-  // Simpan kembali draft setelah Version dan Created Date diperbarui
-  saveDraft();
-
-  // Autosave
-  questionnaire.addEventListener("input", saveDraft);
-  questionnaire.addEventListener("change", saveDraft);
-
-  questionnaire.addEventListener("input", () => {
-    updateReason();
-    updateDimension();
-    updatePackSize();
-  });
-
-  questionnaire.addEventListener("change", () => {
-    updateReason();
-    updateDimension();
-    updatePackSize();
-  });
-
-  $("#addTechnicalBtn")?.addEventListener("click", () => {
-    setTimeout(saveDraft, 0);
-  });
-
-  $("#addUniqueBtn")?.addEventListener("click", () => {
-    setTimeout(saveDraft, 0);
-  });
-}
 
   initialize();
 
