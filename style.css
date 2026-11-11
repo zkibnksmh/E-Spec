@@ -1979,12 +1979,146 @@ fieldset.q-field {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, .09);
 }
 
+
 /* =========================================
-   ELECTRIC DROPDOWN
-   SAMA DENGAN MECHANICAL
+   ELECTRIC SPECIFICATION
 ========================================= */
 
-.electric-spec-card .electric-spec-row select {
+.electric-spec-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 22px;
+  margin: 20px 0;
+  box-shadow: 0 5px 18px rgba(15, 23, 42, 0.04);
+}
+
+.electric-spec-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 22px;
+}
+
+.electric-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #f0edff;
+  color: #6558e8;
+  font-size: 22px;
+}
+
+.electric-spec-heading h4 {
+  margin: 0 0 4px;
+  color: #20243a;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.electric-spec-heading p {
+  margin: 0;
+  color: #8990a3;
+  font-size: 12px;
+}
+
+.electric-spec-table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.electric-spec-header,
+.electric-spec-row {
+  display: grid;
+  grid-template-columns:
+    minmax(145px, 1.35fr)
+    minmax(75px, 1fr)
+    minmax(75px, 0.8fr)
+    minmax(75px, 1fr)
+    minmax(75px, 0.8fr)
+    minmax(65px, 0.7fr);
+  gap: 9px;
+  align-items: center;
+}
+
+.electric-spec-header {
+  padding: 0 10px 10px;
+  color: #737b91;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.electric-spec-row {
+  padding: 12px 10px;
+  background: #fcfcff;
+  border: 1px solid #ececf4;
+  border-radius: 11px;
+}
+
+.electric-parameter {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.electric-parameter strong {
+  color: #252943;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.electric-parameter small {
+  color: #23845a;
+  font-size: 10px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+/* =========================================
+   ELECTRIC INPUT
+========================================= */
+
+.electric-spec-row input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 10px 11px;
+  border: 1px solid #dce2eb;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #172033;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  box-sizing: border-box;
+  transition: .2s ease;
+}
+
+.electric-spec-row input::placeholder {
+  color: #a4adbb;
+  font-size: 11px;
+}
+
+.electric-spec-row input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .09);
+}
+
+/* =========================================
+   ELECTRIC DROPDOWN
+   MATCH DENGAN MECHANICAL
+========================================= */
+
+.electric-spec-row select {
   display: block;
   width: 100%;
   min-width: 0;
@@ -2003,12 +2137,12 @@ fieldset.q-field {
   transition: .2s ease;
 }
 
-.electric-spec-card .electric-spec-row select:hover {
+.electric-spec-row select:hover {
   border-color: #60a5fa;
   background-color: #dbeafe;
 }
 
-.electric-spec-card .electric-spec-row select:focus {
+.electric-spec-row select:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
 }
@@ -2046,9 +2180,6 @@ fieldset.q-field {
     min-width: 690px;
   }
 }
-
-
-
 
 
 /* =========================================
@@ -2278,6 +2409,7 @@ fieldset.q-field {
 
 /* =========================================
    UOM & SYMBOL DROPDOWN
+   MATCH DENGAN ELECTRICAL
 ========================================= */
 
 .mechanical-field select[data-mechanical-unit],
@@ -2296,6 +2428,7 @@ fieldset.q-field {
   font-size: 11px;
   font-weight: 700;
   cursor: pointer;
+  box-sizing: border-box;
   transition: .2s ease;
 }
 
@@ -2344,7 +2477,7 @@ fieldset.q-field {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, .09);
 }
 
-/* PASTIKAN HIDDEN BENAR-BENAR TERSEMBUNYI */
+/* HIDDEN */
 
 .mechanical-field [hidden] {
   display: none !important;
@@ -2355,7 +2488,6 @@ fieldset.q-field {
 ========================================= */
 
 @media (max-width: 900px) {
-
   .mechanical-spec-card {
     padding: 19px;
   }
@@ -2375,7 +2507,6 @@ fieldset.q-field {
 ========================================= */
 
 @media (max-width: 600px) {
-
   .mechanical-spec-card {
     padding: 16px;
     border-radius: 13px;
@@ -2414,7 +2545,6 @@ fieldset.q-field {
 /* SMALL MOBILE */
 
 @media (max-width: 380px) {
-
   .mechanical-parameter-grid {
     grid-template-columns: 1fr;
   }
