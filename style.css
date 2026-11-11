@@ -1846,8 +1846,10 @@ fieldset.q-field {
 }
 
 
+
 /* =========================================
    ELECTRIC SPECIFICATION
+   WARNA DROPDOWN MATCH MECHANICAL
 ========================================= */
 
 .electric-spec-card {
@@ -1947,26 +1949,68 @@ fieldset.q-field {
   font-weight: 600;
 }
 
-.electric-spec-row input,
-.electric-spec-row select {
+/* =========================================
+   ELECTRIC INPUT
+========================================= */
+
+.electric-spec-card .electric-spec-row input {
   width: 100%;
   min-width: 0;
-  height: 39px;
-  padding: 0 9px;
-  border: 1px solid #e1e4ed;
+  min-height: 42px;
+  padding: 10px 11px;
+  border: 1px solid #dce2eb;
   border-radius: 8px;
+  outline: none;
   background: #ffffff;
-  color: #30364b;
+  color: #172033;
   font-family: inherit;
   font-size: 12px;
-  outline: none;
+  font-weight: 500;
   box-sizing: border-box;
+  transition: .2s ease;
 }
 
-.electric-spec-row input:focus,
-.electric-spec-row select:focus {
-  border-color: #6558e8;
-  box-shadow: 0 0 0 3px rgba(101, 88, 232, 0.09);
+.electric-spec-card .electric-spec-row input::placeholder {
+  color: #a4adbb;
+}
+
+.electric-spec-card .electric-spec-row input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .09);
+}
+
+/* =========================================
+   ELECTRIC DROPDOWN
+   SAMA DENGAN MECHANICAL
+========================================= */
+
+.electric-spec-card .electric-spec-row select {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 9px 28px 9px 10px;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  outline: none;
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: .2s ease;
+}
+
+.electric-spec-card .electric-spec-row select:hover {
+  border-color: #60a5fa;
+  background-color: #dbeafe;
+}
+
+.electric-spec-card .electric-spec-row select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
 }
 
 /* TABLET */
@@ -2002,6 +2046,7 @@ fieldset.q-field {
     min-width: 690px;
   }
 }
+
 
 
 
