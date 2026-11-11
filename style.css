@@ -3827,18 +3827,46 @@ fieldset.q-field {
 }
 
 /* =========================================
-   UNIQUE SPECIFICATION - ACCESSORIES TEXT
+   UNIQUE SPECIFICATION - ACCESSORIES
 ========================================= */
 
 .unique-accessories-field {
   display: flex;
-  align-items: center;
-  min-height: 42px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  width: 100%;
 }
 
 .unique-accessories-label {
+  display: block;
   color: var(--ink);
   font-family: inherit;
   font-size: 12px;
   font-weight: 700;
+}
+
+.unique-accessories-input {
+  display: block;
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
+
+  background: #ffffff;
+  color: var(--ink);
+
+  border: 1px solid #dfe3ed;
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 12px;
+
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.unique-accessories-input:focus {
+  border-color: #6558e8;
+  box-shadow: 0 0 0 3px rgba(101, 88, 232, 0.10);
 }
