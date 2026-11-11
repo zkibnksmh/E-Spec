@@ -45,6 +45,8 @@
     "Phase"
   ];
 
+  const DIMENSION_GROUP_SEPARATOR = ["ID", "OD", "DN", "Phase"];
+
   let drawingImage = "";
   let loadingDocument = false;
   let saving = false;
@@ -86,8 +88,8 @@
   }
 
   function escapeSelector(value) {
-    if (window.CSS && CSS.escape) {
-      return CSS.escape(String(value));
+    if (window.CSS && window.CSS.escape) {
+      return window.CSS.escape(String(value));
     }
 
     return String(value).replace(/["\\]/g, "\\$&");
@@ -266,13 +268,42 @@
 
     if (!finalField) return;
 
-    finalField.value = items.map((item, index) => {
-      const dimension = `${item.type} ${item.value}`;
+    let previousType = "";
 
-      return index === 0
-        ? dimension
-        : `${item.symbol} ${dimension}`;
-    }).join(" ");
+    const formattedItems = items.map((item, index) => {
+      const dimension = `${item.type} : ${item.value}`;
+
+      if (index === 0) {
+        previousType = item.type;
+        return dimension;
+      }
+
+      let separator = item.symbol || "x";
+
+      const isCurrentGrouped = DIMENSION_GROUP_SEPARATOR.includes(item.type);
+      const wasPreviousGrouped = DIMENSION_GROUP_SEPARATOR.includes(previousType);
+
+      // Masuk ke kelompok ID / OD / DN / Phase menggunakan "-"
+      if (isCurrentGrouped && !wasPreviousGrouped) {
+        separator = "-";
+      }
+
+      // Antar kelompok ID / OD / DN / Phase tetap menggunakan "-"
+      if (isCurrentGrouped && wasPreviousGrouped) {
+        separator = "-";
+      }
+
+      // Kembali ke kelompok L / W / H / T menggunakan "-"
+      if (!isCurrentGrouped && wasPreviousGrouped) {
+        separator = "-";
+      }
+
+      previousType = item.type;
+
+      return `${separator} ${dimension}`;
+    });
+
+    finalField.value = formattedItems.join(" ");
   }
 
   const dimensionRowsContainer = $("#dimensionRows");
@@ -305,8 +336,15 @@
     saveDraft();
   });
 
-  dimensionRowsContainer?.addEventListener("input", updateDimension);
-  dimensionRowsContainer?.addEventListener("change", updateDimension);
+  dimensionRowsContainer?.addEventListener("input", () => {
+    updateDimension();
+    saveDraft();
+  });
+
+  dimensionRowsContainer?.addEventListener("change", () => {
+    updateDimension();
+    saveDraft();
+  });
 
   // =====================================================
   // PACK SIZE
@@ -665,9 +703,6 @@
 
       if (Array.isArray(data.dimensionItems) && data.dimensionItems.length) {
         data.dimensionItems.forEach(createDimensionRow);
-      } else if (data.dimension) {
-        // Kompatibilitas dengan draft lama
-        createDimensionRow();
       } else {
         createDimensionRow();
       }
@@ -854,13 +889,15 @@
       revisionDate.value = formatDate(data.createdDate);
     }
 
-    if (drawingPreview) {
+    const printDrawing = $("#drawingPreview", printForm);
+
+    if (printDrawing) {
       if (data.drawingImage) {
-        drawingPreview.src = data.drawingImage;
-        drawingPreview.style.display = "block";
+        printDrawing.src = data.drawingImage;
+        printDrawing.style.display = "block";
       } else {
-        drawingPreview.removeAttribute("src");
-        drawingPreview.style.display = "none";
+        printDrawing.removeAttribute("src");
+        printDrawing.style.display = "none";
       }
     }
   }
@@ -1095,8 +1132,10 @@
       updateDimension();
       updatePackSize();
 
-      if (dimensionRowsContainer &&
-          !dimensionRowsContainer.querySelector(".dimension-row")) {
+      if (
+        dimensionRowsContainer &&
+        !dimensionRowsContainer.querySelector(".dimension-row")
+      ) {
         createDimensionRow();
       }
     }

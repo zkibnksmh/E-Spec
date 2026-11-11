@@ -291,46 +291,46 @@
         </label>
 
 
+
 <!-- DIMENSION -->
 <div class="q-field dimension-field">
   <span>Dimension</span>
 
-<div id="dimensionRows">
-  <div class="dimension-row">
-    <select class="dimension-type">
-      <option value="">-- Pilih Dimension --</option>
-      <option value="Length">Length</option>
-      <option value="Width">Width</option>
-      <option value="Height">Height</option>
-      <option value="Thickness">Thickness</option>
-      <option value="Inner Diameter">Inner Diameter</option>
-      <option value="Outer Diameter">Outer Diameter</option>
-      <option value="Diameter Nominal">Diameter Nominal</option>
-      <option value="Phase">Phase</option>
-    </select>
+  <div id="dimensionRows">
+    <div class="dimension-row">
+      <select class="dimension-type">
+        <option value="">-- Pilih Dimension --</option>
+        <option value="L">L</option>
+        <option value="W">W</option>
+        <option value="H">H</option>
+        <option value="T">T</option>
+        <option value="ID">ID</option>
+        <option value="OD">OD</option>
+        <option value="DN">DN</option>
+        <option value="Phase">Phase</option>
+      </select>
 
-    <input
-      type="number"
-      class="dimension-value"
-      placeholder="Masukkan nilai"
-      step="any"
-    >
+      <input
+        type="text"
+        class="dimension-value"
+        placeholder="Masukkan nilai"
+      >
 
-    <select class="dimension-symbol">
-      <option value="x">x</option>
-      <option value="~">~</option>
-      <option value="/">/</option>
-      <option value="±">±</option>
-      <option value="-">-</option>
-    </select>
+      <select class="dimension-symbol">
+        <option value="x">x</option>
+        <option value="~">~</option>
+        <option value="/">/</option>
+        <option value="±">±</option>
+        <option value="-">-</option>
+      </select>
 
-    <button
-      type="button"
-      class="remove-dimension"
-      title="Hapus"
-    >&times;</button>
+      <button
+        type="button"
+        class="remove-dimension"
+        title="Hapus"
+      >&times;</button>
+    </div>
   </div>
-</div>
 
   <button
     type="button"
@@ -340,7 +340,9 @@
     + Tambah Dimension
   </button>
 </div>
-        <input type="hidden" name="dimension" id="dimensionFinal">
+
+<input type="hidden" name="dimension" id="dimensionFinal">
+
 
         <label class="q-field">
           Brand
