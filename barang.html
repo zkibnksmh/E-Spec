@@ -350,7 +350,7 @@
         </label>
 
         <label class="q-field">
-          Catalogue *
+          Catalogue
           <input type="text" name="catalogue" required>
         </label>
 
@@ -595,38 +595,84 @@
 </label>
 
 
-        <label class="q-field">
-          Pack Size Quantity
-          <input type="number" id="packQuantity" min="0" placeholder="Jumlah">
-        </label>
+<!-- PACK SIZE -->
+<div class="q-field wide pack-size-field">
 
-        <label class="q-field">
-          Pack Size UoM
-          <select id="packUom">
-            <option value="">-- Pilih Satuan --</option>
-            <option value="PCS">PCS</option>
-            <option value="UNIT">UNIT</option>
-            <option value="SET">SET</option>
-            <option value="KG">KG</option>
-            <option value="L">L</option>
-            <option value="M">M</option>
-          </select>
-        </label>
+  <div class="pack-size-heading">
+    <strong>Pack Size</strong>
+    <small>Contoh: 666 pc / box</small>
+  </div>
 
-        <label class="q-field">
-          Package UoM
-          <select id="packageUom">
-            <option value="">-- Pilih Kemasan --</option>
-            <option value="BOX">BOX</option>
-            <option value="PACK">PACK</option>
-            <option value="ROLL">ROLL</option>
-            <option value="DRUM">DRUM</option>
-            <option value="BAG">BAG</option>
-            <option value="UNIT">UNIT</option>
-          </select>
-        </label>
+  <div class="pack-size-grid">
 
-        <input type="hidden" name="packSize" id="packSizeFinal">
+    <!-- PACKSIZE QUANTITY -->
+    <label class="pack-size-item">
+      <span>Packsize Quantity</span>
+
+      <input
+        type="number"
+        id="packQuantity"
+        min="0"
+        step="any"
+        placeholder="Masukkan jumlah"
+      >
+    </label>
+
+    <!-- PACKSIZE UOM -->
+    <label class="pack-size-item">
+      <span>Packsize UoM</span>
+
+      <select id="packUom">
+        <option value="">-- Pilih UoM --</option>
+        <option value="PC">PC</option>
+        <option value="PCS">PCS</option>
+        <option value="UNIT">UNIT</option>
+        <option value="SET">SET</option>
+        <option value="KG">KG</option>
+        <option value="L">L</option>
+        <option value="M">M</option>
+      </select>
+
+      <small>Cek Sheet Keterangan SAP: UoM</small>
+    </label>
+
+    <!-- SYMBOL -->
+    <label class="pack-size-item">
+      <span>Symbol</span>
+
+      <select id="packSymbol">
+        <option value="">-- Pilih Symbol --</option>
+        <option value="/">/</option>
+        <option value="x">x</option>
+        <option value="-">-</option>
+        <option value="±">±</option>
+      </select>
+
+      <small>Cek Sheet Keterangan SAP: Symbol</small>
+    </label>
+
+    <!-- PACKAGE UOM -->
+    <label class="pack-size-item">
+      <span>UoM</span>
+
+      <select id="packageUom">
+        <option value="">-- Pilih UoM --</option>
+        <option value="BOX">BOX</option>
+        <option value="PACK">PACK</option>
+        <option value="ROLL">ROLL</option>
+        <option value="DRUM">DRUM</option>
+        <option value="BAG">BAG</option>
+        <option value="UNIT">UNIT</option>
+      </select>
+
+      <small>Cek Sheet Keterangan SAP: UoM</small>
+    </label>
+
+  </div>
+
+</div>
+
+<input type="hidden" name="packSize" id="packSizeFinal">
 
       </div>
     </div>
@@ -1280,14 +1326,27 @@ function updateDimension() {
 
 
   // PACK SIZE
-  function updatePackSize() {
-    const quantity = document.getElementById("packQuantity").value;
-    const uom = document.getElementById("packUom").value;
-    const packageUom = document.getElementById("packageUom").value;
+function updatePackSize() {
+  const quantity = document.getElementById("packQuantity")?.value.trim() || "";
+  const packUom = document.getElementById("packUom")?.value || "";
+  const symbol = document.getElementById("packSymbol")?.value || "";
+  const packageUom = document.getElementById("packageUom")?.value || "";
 
-    document.getElementById("packSizeFinal").value =
-      [quantity, uom, packageUom].filter(Boolean).join(" ");
+  const parts = [];
+
+  if (quantity) parts.push(quantity);
+  if (packUom) parts.push(packUom);
+
+  let result = parts.join(" ");
+
+  if (symbol && packageUom) {
+    result += ` ${symbol} ${packageUom}`;
+  } else if (packageUom) {
+    result += ` ${packageUom}`;
   }
+
+  document.getElementById("packSizeFinal").value = result;
+}
 
 
   // TECHNICAL SPECIFICATION

@@ -1670,3 +1670,88 @@ fieldset.q-field {
     gap: 5px;
   }
 }
+
+/* =========================================
+   PACK SIZE
+========================================= */
+
+.pack-size-field {
+  grid-column: 1 / -1;
+  width: 100%;
+  border: 1px solid #d9e1ec;
+  border-radius: 10px;
+  padding: 12px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.pack-size-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #e5eaf1;
+}
+
+.pack-size-heading strong {
+  font-size: 13px;
+  color: #26364d;
+  font-weight: 700;
+}
+
+.pack-size-heading small {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.pack-size-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.pack-size-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.pack-size-item > span {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.pack-size-item input,
+.pack-size-item select {
+  width: 100%;
+  min-width: 0;
+  height: 38px;
+  box-sizing: border-box;
+}
+
+.pack-size-item small {
+  font-size: 10px;
+  line-height: 1.4;
+  color: #94a3b8;
+}
+
+@media (max-width: 650px) {
+  .pack-size-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 380px) {
+  .pack-size-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pack-size-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
