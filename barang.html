@@ -18,11 +18,13 @@
     </div>
   </div>
 
-  <div>
-    <button type="button" id="resetBtn">Reset form</button>
-    <button type="button" id="saveAdminBtn">Simpan untuk Admin</button>
-    <button type="button" class="primary" id="pdfBtn">
-      Unduh / Cetak PDF ↗
+  <div class="toolbar-actions">
+    <button type="button" id="resetBtn">
+      Reset Form
+    </button>
+
+    <button type="button" id="saveAdminBtn">
+      Simpan untuk Admin
     </button>
   </div>
 </header>
@@ -1490,6 +1492,22 @@ function updatePackSize() {
 
 })();
 </script>
+
+<!-- TOMBOL CETAK PDF -->
+<div class="form-bottom-actions no-print">
+  <div class="form-bottom-info">
+    <strong>Formulir spesifikasi barang selesai?</strong>
+    <p>
+      Periksa kembali seluruh informasi sebelum mengunduh
+      dokumen spesifikasi dalam format PDF.
+    </p>
+  </div>
+
+  <button type="button" class="primary" id="pdfBtn">
+    <span>Unduh / Cetak PDF</span>
+    <span aria-hidden="true">↗</span>
+  </button>
+</div>
 
   <!-- ==================================================
        TEMPLATE PDF SPESIFIKASI BARANG
