@@ -2555,3 +2555,173 @@ fieldset.q-field {
     gap: 4px;
   }
 }
+
+
+/* =========================================
+   LIQUID SPECIFICATION
+   MATCH DENGAN ELECTRICAL & MECHANICAL
+========================================= */
+
+/* MAIN CARD */
+
+.liquid-spec-card {
+  width: 100%;
+  margin-top: 22px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e9f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+/* =========================================
+   HEADING
+========================================= */
+
+.liquid-spec-card .category-spec-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.liquid-spec-card .category-spec-heading h4 {
+  margin: 0;
+  color: #172033;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.liquid-spec-card .category-spec-heading p {
+  margin: 5px 0 0;
+  color: #8791a3;
+  font-size: 12px;
+}
+
+/* =========================================
+   ICON
+========================================= */
+
+.liquid-spec-card .liquid-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 21px;
+}
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+.liquid-spec-card .category-spec-divider {
+  display: none;
+}
+
+/* =========================================
+   LIQUID FIELD GRID
+========================================= */
+
+.liquid-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  width: 100%;
+}
+
+/* =========================================
+   FIELD
+========================================= */
+
+.liquid-spec-card .q-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.liquid-spec-card .q-field label {
+  display: block;
+  margin: 0;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* =========================================
+   INPUT
+   MATCH DENGAN MECHANICAL
+========================================= */
+
+.liquid-spec-card .q-field input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 43px;
+  padding: 11px 13px;
+  border: 1px solid #dce2eb;
+  border-radius: 9px;
+  outline: none;
+  background: #ffffff;
+  color: #172033;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  box-sizing: border-box;
+  transition: .2s ease;
+}
+
+.liquid-spec-card .q-field input::placeholder {
+  color: #a4adbb;
+  font-size: 11px;
+}
+
+.liquid-spec-card .q-field input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+
+  .liquid-spec-card {
+    padding: 19px;
+  }
+
+  .liquid-spec-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .liquid-spec-card {
+    padding: 16px;
+    border-radius: 13px;
+  }
+
+  .liquid-spec-card .category-spec-heading {
+    margin-bottom: 18px;
+  }
+
+  .liquid-spec-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
