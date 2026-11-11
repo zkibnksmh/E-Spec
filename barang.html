@@ -687,93 +687,227 @@
       </p>
 
       <!-- ELECTRIC -->
-      <div class="q-technical-group">
-        <h4>A. ELECTRIC</h4>
 
-        <div class="q-grid">
+<div class="q-technical-group electric-spec-card">
 
-          <label class="q-field">
-            Voltage
-            <input type="text" data-tech-label="Voltage" placeholder="Nilai Voltage">
-          </label>
+  <div class="electric-spec-heading">
+    <span class="electric-icon">⚡</span>
+    <div>
+      <h4>Electric Specification</h4>
+      <p>Parameter kelistrikan barang</p>
+    </div>
+  </div>
 
-          <label class="q-field">
-            Voltage UoM
-            <select data-tech-unit="Voltage">
-              <option value="">-- UoM --</option>
-              <option value="V">V</option>
-              <option value="mV">mV</option>
-              <option value="kV">kV</option>
-            </select>
-          </label>
+  <div class="electric-spec-table">
 
-          <label class="q-field">
-            Phase
-            <input type="text" data-tech-label="Phase" placeholder="Nilai Phase">
-          </label>
+    <div class="electric-spec-header">
+      <span>Parameter</span>
+      <span>Data 1</span>
+      <span>UoM 1</span>
+      <span>Data 2</span>
+      <span>UoM 2</span>
+      <span>Symbol</span>
+    </div>
 
-          <label class="q-field">
-            Power
-            <input type="text" data-tech-label="Power" placeholder="Nilai Power">
-          </label>
-
-          <label class="q-field">
-            Power UoM
-            <select data-tech-unit="Power">
-              <option value="">-- UoM --</option>
-              <option value="W">W</option>
-              <option value="kW">kW</option>
-              <option value="HP">HP</option>
-              <option value="kVA">kVA</option>
-            </select>
-          </label>
-
-          <label class="q-field">
-            Current
-            <input type="text" data-tech-label="Current" placeholder="Nilai Current">
-          </label>
-
-          <label class="q-field">
-            Current UoM
-            <select data-tech-unit="Current">
-              <option value="">-- UoM --</option>
-              <option value="A">A</option>
-              <option value="mA">mA</option>
-              <option value="kA">kA</option>
-            </select>
-          </label>
-
-          <label class="q-field">
-            Frequency
-            <input type="text" data-tech-label="Frequency" placeholder="Nilai Frequency">
-          </label>
-
-          <label class="q-field">
-            Frequency UoM
-            <select data-tech-unit="Frequency">
-              <option value="">-- UoM --</option>
-              <option value="Hz">Hz</option>
-              <option value="kHz">kHz</option>
-            </select>
-          </label>
-
-          <label class="q-field">
-            Temperature
-            <input type="text" data-tech-label="Temperature" placeholder="Nilai Temperature">
-          </label>
-
-          <label class="q-field">
-            Temperature UoM
-            <select data-tech-unit="Temperature">
-              <option value="">-- UoM --</option>
-              <option value="°C">°C</option>
-              <option value="°F">°F</option>
-              <option value="K">K</option>
-            </select>
-          </label>
-
-        </div>
+    <!-- VOLTAGE -->
+    <div class="electric-spec-row" data-electric-row="Voltage">
+      <div class="electric-parameter">
+        <strong>Voltage</strong>
+        <small>Contoh: 110 / 220 V</small>
       </div>
+
+      <input type="text" data-electric-value="1" placeholder="Data 1">
+
+      <select data-electric-unit="1">
+        <option value="">UoM</option>
+        <option value="V">V</option>
+        <option value="mV">mV</option>
+        <option value="kV">kV</option>
+      </select>
+
+      <input type="text" data-electric-value="2" placeholder="Data 2">
+
+      <select data-electric-unit="2">
+        <option value="">UoM</option>
+        <option value="V">V</option>
+        <option value="mV">mV</option>
+        <option value="kV">kV</option>
+      </select>
+
+      <select data-electric-symbol>
+        <option value="/">/</option>
+        <option value="-">-</option>
+        <option value="~">~</option>
+        <option value="x">x</option>
+        <option value="±">±</option>
+      </select>
+    </div>
+
+    <!-- PHASE -->
+    <div class="electric-spec-row" data-electric-row="Phase">
+      <div class="electric-parameter">
+        <strong>Phase</strong>
+        <small>Contoh: 1 Phase / 3 Phase</small>
+      </div>
+
+      <input type="text" data-electric-value="1" placeholder="Data 1">
+
+      <select data-electric-unit="1">
+        <option value="Phase">Phase</option>
+      </select>
+
+      <input type="text" data-electric-value="2" placeholder="Data 2">
+
+      <select data-electric-unit="2">
+        <option value="Phase">Phase</option>
+      </select>
+
+      <select data-electric-symbol>
+        <option value="/">/</option>
+        <option value="-">-</option>
+        <option value="~">~</option>
+        <option value="x">x</option>
+        <option value="±">±</option>
+      </select>
+    </div>
+
+    <!-- POWER -->
+    <div class="electric-spec-row" data-electric-row="Power">
+      <div class="electric-parameter">
+        <strong>Power</strong>
+        <small>Contoh: 100 W - 200 W</small>
+      </div>
+
+      <input type="text" data-electric-value="1" placeholder="Data 1">
+
+      <select data-electric-unit="1">
+        <option value="">UoM</option>
+        <option value="W">W</option>
+        <option value="kW">kW</option>
+        <option value="HP">HP</option>
+        <option value="VA">VA</option>
+        <option value="kVA">kVA</option>
+      </select>
+
+      <input type="text" data-electric-value="2" placeholder="Data 2">
+
+      <select data-electric-unit="2">
+        <option value="">UoM</option>
+        <option value="W">W</option>
+        <option value="kW">kW</option>
+        <option value="HP">HP</option>
+        <option value="VA">VA</option>
+        <option value="kVA">kVA</option>
+      </select>
+
+      <select data-electric-symbol>
+        <option value="-">-</option>
+        <option value="/">/</option>
+        <option value="~">~</option>
+        <option value="x">x</option>
+        <option value="±">±</option>
+      </select>
+    </div>
+
+    <!-- CURRENT -->
+    <div class="electric-spec-row" data-electric-row="Current">
+      <div class="electric-parameter">
+        <strong>Current</strong>
+        <small>Contoh: 10 A</small>
+      </div>
+
+      <input type="text" data-electric-value="1" placeholder="Data 1">
+
+      <select data-electric-unit="1">
+        <option value="">UoM</option>
+        <option value="A">A</option>
+        <option value="mA">mA</option>
+        <option value="kA">kA</option>
+      </select>
+
+      <input type="text" data-electric-value="2" placeholder="Data 2">
+
+      <select data-electric-unit="2">
+        <option value="">UoM</option>
+        <option value="A">A</option>
+        <option value="mA">mA</option>
+        <option value="kA">kA</option>
+      </select>
+
+      <select data-electric-symbol>
+        <option value="/">/</option>
+        <option value="-">-</option>
+        <option value="~">~</option>
+        <option value="x">x</option>
+        <option value="±">±</option>
+      </select>
+    </div>
+
+    <!-- FREQUENCY -->
+    <div class="electric-spec-row" data-electric-row="Frequency">
+      <div class="electric-parameter">
+        <strong>Frequency</strong>
+        <small>Contoh: 50 Hz / 60 Hz</small>
+      </div>
+
+      <input type="text" data-electric-value="1" placeholder="Data 1">
+
+      <select data-electric-unit="1">
+        <option value="Hz">Hz</option>
+        <option value="kHz">kHz</option>
+      </select>
+
+      <input type="text" data-electric-value="2" placeholder="Data 2">
+
+      <select data-electric-unit="2">
+        <option value="Hz">Hz</option>
+        <option value="kHz">kHz</option>
+      </select>
+
+      <select data-electric-symbol>
+        <option value="/">/</option>
+        <option value="-">-</option>
+        <option value="~">~</option>
+        <option value="x">x</option>
+        <option value="±">±</option>
+      </select>
+    </div>
+
+    <!-- TEMPERATURE -->
+    <div class="electric-spec-row" data-electric-row="Temperature">
+      <div class="electric-parameter">
+        <strong>Temperature</strong>
+        <small>Contoh: -40 °C ~ 150 °C</small>
+      </div>
+
+      <input type="text" data-electric-value="1" placeholder="Data 1">
+
+      <select data-electric-unit="1">
+        <option value="°C">°C</option>
+        <option value="°F">°F</option>
+        <option value="K">K</option>
+      </select>
+
+      <input type="text" data-electric-value="2" placeholder="Data 2">
+
+      <select data-electric-unit="2">
+        <option value="°C">°C</option>
+        <option value="°F">°F</option>
+        <option value="K">K</option>
+      </select>
+
+      <select data-electric-symbol>
+        <option value="~">~</option>
+        <option value="/">/</option>
+        <option value="-">-</option>
+        <option value="x">x</option>
+        <option value="±">±</option>
+      </select>
+    </div>
+
+  </div>
+</div>
+
 
 
       <!-- MECHANICAL -->
@@ -1349,27 +1483,91 @@ function updatePackSize() {
 
 
   // TECHNICAL SPECIFICATION
-  function updateTechnical() {
-    const items = [];
 
-    form.querySelectorAll("[data-tech-label]").forEach(input => {
-      const label = input.dataset.techLabel;
-      const value = input.value.trim();
+function updateTechnical() {
+  const items = [];
 
-      if (!value) return;
+  // ELECTRIC SPECIFICATION
+  form.querySelectorAll("[data-electric-row]").forEach(row => {
+    const label = row.dataset.electricRow;
 
-      const unitInput = form.querySelector(
-        `[data-tech-unit="${label}"]`
-      );
+    const value1 =
+      row.querySelector('[data-electric-value="1"]')?.value.trim() || "";
 
-      const unit = unitInput ? unitInput.value : "";
+    const unit1 =
+      row.querySelector('[data-electric-unit="1"]')?.value || "";
 
-      items.push({
-        label,
-        value,
-        unit
-      });
+    const value2 =
+      row.querySelector('[data-electric-value="2"]')?.value.trim() || "";
+
+    const unit2 =
+      row.querySelector('[data-electric-unit="2"]')?.value || "";
+
+    const symbol =
+      row.querySelector("[data-electric-symbol]")?.value || "/";
+
+    // Lewati parameter jika kedua nilai kosong
+    if (!value1 && !value2) return;
+
+    const firstValue = [value1, unit1].filter(Boolean).join(" ");
+    const secondValue = [value2, unit2].filter(Boolean).join(" ");
+
+    let result = firstValue;
+
+    if (secondValue) {
+      result += ` ${symbol} ${secondValue}`;
+    }
+
+    items.push({
+      label,
+      value: result,
+      unit: ""
     });
+  });
+
+  // MECHANICAL, LIQUID, DAN FIELD TECHNICAL LAINNYA
+  form.querySelectorAll("[data-tech-label]").forEach(input => {
+    const label = input.dataset.techLabel;
+    const value = input.value.trim();
+
+    if (!value) return;
+
+    const unitInput = form.querySelector(
+      `[data-tech-unit="${label}"]`
+    );
+
+    const unit = unitInput ? unitInput.value : "";
+
+    items.push({
+      label,
+      value,
+      unit
+    });
+  });
+
+  // CUSTOM TECHNICAL ATTRIBUTE
+  form.querySelectorAll(".custom-tech-row").forEach(row => {
+    const label = row.querySelector("[data-custom-tech-name]")?.value.trim();
+    const value = row.querySelector("[data-custom-tech-value]")?.value.trim();
+    const unit = row.querySelector("[data-custom-tech-unit]")?.value.trim();
+
+    if (label && value) {
+      items.push({ label, value, unit });
+    }
+  });
+
+  // MASUKKAN KE FIELD TEMPLATE PDF
+  for (let i = 1; i <= 5; i++) {
+    const item = items[i - 1];
+
+    document.getElementById(`technical${i}`).value =
+      item ? item.label : "";
+
+    document.getElementById(`technicalUnit${i}`).value =
+      item ? `${item.value} ${item.unit || ""}`.trim() : "";
+  }
+}
+
 
     form.querySelectorAll(".custom-tech-row").forEach(row => {
       const label = row.querySelector("[data-custom-tech-name]")?.value.trim();
