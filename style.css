@@ -2380,3 +2380,41 @@ fieldset.q-field {
     gap: 4px;
   }
 }
+
+/* =========================================
+   MECHANICAL — DROPDOWN STYLE
+   Disamakan dengan ELECTRICAL
+========================================= */
+
+.mechanical-spec-card .mechanical-field select,
+.mechanical-spec-card .mechanical-field input {
+  width: 100%;
+  min-width: 0;
+  height: 39px;
+  padding: 0 9px;
+  border: 1px solid #e1e4ed;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #30364b;
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* Efek ketika dropdown atau input dipilih */
+.mechanical-spec-card .mechanical-field select:focus,
+.mechanical-spec-card .mechanical-field input:focus {
+  border-color: #6558e8;
+  box-shadow: 0 0 0 3px rgba(101, 88, 232, 0.09);
+}
+
+/* Placeholder dropdown */
+.mechanical-spec-card .mechanical-field select:invalid {
+  color: #8990a3;
+}
+
+/* Input Others */
+.mechanical-spec-card .mechanical-field input[hidden] {
+  display: none;
+}
