@@ -2914,3 +2914,214 @@ fieldset.q-field {
     display: none !important;
   }
 }
+
+
+/* =====================================================
+   D. OTHER / CUSTOM ATTRIBUTE
+===================================================== */
+
+.q-technical-group:has(#dynamicCustomTechnicalContainer) {
+  width: 100%;
+  margin-top: 20px;
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #e9ebf3;
+  border-radius: 15px;
+  box-shadow: 0 8px 28px rgba(39, 42, 90, .045);
+  box-sizing: border-box;
+}
+
+/* HEADER */
+
+.q-technical-group:has(#dynamicCustomTechnicalContainer)
+.q-subheading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 0 0 18px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f1f6;
+}
+
+.q-technical-group:has(#dynamicCustomTechnicalContainer)
+.q-subheading-row h4 {
+  margin: 0;
+  color: #202b45;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+
+/* ADD BUTTON */
+
+.q-technical-group:has(#dynamicCustomTechnicalContainer)
+.q-add-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 39px;
+  padding: 9px 15px;
+  border: 1px solid #d8d2ff;
+  border-radius: 9px;
+  background: #f0eeff;
+  color: #6558e8;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all .2s ease;
+  white-space: nowrap;
+}
+
+.q-technical-group:has(#dynamicCustomTechnicalContainer)
+.q-add-button:hover {
+  background: #e5e1ff;
+  border-color: #a99ff5;
+  color: #5143d0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(101, 88, 232, .12);
+}
+
+.q-technical-group:has(#dynamicCustomTechnicalContainer)
+.q-add-button:active {
+  transform: scale(.98);
+}
+
+/* DYNAMIC ATTRIBUTE CONTAINER */
+
+#dynamicCustomTechnicalContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+/* ATTRIBUTE ROW */
+
+#dynamicCustomTechnicalContainer .custom-tech-row {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.2fr)
+    minmax(0, 1.2fr)
+    minmax(0, .8fr)
+    auto;
+  align-items: end;
+  gap: 13px;
+  width: 100%;
+  padding: 16px;
+  background: #fafaff;
+  border: 1px solid #ecebfa;
+  border-radius: 11px;
+  box-sizing: border-box;
+  transition: border-color .2s ease, background .2s ease;
+}
+
+#dynamicCustomTechnicalContainer .custom-tech-row:hover {
+  border-color: #d8d2ff;
+  background: #fcfbff;
+}
+
+/* FIELD LABEL */
+
+#dynamicCustomTechnicalContainer .custom-tech-row .q-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  color: #526078;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* INPUT */
+
+#dynamicCustomTechnicalContainer .custom-tech-row input {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid #e2e5ef;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #202b45;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  box-sizing: border-box;
+  transition: all .2s ease;
+}
+
+#dynamicCustomTechnicalContainer .custom-tech-row input::placeholder {
+  color: #aab1c0;
+}
+
+#dynamicCustomTechnicalContainer .custom-tech-row input:focus {
+  border-color: #6558e8;
+  box-shadow: 0 0 0 3px rgba(101, 88, 232, .10);
+}
+
+/* REMOVE BUTTON */
+
+#dynamicCustomTechnicalContainer .q-remove-button {
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid #fee0e0;
+  border-radius: 8px;
+  background: #fff5f5;
+  color: #dc4545;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all .2s ease;
+  white-space: nowrap;
+}
+
+#dynamicCustomTechnicalContainer .q-remove-button:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+  .q-technical-group:has(#dynamicCustomTechnicalContainer) {
+    padding: 17px 15px;
+    border-radius: 12px;
+  }
+
+  .q-technical-group:has(#dynamicCustomTechnicalContainer)
+  .q-subheading-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .q-technical-group:has(#dynamicCustomTechnicalContainer)
+  .q-add-button {
+    width: 100%;
+    min-height: 42px;
+  }
+
+  #dynamicCustomTechnicalContainer .custom-tech-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  #dynamicCustomTechnicalContainer .q-remove-button {
+    width: 100%;
+  }
+}
+
+/* PRINT */
+
+@media print {
+  .q-technical-group:has(#dynamicCustomTechnicalContainer) {
+    display: none !important;
+  }
+}
