@@ -3646,3 +3646,99 @@ fieldset.q-field {
   color: #1d4ed8;
   font-weight: 600;
 }
+
+
+/* =========================================
+   GENERAL SPECIFICATION
+   DROPDOWN STYLE
+   MATCH ELECTRICAL & MECHANICAL
+========================================= */
+
+/* -----------------------------------------
+   1. DROPDOWN NORMAL
+----------------------------------------- */
+
+.dimension-row select.dimension-type,
+.dimension-row select.dimension-symbol,
+.q-field select[name="uom"],
+.pack-size-item select {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+
+  padding: 9px 28px 9px 10px;
+
+  background-color: #eff6ff;
+  color: #1d4ed8;
+
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+
+  outline: none;
+  box-sizing: border-box;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* -----------------------------------------
+   2. HOVER
+----------------------------------------- */
+
+.dimension-row select.dimension-type:hover,
+.dimension-row select.dimension-symbol:hover,
+.q-field select[name="uom"]:hover,
+.pack-size-item select:hover {
+  background-color: #dbeafe;
+  border-color: #60a5fa;
+}
+
+/* -----------------------------------------
+   3. FOCUS
+----------------------------------------- */
+
+.dimension-row select.dimension-type:focus,
+.dimension-row select.dimension-symbol:focus,
+.q-field select[name="uom"]:focus,
+.pack-size-item select:focus {
+  background-color: #eff6ff;
+  border-color: #2563eb;
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+  outline: none;
+}
+
+/* -----------------------------------------
+   4. OPTION
+----------------------------------------- */
+
+.dimension-row select.dimension-type option,
+.dimension-row select.dimension-symbol option,
+.q-field select[name="uom"] option,
+.pack-size-item select option {
+  background-color: #ffffff;
+  color: #1d4ed8;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* -----------------------------------------
+   5. DISABLED DROPDOWN
+----------------------------------------- */
+
+.dimension-row select.dimension-type:disabled,
+.dimension-row select.dimension-symbol:disabled,
+.q-field select[name="uom"]:disabled,
+.pack-size-item select:disabled {
+  background-color: #f1f5f9;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
