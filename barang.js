@@ -41,8 +41,7 @@
     "T",
     "ID",
     "OD",
-    "DN",
-    "Phase"
+    "DN"
   ];
 
   const DIMENSION_GROUP_SEPARATOR = ["ID", "OD", "DN", "Phase"];
