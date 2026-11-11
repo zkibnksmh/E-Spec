@@ -693,7 +693,7 @@
   <div class="electric-spec-heading">
     <span class="electric-icon">⚡</span>
     <div>
-      <h4>Electric Specification</h4>
+      <h4>Electrical</h4>
       <p>Parameter kelistrikan barang</p>
     </div>
   </div>
@@ -910,119 +910,125 @@
 
 
 
-      <!-- MECHANICAL -->
-      <div class="q-technical-group">
-        <h4>B. MECHANICAL</h4>
 
-        <div class="q-grid">
+<!-- =========================================
+     B. SUB CATEGORY: MECHANICAL
+========================================= -->
+<div class="q-technical-group category-spec-card">
 
-          <label class="q-field">
-            Material
-            <input type="text" data-tech-label="Material">
-          </label>
+<div class="category-spec-heading">
+  <span class="category-spec-icon mechanical-icon">⚙️</span>
 
-          <label class="q-field">
-            Capacity
-            <input type="text" data-tech-label="Capacity">
-          </label>
+  <div>
+    <h4>Mechanical</h4>
+    <p>Parameter mekanikal barang</p>
+  </div>
+</div>
 
-          <label class="q-field">
-            Capacity UoM
-            <select data-tech-unit="Capacity">
-              <option value="">-- UoM --</option>
-              <option value="L">L</option>
-              <option value="m³">m³</option>
-              <option value="kg">kg</option>
-              <option value="ton">ton</option>
-            </select>
-          </label>
+  <div class="mechanical-spec-grid">
 
-          <label class="q-field">
-            Connection Type
-            <input type="text" data-tech-label="Connection Type">
-          </label>
+    <label class="spec-field">
+      <span>Material</span>
+      <input
+        type="text"
+        data-tech-label="Material"
+        placeholder="Stainless Steel 316L"
+      >
+    </label>
 
-          <label class="q-field">
-            Pressure
-            <input type="text" data-tech-label="Pressure">
-          </label>
+    <label class="spec-field">
+      <span>Capacity</span>
+      <input
+        type="text"
+        data-tech-label="Capacity"
+        placeholder="Contoh: 40 L"
+      >
+    </label>
 
-          <label class="q-field">
-            Pressure UoM
-            <select data-tech-unit="Pressure">
-              <option value="">-- UoM --</option>
-              <option value="Bar">Bar</option>
-              <option value="PSI">PSI</option>
-              <option value="MPa">MPa</option>
-            </select>
-          </label>
+    <label class="spec-field">
+      <span>Connection Type</span>
+      <input
+        type="text"
+        data-tech-label="Connection Type"
+        placeholder="Contoh: Flanged / Threaded"
+      >
+    </label>
 
-          <label class="q-field">
-            Flowrate
-            <input type="text" data-tech-label="Flowrate">
-          </label>
+    <label class="spec-field">
+      <span>Pressure</span>
+      <input
+        type="text"
+        data-tech-label="Pressure"
+        placeholder="10 Bar / 200 Psi"
+      >
+    </label>
 
-          <label class="q-field">
-            Flowrate UoM
-            <select data-tech-unit="Flowrate">
-              <option value="">-- UoM --</option>
-              <option value="L/min">L/min</option>
-              <option value="m³/h">m³/h</option>
-            </select>
-          </label>
+    <label class="spec-field">
+      <span>Flowrate</span>
+      <input
+        type="text"
+        data-tech-label="Flowrate"
+        placeholder="Contoh: 60 L/min"
+      >
+    </label>
 
-          <label class="q-field">
-            Speed
-            <input type="text" data-tech-label="Speed">
-          </label>
+    <label class="spec-field">
+      <span>Speed &amp; Tolerance</span>
+      <input
+        type="text"
+        data-tech-label="Speed & Tolerance"
+        placeholder="Contoh: 2000 Rpm / ±0.5 mm"
+      >
+    </label>
 
-          <label class="q-field">
-            Speed UoM
-            <select data-tech-unit="Speed">
-              <option value="">-- UoM --</option>
-              <option value="RPM">RPM</option>
-              <option value="m/s">m/s</option>
-            </select>
-          </label>
-
-          <label class="q-field">
-            Tolerance
-            <input type="text" data-tech-label="Tolerance">
-          </label>
-
-          <label class="q-field">
-            Tolerance UoM
-            <select data-tech-unit="Tolerance">
-              <option value="">-- UoM --</option>
-              <option value="mm">mm</option>
-              <option value="cm">cm</option>
-              <option value="%">%</option>
-            </select>
-          </label>
-
-        </div>
-      </div>
+  </div>
+</div>
 
 
-      <!-- LIQUID -->
-      <div class="q-technical-group">
-        <h4>C. LIQUID</h4>
+<!-- =========================================
+     C. SUB CATEGORY: LIQUID
+========================================= -->
+<div class="q-technical-group category-spec-card liquid-spec-card">
 
-        <div class="q-grid">
+  <div class="category-spec-heading">
+    <div class="category-spec-icon liquid-icon">
+      💧
+    </div>
 
-          <label class="q-field">
-            Konsentrasi
-            <input type="text" data-tech-label="Konsentrasi">
-          </label>
+    <div class="category-spec-title">
+      <h4>Liquid</h4>
+      <p>Parameter cairan dan karakteristik fluida</p>
+    </div>
+  </div>
 
-          <label class="q-field">
-            Viscositas
-            <input type="text" data-tech-label="Viscositas">
-          </label>
+  <div class="category-spec-divider"></div>
 
-        </div>
-      </div>
+  <div class="category-spec-grid liquid-spec-grid">
 
+    <!-- KONSENTRASI -->
+    <div class="q-field">
+      <label for="liquidConcentration">Konsentrasi</label>
+      <input
+        type="text"
+        id="liquidConcentration"
+        data-tech-label="Konsentrasi"
+        placeholder="Contoh: 0.7 %"
+      >
+    </div>
+
+    <!-- VISCOSITAS -->
+    <div class="q-field">
+      <label for="liquidViscosity">Viscositas</label>
+      <input
+        type="text"
+        id="liquidViscosity"
+        data-tech-label="Viscositas"
+        placeholder="Contoh: VG 60 PG 40"
+      >
+    </div>
+
+  </div>
+</div>
 
       <!-- OTHER TECHNICAL -->
       <div class="q-technical-group">
@@ -1285,411 +1291,6 @@
 
 </form>
 
-
-<!-- PENGATURAN PLANT, REASON, DIMENSION, DAN TECHNICAL -->
-<script>
-(() => {
-  "use strict";
-
-  const form = document.getElementById("questionnaireForm");
-  if (!form) return;
-
-  const plantSelect = document.getElementById("plantCodeSelect");
-  const plantDesc = document.getElementById("plantDescInput");
-  const deptSelect = document.getElementById("deptSelect");
-
-  const plantData = {
-    "1210 - Plant Gending": [
-      "HRGA",
-      "Fermentation - Decalcium",
-      "Fermentation - Glucose",
-      "Fermentation - Fermentation",
-      "Isolation & Purification - Isolation",
-      "Isolation & Purification - Purification",
-      "Packing",
-      "Polycello & Technic Packing",
-      "Liquid Fertilizer Sales",
-      "SCM - PPIC",
-      "SCM - Inderect Sourcing",
-      "Engineering & Technical Development",
-      "Utility",
-      "Electrical Instrument",
-      "Mechanical & Maintenance",
-      "Logistic & Warehouse",
-      "QA & QC",
-      "SHE",
-      "IT",
-      "Costing Associate"
-    ],
-
-    "1220 - Plant Cikarang": [
-      "HRGA",
-      "Production - Dry",
-      "Production - Wet",
-      "SCM - PPIC",
-      "SCM - Inderect Sourcing",
-      "Maintenance",
-      "Project",
-      "Warehouse",
-      "QA & QC",
-      "SHE",
-      "IT",
-      "Supply Chain Finance"
-    ],
-
-    "1230 - Plant Minahasa Selatan": [
-      "Production - Opening & Processing",
-      "Production - Production & TCA",
-      "PPIC",
-      "Indirect Sourcing",
-      "Maintenance",
-      "Utility",
-      "Warehouse",
-      "QA & QC",
-      "SHE",
-      "IT",
-      "Plant Operation Controller"
-    ]
-  };
-
-  function updateDepartment(restoreValue = "") {
-    const selected = plantSelect.value;
-    const description = selected.split(" - ")[1] || "";
-
-    plantDesc.value = description;
-    deptSelect.innerHTML =
-      '<option value="">-- Pilih Departemen --</option>';
-
-    (plantData[selected] || []).forEach(dept => {
-      const option = document.createElement("option");
-      option.value = dept;
-      option.textContent = dept;
-      deptSelect.appendChild(option);
-    });
-
-    if (restoreValue) deptSelect.value = restoreValue;
-  }
-
-  plantSelect.addEventListener("change", () => {
-    updateDepartment();
-    form.dispatchEvent(new Event("input", { bubbles: true }));
-  });
-
-
-// MATERIAL CATEGORY: MULTIPLE CHECKBOX
-function updateCategory() {
-
-  const selectedCategories = Array.from(
-    form.querySelectorAll('[name="materialCategory"]:checked')
-  ).map(check => check.value);
-
-  const mapping = {
-    "Asset Barang": "Asset Barang",
-    "Expense Barang Umum / Teknik": "Expense Barang General",
-    "Expense Bahan Kimia / Sanitasi / Pelumas": "Expense Barang Kimia"
-  };
-
-  form.querySelectorAll('[name="category"]').forEach(check => {
-
-    check.checked = selectedCategories.some(
-      category => mapping[category] === check.value
-    );
-
-  });
-}
-
-// Sinkronisasi saat checkbox berubah
-form.querySelectorAll('[name="materialCategory"]').forEach(check => {
-  check.addEventListener("change", updateCategory);
-});
-
-
-  // REASON TO PROCURE
-  const reasonChoice = document.getElementById("reasonChoice");
-  const reasonOther = document.getElementById("reasonOther");
-  const reasonOthers = document.getElementById("reasonOthersBarang");
-  const reasonFinal = document.getElementById("reasonFinal");
-
-  function updateReason() {
-    const isOther = reasonChoice.value === "Others";
-
-    reasonOthers.hidden = !isOther;
-    reasonOther.required = isOther;
-
-    reasonFinal.value = isOther
-      ? reasonOther.value.trim()
-      : reasonChoice.value;
-  }
-
-  reasonChoice.addEventListener("change", updateReason);
-  reasonOther.addEventListener("input", updateReason);
-
-
-  // DIMENSION
-
-function updateDimension() {
-  const rows = document.querySelectorAll(
-    "#dimensionRows .dimension-row"
-  );
-
-  const unit = document.getElementById("dimensionUom")?.value || "";
-  const finalField = document.getElementById("dimensionFinal");
-
-  if (!finalField) return;
-
-  const items = Array.from(rows)
-    .map(row => ({
-      type: row.querySelector(".dimension-type")?.value || "",
-      value: row.querySelector(".dimension-value")?.value.trim() || "",
-      symbol: row.querySelector(".dimension-symbol")?.value || "x"
-    }))
-    .filter(item => item.type && item.value !== "");
-
-  finalField.value = items.length
-    ? items.map((item, index) => {
-        const text = `${item.type} ${item.value}`;
-
-        return index === 0
-          ? text
-          : `${item.symbol} ${text}`;
-      }).join(" ") + (unit ? ` ${unit}` : "")
-    : "";
-}
-
-
-
-  // PACK SIZE
-function updatePackSize() {
-  const quantity = document.getElementById("packQuantity")?.value.trim() || "";
-  const packUom = document.getElementById("packUom")?.value || "";
-  const symbol = document.getElementById("packSymbol")?.value || "";
-  const packageUom = document.getElementById("packageUom")?.value || "";
-
-  const parts = [];
-
-  if (quantity) parts.push(quantity);
-  if (packUom) parts.push(packUom);
-
-  let result = parts.join(" ");
-
-  if (symbol && packageUom) {
-    result += ` ${symbol} ${packageUom}`;
-  } else if (packageUom) {
-    result += ` ${packageUom}`;
-  }
-
-  document.getElementById("packSizeFinal").value = result;
-}
-
-
-  // TECHNICAL SPECIFICATION
-
-function updateTechnical() {
-  const items = [];
-
-  // ELECTRIC SPECIFICATION
-  form.querySelectorAll("[data-electric-row]").forEach(row => {
-    const label = row.dataset.electricRow;
-
-    const value1 =
-      row.querySelector('[data-electric-value="1"]')?.value.trim() || "";
-
-    const unit1 =
-      row.querySelector('[data-electric-unit="1"]')?.value || "";
-
-    const value2 =
-      row.querySelector('[data-electric-value="2"]')?.value.trim() || "";
-
-    const unit2 =
-      row.querySelector('[data-electric-unit="2"]')?.value || "";
-
-    const symbol =
-      row.querySelector("[data-electric-symbol]")?.value || "/";
-
-    // Lewati parameter jika kedua nilai kosong
-    if (!value1 && !value2) return;
-
-    const firstValue = [value1, unit1].filter(Boolean).join(" ");
-    const secondValue = [value2, unit2].filter(Boolean).join(" ");
-
-    let result = firstValue;
-
-    if (secondValue) {
-      result += ` ${symbol} ${secondValue}`;
-    }
-
-    items.push({
-      label,
-      value: result,
-      unit: ""
-    });
-  });
-
-  // MECHANICAL, LIQUID, DAN FIELD TECHNICAL LAINNYA
-  form.querySelectorAll("[data-tech-label]").forEach(input => {
-    const label = input.dataset.techLabel;
-    const value = input.value.trim();
-
-    if (!value) return;
-
-    const unitInput = form.querySelector(
-      `[data-tech-unit="${label}"]`
-    );
-
-    const unit = unitInput ? unitInput.value : "";
-
-    items.push({
-      label,
-      value,
-      unit
-    });
-  });
-
-  // CUSTOM TECHNICAL ATTRIBUTE
-  form.querySelectorAll(".custom-tech-row").forEach(row => {
-    const label = row.querySelector("[data-custom-tech-name]")?.value.trim();
-    const value = row.querySelector("[data-custom-tech-value]")?.value.trim();
-    const unit = row.querySelector("[data-custom-tech-unit]")?.value.trim();
-
-    if (label && value) {
-      items.push({ label, value, unit });
-    }
-  });
-
-  // MASUKKAN KE FIELD TEMPLATE PDF
-  for (let i = 1; i <= 5; i++) {
-    const item = items[i - 1];
-
-    document.getElementById(`technical${i}`).value =
-      item ? item.label : "";
-
-    document.getElementById(`technicalUnit${i}`).value =
-      item ? `${item.value} ${item.unit || ""}`.trim() : "";
-  }
-}
-
-
-    form.querySelectorAll(".custom-tech-row").forEach(row => {
-      const label = row.querySelector("[data-custom-tech-name]")?.value.trim();
-      const value = row.querySelector("[data-custom-tech-value]")?.value.trim();
-      const unit = row.querySelector("[data-custom-tech-unit]")?.value.trim();
-
-      if (label && value) items.push({ label, value, unit });
-    });
-
-    for (let i = 1; i <= 5; i++) {
-      const item = items[i - 1];
-
-      document.getElementById(`technical${i}`).value =
-        item ? item.label : "";
-
-      document.getElementById(`technicalUnit${i}`).value =
-        item ? `${item.value} ${item.unit || ""}`.trim() : "";
-    }
-  }
-
-
-  // TAMBAH TECHNICAL ATTRIBUTE
-  let technicalCounter = 0;
-
-  document.getElementById("addTechnicalBtn").addEventListener("click", () => {
-    technicalCounter++;
-
-    const container = document.getElementById(
-      "dynamicCustomTechnicalContainer"
-    );
-
-    const row = document.createElement("div");
-    row.className = "custom-tech-row q-grid";
-
-    row.innerHTML = `
-      <label class="q-field">
-        Nama Atribut
-        <input type="text" data-custom-tech-name placeholder="Nama atribut">
-      </label>
-
-      <label class="q-field">
-        Nilai
-        <input type="text" data-custom-tech-value placeholder="Nilai teknis">
-      </label>
-
-      <label class="q-field">
-        UoM
-        <input type="text" data-custom-tech-unit placeholder="Satuan">
-      </label>
-
-      <button type="button" class="q-remove-button">Hapus</button>
-    `;
-
-    row.querySelector(".q-remove-button").addEventListener("click", () => {
-      row.remove();
-      updateTechnical();
-      form.dispatchEvent(new Event("input", { bubbles: true }));
-    });
-
-    container.appendChild(row);
-  });
-
-
-  // TAMBAH UNIQUE ATTRIBUTE
-  let uniqueCounter = 0;
-
-  document.getElementById("addUniqueBtn").addEventListener("click", () => {
-    uniqueCounter++;
-
-    const container = document.getElementById(
-      "dynamicCustomUniqueContainer"
-    );
-
-    const row = document.createElement("div");
-    row.className = "q-grid custom-unique-row";
-
-    row.innerHTML = `
-      <label class="q-field">
-        Nama Unique Attribute
-        <input type="text" name="customUniqueName${uniqueCounter}">
-      </label>
-
-      <label class="q-field">
-        Detail Unique Attribute
-        <input type="text" name="customUniqueDetail${uniqueCounter}">
-      </label>
-
-      <button type="button" class="q-remove-button">Hapus</button>
-    `;
-
-    row.querySelector(".q-remove-button").addEventListener("click", () => {
-      row.remove();
-    });
-
-    container.appendChild(row);
-  });
-
-
-  form.addEventListener("input", () => {
-    updateReason();
-    updateDimension();
-    updatePackSize();
-    updateTechnical();
-  });
-
-  form.addEventListener("change", () => {
-    updateCategory();
-    updateReason();
-    updateDimension();
-    updatePackSize();
-    updateTechnical();
-  });
-
-  updateDepartment();
-  updateCategory();
-  updateReason();
-  updateDimension();
-  updatePackSize();
-  updateTechnical();
-
-})();
-</script>
 
 <!-- TOMBOL CETAK PDF -->
 <div class="form-bottom-actions no-print">

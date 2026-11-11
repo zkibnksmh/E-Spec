@@ -3,10 +3,9 @@
   "use strict";
 
   // =====================================================
-  // E-SPEC BARANG
+  // E-SPEC BARANG — QUESTIONNAIRE CONTROLLER
   // =====================================================
 
-  const API_URL = "http://localhost:3000/api/documents";
   const STORAGE_KEY = "eSpecBarangQuestionnaire.v2";
   const OLD_STORAGE_KEY = "eSpecBarangQuestionnaire.v1";
   const VERSION_STORAGE_KEY = "eSpecBarangVersion.v1";
@@ -15,8 +14,8 @@
   const questionnaire = document.getElementById("questionnaireForm");
   const printForm = document.getElementById("printSpecForm");
 
-  if (!questionnaire || !printForm) {
-    console.error("Form kuesioner atau template PDF Barang tidak ditemukan.");
+  if (!questionnaire) {
+    console.error("Form kuesioner Barang tidak ditemukan.");
     return;
   }
 
@@ -31,32 +30,94 @@
   const saveBtn = $("#saveAdminBtn");
   const draftStatus = $("#draftStatus");
 
+  const plantSelect = $("#plantCodeSelect");
+  const plantDesc = $("#plantDescInput");
+  const deptSelect = $("#deptSelect");
+
+  const reasonChoice = $("#reasonChoice");
+  const reasonOther = $("#reasonOther");
+  const reasonOthers = $("#reasonOthersBarang");
+  const reasonFinal = $("#reasonFinal");
+
+  const dimensionContainer = $("#dimensionRows");
   const drawingUpload = $("#questionDrawingUpload");
   const drawingPreview = $("#drawingPreview");
 
-  const DIMENSION_OPTIONS = [
-    "L",
-    "W",
-    "H",
-    "T",
-    "ID",
-    "OD",
-    "DN"
-  ];
+  const technicalContainer = $("#dynamicCustomTechnicalContainer");
+  const uniqueContainer = $("#dynamicCustomUniqueContainer");
 
-  const DIMENSION_GROUP_SEPARATOR = ["ID", "OD", "DN", "Phase"];
+  const DIMENSION_OPTIONS = ["L", "W", "H", "T", "ID", "OD", "DN"];
+
+  const PLANT_DATA = {
+    "1210 - Plant Gending": [
+      "HRGA",
+      "Fermentation - Decalcium",
+      "Fermentation - Glucose",
+      "Fermentation - Fermentation",
+      "Isolation & Purification - Isolation",
+      "Isolation & Purification - Purification",
+      "Packing",
+      "Polycello & Technic Packing",
+      "Liquid Fertilizer Sales",
+      "SCM - PPIC",
+      "SCM - Inderect Sourcing",
+      "Engineering & Technical Development",
+      "Utility",
+      "Electrical Instrument",
+      "Mechanical & Maintenance",
+      "Logistic & Warehouse",
+      "QA & QC",
+      "SHE",
+      "IT",
+      "Costing Associate"
+    ],
+
+    "1220 - Plant Cikarang": [
+      "HRGA",
+      "Production - Dry",
+      "Production - Wet",
+      "SCM - PPIC",
+      "SCM - Inderect Sourcing",
+      "Maintenance",
+      "Project",
+      "Warehouse",
+      "QA & QC",
+      "SHE",
+      "IT",
+      "Supply Chain Finance"
+    ],
+
+    "1230 - Plant Minahasa Selatan": [
+      "Production - Opening & Processing",
+      "Production - Production & TCA",
+      "PPIC",
+      "Indirect Sourcing",
+      "Maintenance",
+      "Utility",
+      "Warehouse",
+      "QA & QC",
+      "SHE",
+      "IT",
+      "Plant Operation Controller"
+    ]
+  };
+
+  const CATEGORY_MAPPING = {
+    "Asset Barang": "Asset Barang",
+    "Expense Barang Umum / Teknik": "Expense Barang General",
+    "Expense Bahan Kimia / Sanitasi / Pelumas": "Expense Barang Kimia"
+  };
 
   let drawingImage = "";
   let loadingDocument = false;
   let saving = false;
 
   // =====================================================
-  // UTILITAS
+  // UTILITIES
   // =====================================================
 
   function todayISO() {
     const now = new Date();
-
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
     const day = String(now.getDate()).padStart(2, "0");
@@ -65,9 +126,7 @@
   }
 
   function setStatus(message) {
-    if (draftStatus) {
-      draftStatus.textContent = message;
-    }
+    if (draftStatus) draftStatus.textContent = message;
   }
 
   function formatDate(value) {
@@ -75,9 +134,7 @@
 
     const date = new Date(`${value}T00:00:00`);
 
-    if (Number.isNaN(date.getTime())) {
-      return value;
-    }
+    if (Number.isNaN(date.getTime())) return value;
 
     return date.toLocaleDateString("id-ID", {
       day: "numeric",
@@ -86,89 +143,69 @@
     });
   }
 
-  function escapeSelector(value) {
-    if (window.CSS && window.CSS.escape) {
-      return window.CSS.escape(String(value));
+  function safeJSONParse(value, fallback) {
+    try {
+      return value ? JSON.parse(value) : fallback;
+    } catch {
+      return fallback;
     }
+  }
 
+  function escapeSelector(value) {
+    if (window.CSS?.escape) return window.CSS.escape(String(value));
     return String(value).replace(/["\\]/g, "\\$&");
   }
 
-  // =====================================================
-  // VERSION & CREATED DATE
-  // =====================================================
-
-  function initializeDocumentInfo() {
-    const versionInput = $('[name="version"]', questionnaire);
-    const createdDateInput = $('[name="createdDate"]', questionnaire);
-
-    if (!versionInput || !createdDateInput) return;
-
-    const savedVersion = localStorage.getItem(VERSION_STORAGE_KEY);
-
-    const currentVersion = savedVersion === null
-      ? 0
-      : Number(savedVersion);
-
-    versionInput.value = String(currentVersion).padStart(2, "0");
-
-    if (!createdDateInput.value) {
-      createdDateInput.value = todayISO();
-    }
+  function getVersionInput() {
+    return $('[name="version"]', questionnaire);
   }
 
-  function saveTransactionLocally() {
-    try {
-      const formData = getFormData();
+  function getCreatedDateInput() {
+    return $('[name="createdDate"]', questionnaire);
+  }
 
-      const versionInput = $('[name="version"]', questionnaire);
-      const createdDateInput = $('[name="createdDate"]', questionnaire);
+  // =====================================================
+  // PLANT & DEPARTMENT
+  // =====================================================
 
-      const currentVersion = Number(versionInput?.value || 0);
+  function updateDepartment(restoreValue = "") {
+    if (!plantSelect || !deptSelect) return;
 
-      const history = JSON.parse(
-        localStorage.getItem(HISTORY_KEY) || "[]"
+    const selectedPlant = plantSelect.value;
+    const description = selectedPlant.split(" - ")[1] || "";
+
+    if (plantDesc) plantDesc.value = description;
+
+    deptSelect.innerHTML =
+      '<option value="">-- Pilih Departemen --</option>';
+
+    (PLANT_DATA[selectedPlant] || []).forEach(department => {
+      const option = document.createElement("option");
+      option.value = department;
+      option.textContent = department;
+      deptSelect.appendChild(option);
+    });
+
+    if (restoreValue) deptSelect.value = restoreValue;
+  }
+
+  // =====================================================
+  // MATERIAL CATEGORY
+  // =====================================================
+
+  function getSelectedCategories() {
+    return $$('[name="materialCategory"]:checked', questionnaire)
+      .map(field => field.value);
+  }
+
+  function updateCategory() {
+    const selected = getSelectedCategories();
+
+    $$('[name="category"]', questionnaire).forEach(field => {
+      field.checked = selected.some(
+        category => CATEGORY_MAPPING[category] === field.value
       );
-
-      const transaction = {
-        id: Date.now(),
-        version: String(currentVersion).padStart(2, "0"),
-        createdDate: createdDateInput?.value || todayISO(),
-        submittedAt: new Date().toISOString(),
-        formData
-      };
-
-      history.push(transaction);
-
-      localStorage.setItem(
-        HISTORY_KEY,
-        JSON.stringify(history)
-      );
-
-      const nextVersion = currentVersion + 1;
-
-      localStorage.setItem(
-        VERSION_STORAGE_KEY,
-        String(nextVersion)
-      );
-
-      if (versionInput) {
-        versionInput.value = String(nextVersion).padStart(2, "0");
-      }
-
-      saveDraft();
-
-      return true;
-
-    } catch (error) {
-      console.error("Gagal menyimpan transaksi:", error);
-
-      alert(
-        "Transaksi gagal disimpan di browser. Periksa kapasitas penyimpanan."
-      );
-
-      return false;
-    }
+    });
   }
 
   // =====================================================
@@ -176,26 +213,20 @@
   // =====================================================
 
   function updateReason() {
-    const choice = $("#reasonChoice", questionnaire);
-    const other = $('[name="reasonOther"]', questionnaire);
-    const finalField = $("#reasonFinal", questionnaire);
-    const otherContainer = $("#reasonOthersBarang");
+    if (!reasonChoice || !reasonFinal) return;
 
-    if (!choice || !finalField) return;
+    const isOthers = reasonChoice.value === "Others";
 
-    const isOthers = choice.value === "Others";
+    if (reasonOthers) reasonOthers.hidden = !isOthers;
 
-    if (otherContainer) {
-      otherContainer.hidden = !isOthers;
+    if (reasonOther) {
+      reasonOther.disabled = !isOthers;
+      reasonOther.required = isOthers;
     }
 
-    if (other) {
-      other.disabled = !isOthers;
-    }
-
-    finalField.value = isOthers
-      ? other?.value.trim() || ""
-      : choice.value;
+    reasonFinal.value = isOthers
+      ? (reasonOther?.value.trim() || "")
+      : reasonChoice.value;
   }
 
   // =====================================================
@@ -203,198 +234,212 @@
   // =====================================================
 
   function createDimensionRow(item = {}) {
-    const container = $("#dimensionRows");
-
-    if (!container) return;
+    if (!dimensionContainer) return;
 
     const row = document.createElement("div");
     row.className = "dimension-row";
 
-    row.innerHTML = `
-      <select class="dimension-type">
-        <option value="">-- Pilih Dimension --</option>
+    const typeSelect = document.createElement("select");
+    typeSelect.className = "dimension-type";
 
-        ${DIMENSION_OPTIONS.map(option => `
-          <option value="${option}">${option}</option>
-        `).join("")}
-      </select>
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "-- Pilih Dimension --";
+    typeSelect.appendChild(defaultOption);
 
-      <input
-        type="text"
-        class="dimension-value"
-        placeholder="Masukkan nilai"
-      >
+    DIMENSION_OPTIONS.forEach(type => {
+      const option = document.createElement("option");
+      option.value = type;
+      option.textContent = type;
+      typeSelect.appendChild(option);
+    });
 
-      <select class="dimension-symbol">
-        <option value="x">x</option>
-        <option value="~">~</option>
-        <option value="/">/</option>
-        <option value="±">±</option>
-        <option value="-">-</option>
-      </select>
+    const valueInput = document.createElement("input");
+    valueInput.type = "text";
+    valueInput.className = "dimension-value";
+    valueInput.placeholder = "Masukkan nilai";
 
-      <button
-        type="button"
-        class="remove-dimension"
-        title="Hapus"
-      >&times;</button>
-    `;
+    const symbolSelect = document.createElement("select");
+    symbolSelect.className = "dimension-symbol";
 
-    $(".dimension-type", row).value = item.type || "";
-    $(".dimension-value", row).value = item.value || "";
-    $(".dimension-symbol", row).value = item.symbol || "x";
+    [
+      ["x", "x"],
+      ["~", "~"],
+      ["/", "/"],
+      ["±", "±"],
+      ["-", "-"]
+    ].forEach(([value, label]) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
+      symbolSelect.appendChild(option);
+    });
 
-    container.appendChild(row);
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "remove-dimension";
+    removeButton.title = "Hapus";
+    removeButton.textContent = "×";
+
+    typeSelect.value = item.type || "";
+    valueInput.value = item.value || "";
+    symbolSelect.value = item.symbol || "x";
+
+    row.append(typeSelect, valueInput, symbolSelect, removeButton);
+    dimensionContainer.appendChild(row);
   }
 
   function collectDimensionItems() {
-    const container = $("#dimensionRows");
+    if (!dimensionContainer) return [];
 
-    if (!container) return [];
-
-    return $$(".dimension-row", container)
+    return $$(".dimension-row", dimensionContainer)
       .map(row => ({
         type: $(".dimension-type", row)?.value || "",
         value: $(".dimension-value", row)?.value.trim() || "",
         symbol: $(".dimension-symbol", row)?.value || "x"
       }))
-      .filter(item => item.type && item.value !== "");
+      .filter(item => item.type && item.value);
   }
 
   function updateDimension() {
-    const items = collectDimensionItems();
-    const finalField = $("#dimensionFinal");
-
+    const finalField = $("#dimensionFinal", questionnaire);
     if (!finalField) return;
 
+    const items = collectDimensionItems();
     let previousType = "";
 
-    const formattedItems = items.map((item, index) => {
-      const dimension = `${item.type} : ${item.value}`;
+    const groupedTypes = ["ID", "OD", "DN", "Phase"];
+
+    finalField.value = items.map((item, index) => {
+      const text = `${item.type} : ${item.value}`;
 
       if (index === 0) {
         previousType = item.type;
-        return dimension;
+        return text;
       }
 
       let separator = item.symbol || "x";
 
-      const isCurrentGrouped = DIMENSION_GROUP_SEPARATOR.includes(item.type);
-      const wasPreviousGrouped = DIMENSION_GROUP_SEPARATOR.includes(previousType);
+      const currentGrouped = groupedTypes.includes(item.type);
+      const previousGrouped = groupedTypes.includes(previousType);
 
-      // Masuk ke kelompok ID / OD / DN / Phase menggunakan "-"
-      if (isCurrentGrouped && !wasPreviousGrouped) {
-        separator = "-";
-      }
-
-      // Antar kelompok ID / OD / DN / Phase tetap menggunakan "-"
-      if (isCurrentGrouped && wasPreviousGrouped) {
-        separator = "-";
-      }
-
-      // Kembali ke kelompok L / W / H / T menggunakan "-"
-      if (!isCurrentGrouped && wasPreviousGrouped) {
+      if (currentGrouped || previousGrouped) {
         separator = "-";
       }
 
       previousType = item.type;
-
-      return `${separator} ${dimension}`;
-    });
-
-    finalField.value = formattedItems.join(" ");
+      return `${separator} ${text}`;
+    }).join(" ");
   }
-
-  const dimensionRowsContainer = $("#dimensionRows");
-  const addDimensionBtn = $("#addDimensionBtn");
-
-  addDimensionBtn?.addEventListener("click", () => {
-    createDimensionRow();
-
-    updateDimension();
-    saveDraft();
-  });
-
-  dimensionRowsContainer?.addEventListener("click", event => {
-    const removeButton = event.target.closest(".remove-dimension");
-
-    if (!removeButton) return;
-
-    const rows = $$(".dimension-row", dimensionRowsContainer);
-    const currentRow = removeButton.closest(".dimension-row");
-
-    if (rows.length > 1) {
-      currentRow.remove();
-    } else {
-      $(".dimension-type", currentRow).value = "";
-      $(".dimension-value", currentRow).value = "";
-      $(".dimension-symbol", currentRow).value = "x";
-    }
-
-    updateDimension();
-    saveDraft();
-  });
-
-  dimensionRowsContainer?.addEventListener("input", () => {
-    updateDimension();
-    saveDraft();
-  });
-
-  dimensionRowsContainer?.addEventListener("change", () => {
-    updateDimension();
-    saveDraft();
-  });
 
   // =====================================================
   // PACK SIZE
   // =====================================================
 
   function updatePackSize() {
-    const quantity = $("#packQuantity", questionnaire)?.value || "";
-    const uom = $("#packUom", questionnaire)?.value || "";
+    const quantity = $("#packQuantity", questionnaire)?.value.trim() || "";
+    const packUom = $("#packUom", questionnaire)?.value || "";
+    const symbol = $("#packSymbol", questionnaire)?.value || "";
     const packageUom = $("#packageUom", questionnaire)?.value || "";
-
     const finalField = $("#packSizeFinal", questionnaire);
 
-    if (finalField) {
-      finalField.value = [
-        quantity,
-        uom,
-        packageUom
-      ].filter(Boolean).join(" ");
+    if (!finalField) return;
+
+    const firstPart = [quantity, packUom].filter(Boolean).join(" ");
+
+    let result = firstPart;
+
+    if (packageUom) {
+      result += `${result && symbol ? ` ${symbol} ` : result ? " " : ""}${packageUom}`;
     }
+
+    finalField.value = result.trim();
   }
 
   // =====================================================
   // TECHNICAL SPECIFICATION
   // =====================================================
 
+  function getTechnicalCategory(input) {
+    const group = input.closest(".q-technical-group");
+    const heading = $("h4", group)?.textContent.toLowerCase() || "";
+
+    if (heading.includes("electric")) return "Electric";
+    if (heading.includes("mechanical")) return "Mechanical";
+    if (heading.includes("liquid")) return "Liquid";
+
+    return "Other";
+  }
+
   function collectTechnicalAttributes() {
     const attributes = [];
 
+    // ELECTRICAL
+    $$("[data-electric-row]", questionnaire).forEach(row => {
+      const label = row.dataset.electricRow || "";
+
+      const value1 =
+        $('[data-electric-value="1"]', row)?.value.trim() || "";
+
+      const unit1 =
+        $('[data-electric-unit="1"]', row)?.value || "";
+
+      const value2 =
+        $('[data-electric-value="2"]', row)?.value.trim() || "";
+
+      const unit2 =
+        $('[data-electric-unit="2"]', row)?.value || "";
+
+      const symbol =
+        $("[data-electric-symbol]", row)?.value || "/";
+
+      if (!value1 && !value2) return;
+
+      const first = [value1, unit1].filter(Boolean).join(" ");
+      const second = [value2, unit2].filter(Boolean).join(" ");
+
+      let value = first;
+
+      if (second) {
+        value += `${first ? ` ${symbol} ` : ""}${second}`;
+      }
+
+      attributes.push({
+        category: "Electric",
+        label,
+        value,
+        unit: ""
+      });
+    });
+
+    // MECHANICAL & LIQUID
     $$("[data-tech-label]", questionnaire).forEach(input => {
-      const label = input.dataset.techLabel;
+      const label = input.dataset.techLabel || "";
       const value = input.value.trim();
 
       if (!label || !value) return;
 
       const unitInput = $$("[data-tech-unit]", questionnaire)
-        .find(item => item.dataset.techUnit === label);
-
-      const unit = unitInput?.value.trim() || "";
+        .find(field => field.dataset.techUnit === label);
 
       attributes.push({
         category: getTechnicalCategory(input),
         label,
         value,
-        unit
+        unit: unitInput?.value.trim() || ""
       });
     });
 
+    // CUSTOM
     $$(".custom-tech-row", questionnaire).forEach(row => {
-      const label = $("[data-custom-tech-name]", row)?.value.trim() || "";
-      const value = $("[data-custom-tech-value]", row)?.value.trim() || "";
-      const unit = $("[data-custom-tech-unit]", row)?.value.trim() || "";
+      const label =
+        $("[data-custom-tech-name]", row)?.value.trim() || "";
+
+      const value =
+        $("[data-custom-tech-value]", row)?.value.trim() || "";
+
+      const unit =
+        $("[data-custom-tech-unit]", row)?.value.trim() || "";
 
       if (label && value) {
         attributes.push({
@@ -409,31 +454,18 @@
     return attributes;
   }
 
-  function getTechnicalCategory(input) {
-    const group = input.closest(".q-technical-group");
-    const heading = $("h4", group)?.textContent.toLowerCase() || "";
-
-    if (heading.includes("electric")) return "Electric";
-    if (heading.includes("mechanical")) return "Mechanical";
-    if (heading.includes("liquid")) return "Liquid";
-
-    return "Other";
-  }
-
   function updateLegacyTechnicalFields(attributes) {
-    for (let i = 1; i <= 5; i++) {
-      const item = attributes[i - 1];
+    for (let index = 1; index <= 5; index++) {
+      const item = attributes[index - 1];
 
-      const labelField = $(`#technical${i}`, questionnaire);
-      const valueField = $(`#technicalUnit${i}`, questionnaire);
+      const labelField = $(`#technical${index}`, questionnaire);
+      const valueField = $(`#technicalUnit${index}`, questionnaire);
 
-      if (labelField) {
-        labelField.value = item ? item.label : "";
-      }
+      if (labelField) labelField.value = item?.label || "";
 
       if (valueField) {
         valueField.value = item
-          ? `${item.value} ${item.unit || ""}`.trim()
+          ? [item.value, item.unit].filter(Boolean).join(" ")
           : "";
       }
     }
@@ -452,52 +484,39 @@
     const name2 = $('[name="unique2"]', questionnaire)?.value.trim() || "";
     const detail2 = $('[name="uniqueDetail2"]', questionnaire)?.value.trim() || "";
 
-    if (name1 || detail1) {
-      attributes.push({
-        name: name1,
-        detail: detail1
-      });
-    }
-
-    if (name2 || detail2) {
-      attributes.push({
-        name: name2,
-        detail: detail2
-      });
-    }
+    if (name1 || detail1) attributes.push({ name: name1, detail: detail1 });
+    if (name2 || detail2) attributes.push({ name: name2, detail: detail2 });
 
     $$(".custom-unique-row", questionnaire).forEach(row => {
       const name = $('input[name^="customUniqueName"]', row)?.value.trim() || "";
       const detail = $('input[name^="customUniqueDetail"]', row)?.value.trim() || "";
 
-      if (name || detail) {
-        attributes.push({ name, detail });
-      }
+      if (name || detail) attributes.push({ name, detail });
     });
 
     return attributes;
   }
 
   // =====================================================
-  // SERIALISASI DATA FORM
+  // FORM DATA
   // =====================================================
 
   function getFormData() {
     updateReason();
+    updateCategory();
     updateDimension();
     updatePackSize();
 
     const technicalAttributes = collectTechnicalAttributes();
+    const uniqueAttributes = collectUniqueAttributes();
 
     updateLegacyTechnicalFields(technicalAttributes);
-
-    const uniqueAttributes = collectUniqueAttributes();
 
     const data = {};
     const fieldsByName = new Map();
 
     $$("[name]", questionnaire).forEach(field => {
-      if (field.type === "file") return;
+      if (field.type === "file" || field.disabled) return;
 
       if (!fieldsByName.has(field.name)) {
         fieldsByName.set(field.name, []);
@@ -529,6 +548,10 @@
       data[name] = first.value ?? "";
     });
 
+    data.materialCategory = getSelectedCategories();
+    data.category = $$('[name="category"]:checked', questionnaire)
+      .map(field => field.value);
+
     data.technicalAttributes = technicalAttributes;
     data.uniqueAttributes = uniqueAttributes;
     data.dimensionItems = collectDimensionItems();
@@ -539,7 +562,84 @@
   }
 
   // =====================================================
-  // RESTORE FIELD
+  // DYNAMIC TECHNICAL ROWS
+  // =====================================================
+
+  function createCustomTechnicalRow(item = {}) {
+    if (!technicalContainer) return;
+
+    const row = document.createElement("div");
+    row.className = "custom-tech-row q-grid";
+
+    row.innerHTML = `
+      <label class="q-field">
+        Nama Atribut
+        <input type="text" data-custom-tech-name placeholder="Nama atribut">
+      </label>
+
+      <label class="q-field">
+        Nilai
+        <input type="text" data-custom-tech-value placeholder="Nilai teknis">
+      </label>
+
+      <label class="q-field">
+        UoM
+        <input type="text" data-custom-tech-unit placeholder="Satuan">
+      </label>
+
+      <button type="button" class="q-remove-button">Hapus</button>
+    `;
+
+    $("[data-custom-tech-name]", row).value = item.label || "";
+    $("[data-custom-tech-value]", row).value = item.value || "";
+    $("[data-custom-tech-unit]", row).value = item.unit || "";
+
+    technicalContainer.appendChild(row);
+  }
+
+  // =====================================================
+  // DYNAMIC UNIQUE ROWS
+  // =====================================================
+
+  function createCustomUniqueRow(item = {}) {
+    if (!uniqueContainer) return;
+
+    const index = Date.now() + Math.floor(Math.random() * 1000);
+
+    const row = document.createElement("div");
+    row.className = "q-grid custom-unique-row";
+
+    const nameLabel = document.createElement("label");
+    nameLabel.className = "q-field";
+    nameLabel.textContent = "Nama Unique Attribute";
+
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.name = `customUniqueName${index}`;
+    nameInput.value = item.name || "";
+    nameLabel.appendChild(nameInput);
+
+    const detailLabel = document.createElement("label");
+    detailLabel.className = "q-field";
+    detailLabel.textContent = "Detail Unique Attribute";
+
+    const detailInput = document.createElement("input");
+    detailInput.type = "text";
+    detailInput.name = `customUniqueDetail${index}`;
+    detailInput.value = item.detail || "";
+    detailLabel.appendChild(detailInput);
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "q-remove-button";
+    removeButton.textContent = "Hapus";
+
+    row.append(nameLabel, detailLabel, removeButton);
+    uniqueContainer.appendChild(row);
+  }
+
+  // =====================================================
+  // RESTORE FORM
   // =====================================================
 
   function setFieldValue(name, value) {
@@ -567,115 +667,9 @@
     });
   }
 
-  // =====================================================
-  // CUSTOM TECHNICAL ATTRIBUTE
-  // =====================================================
-
-  function createCustomTechnicalRow(item = {}) {
-    const container = $("#dynamicCustomTechnicalContainer");
-
-    if (!container) return;
-
-    const row = document.createElement("div");
-    row.className = "custom-tech-row q-grid";
-
-    row.innerHTML = `
-      <label class="q-field">
-        Nama Atribut
-        <input
-          type="text"
-          data-custom-tech-name
-          placeholder="Nama atribut"
-        >
-      </label>
-
-      <label class="q-field">
-        Nilai
-        <input
-          type="text"
-          data-custom-tech-value
-          placeholder="Nilai teknis"
-        >
-      </label>
-
-      <label class="q-field">
-        UoM
-        <input
-          type="text"
-          data-custom-tech-unit
-          placeholder="Satuan"
-        >
-      </label>
-
-      <button type="button" class="q-remove-button">
-        Hapus
-      </button>
-    `;
-
-    $("[data-custom-tech-name]", row).value = item.label || "";
-    $("[data-custom-tech-value]", row).value = item.value || "";
-    $("[data-custom-tech-unit]", row).value = item.unit || "";
-
-    $(".q-remove-button", row).addEventListener("click", () => {
-      row.remove();
-      saveDraft();
-    });
-
-    container.appendChild(row);
-  }
-
-  // =====================================================
-  // CUSTOM UNIQUE ATTRIBUTE
-  // =====================================================
-
-  function createCustomUniqueRow(item = {}) {
-    const container = $("#dynamicCustomUniqueContainer");
-
-    if (!container) return;
-
-    const index = container.querySelectorAll(".custom-unique-row").length + 1;
-
-    const row = document.createElement("div");
-    row.className = "q-grid custom-unique-row";
-
-    row.innerHTML = `
-      <label class="q-field">
-        Nama Unique Attribute
-        <input type="text" name="customUniqueName${index}">
-      </label>
-
-      <label class="q-field">
-        Detail Unique Attribute
-        <input type="text" name="customUniqueDetail${index}">
-      </label>
-
-      <button type="button" class="q-remove-button">
-        Hapus
-      </button>
-    `;
-
-    $(`[name="customUniqueName${index}"]`, row).value = item.name || "";
-    $(`[name="customUniqueDetail${index}"]`, row).value = item.detail || "";
-
-    $(".q-remove-button", row).addEventListener("click", () => {
-      row.remove();
-      saveDraft();
-    });
-
-    container.appendChild(row);
-  }
-
   function restoreDynamicAttributes(data) {
-    const technicalContainer = $("#dynamicCustomTechnicalContainer");
-    const uniqueContainer = $("#dynamicCustomUniqueContainer");
-
-    if (technicalContainer) {
-      technicalContainer.innerHTML = "";
-    }
-
-    if (uniqueContainer) {
-      uniqueContainer.innerHTML = "";
-    }
+    technicalContainer?.replaceChildren();
+    uniqueContainer?.replaceChildren();
 
     (data.technicalAttributes || [])
       .filter(item => item.category === "Other")
@@ -686,19 +680,13 @@
       .forEach(createCustomUniqueRow);
   }
 
-  // =====================================================
-  // RESTORE FORM
-  // =====================================================
-
   function restoreForm(data) {
     if (!data || typeof data !== "object") return;
 
     restoreDynamicAttributes(data);
 
-    const dimensionContainer = $("#dimensionRows");
-
     if (dimensionContainer) {
-      dimensionContainer.innerHTML = "";
+      dimensionContainer.replaceChildren();
 
       if (Array.isArray(data.dimensionItems) && data.dimensionItems.length) {
         data.dimensionItems.forEach(createDimensionRow);
@@ -708,48 +696,63 @@
     }
 
     Object.entries(data).forEach(([name, value]) => {
-      if (
-        name === "technicalAttributes" ||
-        name === "uniqueAttributes" ||
-        name === "dimensionItems" ||
-        name === "drawingImage" ||
-        name === "specType"
-      ) {
-        return;
-      }
+      if ([
+        "technicalAttributes",
+        "uniqueAttributes",
+        "dimensionItems",
+        "drawingImage",
+        "specType"
+      ].includes(name)) return;
 
       setFieldValue(name, value);
     });
 
     drawingImage = data.drawingImage || "";
 
-    if (drawingImage && drawingPreview) {
-      drawingPreview.src = drawingImage;
-      drawingPreview.style.display = "block";
-    } else if (drawingPreview) {
-      drawingPreview.removeAttribute("src");
-      drawingPreview.style.display = "none";
+    if (drawingPreview) {
+      if (drawingImage) {
+        drawingPreview.src = drawingImage;
+        drawingPreview.style.display = "block";
+      } else {
+        drawingPreview.removeAttribute("src");
+        drawingPreview.style.display = "none";
+      }
+    }
+
+    if (plantSelect?.value) {
+      updateDepartment(data.department || "");
     }
 
     updateReason();
+    updateCategory();
     updateDimension();
     updatePackSize();
+    updateLegacyTechnicalFields(collectTechnicalAttributes());
+  }
 
-    const plantSelect = $("#plantCodeSelect", questionnaire);
+  // =====================================================
+  // VERSION & CREATED DATE
+  // =====================================================
 
-    if (plantSelect?.value) {
-      plantSelect.dispatchEvent(new Event("change", { bubbles: true }));
+  function initializeDocumentInfo() {
+    const versionInput = getVersionInput();
+    const createdDateInput = getCreatedDateInput();
 
-      const department = $('[name="department"]', questionnaire);
+    if (!versionInput || !createdDateInput) return;
 
-      if (department && data.department) {
-        department.value = data.department;
-      }
+    const savedVersion = Number(
+      localStorage.getItem(VERSION_STORAGE_KEY) || 0
+    );
+
+    versionInput.value = String(savedVersion).padStart(2, "0");
+
+    if (!createdDateInput.value) {
+      createdDateInput.value = todayISO();
     }
   }
 
   // =====================================================
-  // AUTOSAVE DRAFT
+  // AUTOSAVE
   // =====================================================
 
   function saveDraft() {
@@ -758,49 +761,36 @@
     try {
       const data = getFormData();
 
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(data)
-      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 
       setStatus("Draft tersimpan otomatis di browser");
-
     } catch (error) {
       console.error("Gagal menyimpan draft:", error);
-
-      setStatus(
-        "Draft gagal disimpan. Periksa ukuran gambar atau penyimpanan browser."
-      );
+      setStatus("Draft gagal disimpan. Periksa ukuran gambar atau penyimpanan browser.");
     }
   }
 
   function restoreDraft() {
     try {
-      let saved = localStorage.getItem(STORAGE_KEY);
-
-      if (!saved) {
-        saved = localStorage.getItem(OLD_STORAGE_KEY);
-      }
+      const saved =
+        localStorage.getItem(STORAGE_KEY) ||
+        localStorage.getItem(OLD_STORAGE_KEY);
 
       if (!saved) return false;
 
-      const data = JSON.parse(saved);
+      const data = safeJSONParse(saved, null);
+      if (!data) return false;
 
       loadingDocument = true;
       restoreForm(data);
       loadingDocument = false;
 
       setStatus("Draft sebelumnya berhasil dipulihkan");
-
       return true;
-
     } catch (error) {
       loadingDocument = false;
-
       console.error("Gagal memulihkan draft:", error);
-
       setStatus("Draft sebelumnya gagal dipulihkan");
-
       return false;
     }
   }
@@ -811,7 +801,6 @@
 
   drawingUpload?.addEventListener("change", event => {
     const file = event.target.files?.[0];
-
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
@@ -820,9 +809,7 @@
       return;
     }
 
-    const maxSize = 5 * 1024 * 1024;
-
-    if (file.size > maxSize) {
+    if (file.size > 5 * 1024 * 1024) {
       alert("Ukuran gambar maksimal 5 MB.");
       event.target.value = "";
       return;
@@ -841,27 +828,101 @@
       saveDraft();
     };
 
-    reader.onerror = () => {
-      alert("Gagal membaca gambar.");
-    };
-
+    reader.onerror = () => alert("Gagal membaca gambar.");
     reader.readAsDataURL(file);
   });
 
   // =====================================================
-  // TRANSFER DATA KE TEMPLATE PDF
+  // VALIDATION
+  // =====================================================
+
+  function validateForm() {
+    updateReason();
+    updateCategory();
+
+    if (!questionnaire.reportValidity()) return false;
+
+    const categories = getSelectedCategories();
+
+    if (!categories.length) {
+      const firstCategory = $('[name="materialCategory"]', questionnaire);
+
+      alert("Pilih minimal satu Material Category.");
+
+      firstCategory?.focus();
+      return false;
+    }
+
+    if (reasonChoice?.value === "Others" && !reasonOther?.value.trim()) {
+      alert("Reason Others wajib diisi.");
+      reasonOther?.focus();
+      return false;
+    }
+
+    return true;
+  }
+
+  // =====================================================
+  // LOCAL TRANSACTION
+  // =====================================================
+
+  function saveTransactionLocally() {
+    try {
+      const data = getFormData();
+
+      const versionInput = getVersionInput();
+      const createdDateInput = getCreatedDateInput();
+
+      const currentVersion = Number(versionInput?.value || 0);
+
+      const history = safeJSONParse(
+        localStorage.getItem(HISTORY_KEY),
+        []
+      );
+
+      history.push({
+        id: Date.now(),
+        version: String(currentVersion).padStart(2, "0"),
+        createdDate: createdDateInput?.value || todayISO(),
+        submittedAt: new Date().toISOString(),
+        formData: data
+      });
+
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+
+      const nextVersion = currentVersion + 1;
+
+      localStorage.setItem(VERSION_STORAGE_KEY, String(nextVersion));
+
+      if (versionInput) {
+        versionInput.value = String(nextVersion).padStart(2, "0");
+      }
+
+      saveDraft();
+      return true;
+    } catch (error) {
+      console.error("Gagal menyimpan transaksi:", error);
+
+      alert("Transaksi gagal disimpan di browser. Periksa kapasitas penyimpanan.");
+      return false;
+    }
+  }
+
+  // =====================================================
+  // PRINT DATA TRANSFER
+  // Template PDF tidak diubah pada tahap ini.
   // =====================================================
 
   function transferToPrint(data = getFormData()) {
+    if (!printForm) return;
+
     printForm.querySelectorAll("[name]").forEach(target => {
       const value = data[target.name];
 
       if (target.type === "checkbox") {
-        if (Array.isArray(value)) {
-          target.checked = value.includes(target.value);
-        } else {
-          target.checked = Boolean(value);
-        }
+        target.checked = Array.isArray(value)
+          ? value.includes(target.value)
+          : Boolean(value);
 
         return;
       }
@@ -874,12 +935,10 @@
       target.value = value ?? "";
     });
 
-    const category = data.materialCategory || "";
-
     const categoryField = $('[name="materialCategory"]', printForm);
 
-    if (categoryField && !categoryField.value) {
-      categoryField.value = category;
+    if (categoryField) {
+      categoryField.value = (data.materialCategory || []).join(", ");
     }
 
     const revisionDate = $('[name="revisionDate"]', printForm);
@@ -902,82 +961,84 @@
   }
 
   // =====================================================
-  // VALIDASI
+  // BUTTON EVENTS
   // =====================================================
 
-  // function validateForm() {
-  //   if (!questionnaire.reportValidity()) {
-  //     return false;
-  //   }
-
-  //   const catalogue = $('[name="catalogue"]', questionnaire);
-
-  //   if (catalogue && !catalogue.value.trim()) {
-  //     catalogue.focus();
-
-  //     alert("Catalogue wajib diisi sesuai rancangan form.");
-
-  //     return false;
-  //   }
-
-  //   return true;
-  // }
-    function validateForm() {
-  return questionnaire.reportValidity();
-}
-
-  // =====================================================
-  // CETAK PDF
-  // =====================================================
-
-  pdfBtn?.addEventListener("click", () => {
-    if (!validateForm()) return;
-
-    initializeDocumentInfo();
-
-    const data = getFormData();
-
+  $("#addDimensionBtn")?.addEventListener("click", () => {
+    createDimensionRow();
+    updateDimension();
     saveDraft();
-    transferToPrint(data);
+  });
 
-    window.print();
+  dimensionContainer?.addEventListener("click", event => {
+    const button = event.target.closest(".remove-dimension");
+    if (!button) return;
+
+    const row = button.closest(".dimension-row");
+    const rows = $$(".dimension-row", dimensionContainer);
+
+    if (rows.length > 1) {
+      row.remove();
+    } else {
+      $(".dimension-type", row).value = "";
+      $(".dimension-value", row).value = "";
+      $(".dimension-symbol", row).value = "x";
+    }
+
+    updateDimension();
+    saveDraft();
+  });
+
+  $("#addTechnicalBtn")?.addEventListener("click", () => {
+    createCustomTechnicalRow();
+    saveDraft();
+  });
+
+  $("#addUniqueBtn")?.addEventListener("click", () => {
+    createCustomUniqueRow();
+    saveDraft();
+  });
+
+  questionnaire.addEventListener("click", event => {
+    const removeButton = event.target.closest(".q-remove-button");
+    if (!removeButton) return;
+
+    const row = removeButton.closest(".custom-tech-row, .custom-unique-row");
+    if (!row) return;
+
+    row.remove();
+    saveDraft();
   });
 
   // =====================================================
-  // SIMPAN TRANSAKSI LOKAL
+  // INPUT EVENTS
   // =====================================================
 
-  if (saveBtn) {
-    saveBtn.addEventListener("click", () => {
-      if (saving) return;
+  questionnaire.addEventListener("input", () => {
+    updateReason();
+    updateDimension();
+    updatePackSize();
+    updateCategory();
+    saveDraft();
+  });
 
-      if (!validateForm()) return;
+  questionnaire.addEventListener("change", () => {
+    updateReason();
+    updateDimension();
+    updatePackSize();
+    updateCategory();
+    saveDraft();
+  });
 
-      saving = true;
-      saveBtn.disabled = true;
+  plantSelect?.addEventListener("change", () => {
+    updateDepartment();
+    saveDraft();
+  });
 
-      try {
-        initializeDocumentInfo();
-
-        const success = saveTransactionLocally();
-
-        if (!success) return;
-
-        alert(
-          "Transaksi berhasil disimpan!\n" +
-          "Version berikutnya: " +
-          ($('[name="version"]', questionnaire)?.value || "00")
-        );
-
-      } finally {
-        saving = false;
-        saveBtn.disabled = false;
-      }
-    });
-  }
+  reasonChoice?.addEventListener("change", updateReason);
 
   // =====================================================
-  // RESET FORM
+  // RESET
   // =====================================================
 
   resetBtn?.addEventListener("click", () => {
@@ -994,61 +1055,81 @@
 
     drawingImage = "";
 
-    if (drawingUpload) {
-      drawingUpload.value = "";
-    }
+    if (drawingUpload) drawingUpload.value = "";
 
     if (drawingPreview) {
       drawingPreview.removeAttribute("src");
       drawingPreview.style.display = "none";
     }
 
-    $("#dynamicCustomTechnicalContainer")?.replaceChildren();
-    $("#dynamicCustomUniqueContainer")?.replaceChildren();
+    technicalContainer?.replaceChildren();
+    uniqueContainer?.replaceChildren();
 
-    if (dimensionRowsContainer) {
-      dimensionRowsContainer.innerHTML = "";
+    if (dimensionContainer) {
+      dimensionContainer.replaceChildren();
       createDimensionRow();
     }
 
+    updateDepartment();
     initializeDocumentInfo();
-
     updateReason();
+    updateCategory();
     updateDimension();
     updatePackSize();
 
     saveDraft();
-
     setStatus("Form berhasil direset");
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   // =====================================================
-  // AMBIL DOKUMEN DARI DATABASE
+  // SAVE FOR ADMIN
+  // Catatan: transaksi saat ini disimpan di browser lokal.
+  // =====================================================
+
+  saveBtn?.addEventListener("click", () => {
+    if (saving) return;
+    if (!validateForm()) return;
+
+    saving = true;
+    saveBtn.disabled = true;
+
+    try {
+      initializeDocumentInfo();
+
+      if (!saveTransactionLocally()) return;
+
+      alert(
+        "Transaksi berhasil disimpan di browser!\n" +
+        "Version berikutnya: " +
+        (getVersionInput()?.value || "00")
+      );
+    } finally {
+      saving = false;
+      saveBtn.disabled = false;
+    }
+  });
+
+  // =====================================================
+  // LOAD DOCUMENT FROM DATABASE FOR PRINT
   // barang.html?printId=ID
   // =====================================================
 
   async function loadDocumentFromDatabase(id) {
     try {
       loadingDocument = true;
-
       setStatus("Mengambil dokumen dari database...");
 
       const response = await fetch(
-        `${API_URL}/${encodeURIComponent(id)}`
+        `http://localhost:3000/api/documents/${encodeURIComponent(id)}`
       );
 
       const result = await response.json();
 
       if (!response.ok) {
         throw new Error(
-          result.message ||
-          result.error ||
-          "Dokumen tidak ditemukan."
+          result.message || result.error || "Dokumen tidak ditemukan."
         );
       }
 
@@ -1057,63 +1138,41 @@
       let formData = row.form_data || row.formData || {};
 
       if (typeof formData === "string") {
-        try {
-          formData = JSON.parse(formData);
-        } catch {
-          formData = {};
-        }
+        formData = safeJSONParse(formData, {});
       }
 
       const data = {
         ...formData,
-
         id: row.id,
-
         docNo: row.doc_no ?? row.docNo ?? "",
         revision: row.revision ?? "",
-
         plant: row.plant ?? formData.plant ?? "",
         requestor: row.requestor ?? formData.requestor ?? "",
         department: row.department ?? formData.department ?? "",
-
         materialDescription:
-          row.material_description ??
-          formData.materialDescription ??
-          "",
-
-        materialCode:
-          row.material_code ??
-          formData.materialCode ??
-          "",
-
+          row.material_description ?? formData.materialDescription ?? "",
+        materialCode: row.material_code ?? formData.materialCode ?? "",
         specType: row.spec_type || "Barang"
       };
 
       restoreForm(data);
-
       transferToPrint(data);
 
       loadingDocument = false;
-
       setStatus("Dokumen berhasil dimuat dari database");
 
-      setTimeout(() => {
-        window.print();
-      }, 500);
-
+      setTimeout(() => window.print(), 500);
     } catch (error) {
       loadingDocument = false;
 
       console.error("Gagal mengambil dokumen:", error);
-
       setStatus("Gagal memuat dokumen dari database");
-
       alert(error.message);
     }
   }
 
   // =====================================================
-  // INISIALISASI
+  // INITIALIZATION
   // =====================================================
 
   function initialize() {
@@ -1125,47 +1184,40 @@
       return;
     }
 
+    updateDepartment();
+    initializeDocumentInfo();
+
     const restored = restoreDraft();
+
+    if (!restored && dimensionContainer &&
+        !$(".dimension-row", dimensionContainer)) {
+      createDimensionRow();
+    }
+
+    updateReason();
+    updateCategory();
+    updateDimension();
+    updatePackSize();
+
+    saveDraft();
+  }
+
+  // =====================================================
+  // PDF BUTTON
+  // =====================================================
+
+  pdfBtn?.addEventListener("click", () => {
+    if (!validateForm()) return;
 
     initializeDocumentInfo();
 
-    if (!restored) {
-      updateReason();
-      updateDimension();
-      updatePackSize();
-
-      if (
-        dimensionRowsContainer &&
-        !dimensionRowsContainer.querySelector(".dimension-row")
-      ) {
-        createDimensionRow();
-      }
-    }
+    const data = getFormData();
 
     saveDraft();
+    transferToPrint(data);
 
-    questionnaire.addEventListener("input", () => {
-      updateReason();
-      updateDimension();
-      updatePackSize();
-      saveDraft();
-    });
-
-    questionnaire.addEventListener("change", () => {
-      updateReason();
-      updateDimension();
-      updatePackSize();
-      saveDraft();
-    });
-
-    $("#addTechnicalBtn")?.addEventListener("click", () => {
-      setTimeout(saveDraft, 0);
-    });
-
-    $("#addUniqueBtn")?.addEventListener("click", () => {
-      setTimeout(saveDraft, 0);
-    });
-  }
+    window.print();
+  });
 
   initialize();
 
