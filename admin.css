@@ -1877,47 +1877,175 @@ tbody td small {
   }
 }
 
+
 /* =========================================
    RESPONSIVE - MOBILE
 ========================================= */
 
 @media (max-width: 600px) {
+
   :root {
     --sidebar-width: 0px;
   }
 
+  /* SIDEBAR MOBILE */
   .sidebar {
     position: relative;
     inset: auto;
+    z-index: 100;
 
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 
     width: 100%;
     height: auto;
-    padding: 13px 16px;
+    min-height: auto;
 
+    padding: 14px 16px 12px;
     overflow: visible;
   }
 
+  /* BRAND */
   .brand {
+    display: flex;
+    align-items: center;
     justify-content: flex-start;
-    margin: 0;
+
+    padding: 0;
+    margin: 0 0 13px;
   }
 
   .brand-info {
     display: block;
   }
 
-  .sidebar-menu,
-  .sidebar-divider,
-  .sidebar-bottom {
+  /* SIDEBAR MENU */
+  .sidebar-menu {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
+    gap: 7px;
+
+    padding: 9px 0 2px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sidebar-menu::-webkit-scrollbar {
     display: none;
   }
 
+  /* SEMBUNYIKAN LABEL KELOMPOK */
+  .side-label {
+    display: none !important;
+  }
+
+  /* TAMPILKAN TEKS MENU */
+  .nav > span:not(.nav-icon) {
+    display: inline !important;
+  }
+
+  /* TOMBOL NAVIGASI */
+  .nav {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    flex: 0 0 auto;
+
+    width: auto;
+    min-width: max-content;
+    min-height: 40px;
+    height: 40px;
+
+    padding: 9px 13px;
+
+    border: none;
+    border-radius: 10px;
+
+    color: rgba(255,255,255,.85);
+    background: transparent;
+
+    font-size: 11px;
+    white-space: nowrap;
+
+    transform: none;
+  }
+
+  .nav:hover {
+    color: #fff;
+    background: rgba(255,255,255,.12);
+    transform: none;
+  }
+
+  .nav-icon {
+    display: grid;
+    place-items: center;
+
+    width: auto;
+    min-width: auto;
+
+    font-size: 15px;
+  }
+
+  /* MENU AKTIF */
+  .nav.active {
+    color: var(--primary);
+    background: #fff;
+
+    box-shadow: 0 4px 12px rgba(25,20,100,.13);
+  }
+
+  /* BADGE APPROVAL */
+  .approval-nav-badge {
+    position: static;
+
+    display: grid;
+    place-items: center;
+
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+
+    margin-left: 2px;
+
+    border-radius: 20px;
+
+    background: rgba(255,255,255,.2);
+    color: #fff;
+
+    font-size: 9px;
+  }
+
+  .nav.active .approval-nav-badge {
+    background: var(--primary-light);
+    color: var(--primary);
+  }
+
+  /* HILANGKAN ELEMEN SIDEBAR TAMBAHAN */
+  .sidebar-divider,
+  .sidebar-bottom {
+    display: none !important;
+  }
+
+  /* MAIN CONTENT */
   .main {
+    width: 100%;
+    min-width: 0;
     margin-left: 0;
   }
 
+  /* TOPBAR */
   .topbar {
     position: relative;
     min-height: 61px;
@@ -1933,6 +2061,7 @@ tbody td small {
     display: none;
   }
 
+  /* WELCOME BANNER */
   .welcome-banner {
     min-height: 190px;
     padding: 24px 21px;
@@ -1960,6 +2089,7 @@ tbody td small {
     transform: scale(.8);
   }
 
+  /* PAGE HEADING */
   .page-heading {
     align-items: flex-start;
     flex-direction: column;
@@ -1972,6 +2102,7 @@ tbody td small {
     font-size: 21px;
   }
 
+  /* STATISTICS */
   .stats {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -1983,6 +2114,7 @@ tbody td small {
     min-height: 100px;
   }
 
+  /* PANEL */
   .panel-top {
     align-items: flex-start;
     flex-direction: column;
@@ -1993,6 +2125,7 @@ tbody td small {
     align-self: flex-start;
   }
 
+  /* DOCUMENT SWITCH */
   .document-switch {
     width: calc(100% - 34px);
     margin: 17px 17px 0;
@@ -2004,6 +2137,7 @@ tbody td small {
     padding: 10px 8px;
   }
 
+  /* TABLE TOOLBAR */
   .table-toolbar {
     align-items: flex-start;
     flex-direction: column;
@@ -2026,6 +2160,7 @@ tbody td small {
     min-width: 120px;
   }
 
+  /* FOOTER */
   .panel-footer {
     align-items: flex-start;
     flex-direction: column;
@@ -2038,6 +2173,7 @@ tbody td small {
     gap: 5px;
   }
 
+  /* MODAL */
   .detail-grid {
     grid-template-columns: 1fr;
   }
@@ -2061,11 +2197,13 @@ tbody td small {
     padding: 13px 18px;
   }
 
+  /* TOAST */
   .toast {
     right: 15px;
     bottom: 15px;
   }
 }
+
 
 /* =========================================
    RESPONSIVE - VERY SMALL MOBILE
