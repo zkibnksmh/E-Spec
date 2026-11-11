@@ -2824,6 +2824,64 @@ fieldset.q-field {
   width: 100%;
 }
 
+
+/* =========================================
+   CUSTOM TECHNICAL - DELETE BUTTON
+========================================= */
+
+#dynamicCustomTechnicalContainer button,
+#dynamicCustomTechnicalContainer input[type="button"],
+#dynamicCustomTechnicalContainer input[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 16px;
+
+  background: #fff1f2;
+  color: #e11d48;
+
+  border: 1px solid #fecdd3;
+  border-radius: 9px;
+
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+/* Hover */
+#dynamicCustomTechnicalContainer button:hover,
+#dynamicCustomTechnicalContainer input[type="button"]:hover,
+#dynamicCustomTechnicalContainer input[type="submit"]:hover {
+  background: #ffe4e6;
+  border-color: #fda4af;
+  color: #be123c;
+
+  box-shadow: 0 4px 12px rgba(225, 29, 72, .10);
+  transform: translateY(-1px);
+}
+
+/* Active */
+#dynamicCustomTechnicalContainer button:active,
+#dynamicCustomTechnicalContainer input[type="button"]:active,
+#dynamicCustomTechnicalContainer input[type="submit"]:active {
+  transform: scale(.98);
+}
+
+/* Focus */
+#dynamicCustomTechnicalContainer button:focus-visible,
+#dynamicCustomTechnicalContainer input[type="button"]:focus-visible,
+#dynamicCustomTechnicalContainer input[type="submit"]:focus-visible {
+  outline: 3px solid rgba(225, 29, 72, .15);
+  outline-offset: 2px;
+}
+
+
 /* MOBILE */
 @media (max-width: 600px) {
   .q-technical-group:has(#dynamicCustomTechnicalContainer) {
