@@ -3125,3 +3125,369 @@ fieldset.q-field {
     display: none !important;
   }
 }
+
+
+
+/* =====================================================
+   E-SPEC — UNIQUE SPECIFICATION
+===================================================== */
+
+.unique-specification-section {
+  margin-top: 28px;
+  min-width: 0;
+}
+
+/* =====================================================
+   HEADING
+===================================================== */
+
+.unique-specification-section > .q-subheading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+
+  padding: 15px 17px;
+  margin-bottom: 20px;
+
+  background: #f5f3ff;
+  border: 1px solid #e8e3ff;
+  border-radius: 10px;
+}
+
+.unique-heading-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.unique-heading-content h3 {
+  margin: 0;
+  padding: 0;
+  border: none;
+
+  color: #6558e8;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.unique-heading-content p {
+  margin: 0;
+  color: #8791a5;
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+/* =====================================================
+   ADD ATTRIBUTE BUTTON
+===================================================== */
+
+.unique-specification-section .q-add-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 39px;
+  padding: 9px 16px;
+
+  border: 1px solid #6558e8;
+  border-radius: 8px;
+
+  background: #6558e8;
+  color: #ffffff;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.unique-specification-section .q-add-button:hover {
+  background: #5143d0;
+  border-color: #5143d0;
+  box-shadow: 0 4px 12px rgba(101, 88, 232, 0.18);
+  transform: translateY(-1px);
+}
+
+.unique-specification-section .q-add-button:active {
+  transform: translateY(0);
+}
+
+/* =====================================================
+   DEFAULT ACCESSORIES GRID
+===================================================== */
+
+.unique-default-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 22px;
+
+  width: 100%;
+}
+
+/* FIELD */
+.unique-specification-section .q-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  min-width: 0;
+
+  color: #526078;
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* INPUT */
+.unique-specification-section .q-field input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 43px;
+
+  padding: 11px 13px;
+
+  border: 1px solid #e2e7f0;
+  border-radius: 9px;
+  outline: none;
+
+  background: #ffffff;
+  color: #26334d;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+
+  transition: all 0.2s ease;
+}
+
+.unique-specification-section .q-field input::placeholder {
+  color: #a5afc1;
+  font-weight: 400;
+}
+
+.unique-specification-section .q-field input:hover {
+  border-color: #c9c5f5;
+}
+
+.unique-specification-section .q-field input:focus {
+  border-color: #8b80f0;
+  box-shadow: 0 0 0 3px rgba(101, 88, 232, 0.09);
+}
+
+/* READONLY ACCESSORIES */
+.unique-specification-section .q-field input[readonly] {
+  background: #f8f9fd;
+  color: #526078;
+  cursor: default;
+}
+
+.unique-specification-section .q-field input[readonly]:focus {
+  border-color: #e2e7f0;
+  box-shadow: none;
+}
+
+/* =====================================================
+   DYNAMIC UNIQUE ATTRIBUTE CONTAINER
+===================================================== */
+
+#dynamicCustomUniqueContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* DYNAMIC ROW */
+#dynamicCustomUniqueContainer .custom-unique-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: 18px;
+
+  border: 1px solid #e8eaf2;
+  border-radius: 11px;
+
+  background: #ffffff;
+  box-shadow: 0 3px 12px rgba(32, 43, 69, 0.035);
+
+  transition: all 0.2s ease;
+}
+
+#dynamicCustomUniqueContainer .custom-unique-row:hover {
+  border-color: #d9d5fb;
+  box-shadow: 0 5px 16px rgba(32, 43, 69, 0.055);
+}
+
+/* DYNAMIC FIELD */
+#dynamicCustomUniqueContainer .q-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+
+  color: #526078;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* DYNAMIC INPUT */
+#dynamicCustomUniqueContainer .q-field input {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+
+  padding: 10px 12px;
+
+  border: 1px solid #e2e7f0;
+  border-radius: 8px;
+
+  outline: none;
+  background: #ffffff;
+  color: #26334d;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+
+  transition: all 0.2s ease;
+}
+
+#dynamicCustomUniqueContainer .q-field input:focus {
+  border-color: #8b80f0;
+  box-shadow: 0 0 0 3px rgba(101, 88, 232, 0.09);
+}
+
+/* REMOVE BUTTON */
+#dynamicCustomUniqueContainer .q-remove-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 40px;
+  padding: 8px 14px;
+
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+
+  background: #fff5f5;
+  color: #dc2626;
+
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#dynamicCustomUniqueContainer .q-remove-button:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+/* =====================================================
+   RESPONSIVE TABLET
+===================================================== */
+
+@media (max-width: 768px) {
+  .unique-default-grid {
+    gap: 16px;
+  }
+
+  #dynamicCustomUniqueContainer .custom-unique-row {
+    gap: 14px;
+    padding: 16px;
+  }
+}
+
+/* =====================================================
+   RESPONSIVE MOBILE
+===================================================== */
+
+@media (max-width: 640px) {
+  .unique-specification-section {
+    margin-top: 22px;
+  }
+
+  .unique-specification-section > .q-subheading-row {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 13px;
+
+    padding: 14px;
+    margin-bottom: 17px;
+  }
+
+  .unique-heading-content h3 {
+    font-size: 12px;
+  }
+
+  .unique-specification-section .q-add-button {
+    width: 100%;
+    min-height: 42px;
+  }
+
+  .unique-default-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 15px;
+  }
+
+  .unique-specification-section .q-field input {
+    min-height: 44px;
+  }
+
+  #dynamicCustomUniqueContainer {
+    margin-top: 16px;
+  }
+
+  #dynamicCustomUniqueContainer .custom-unique-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    padding: 14px;
+  }
+
+  #dynamicCustomUniqueContainer .q-remove-button {
+    width: 100%;
+  }
+}
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print {
+  .unique-specification-section > .q-subheading-row {
+    padding: 0;
+    margin-bottom: 12px;
+    background: transparent;
+    border: none;
+  }
+
+  .unique-specification-section .q-add-button,
+  #dynamicCustomUniqueContainer .q-remove-button {
+    display: none !important;
+  }
+
+  #dynamicCustomUniqueContainer {
+    margin-top: 10px;
+  }
+
+  #dynamicCustomUniqueContainer .custom-unique-row {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}
+

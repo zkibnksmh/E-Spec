@@ -1271,41 +1271,54 @@
 
 
     <!-- UNIQUE SPECIFICATION -->
-    <div class="q-subsection">
-      <div class="q-subheading-row">
-        <h3>C. UNIQUE SPECIFICATION</h3>
 
-        <button type="button" class="q-add-button" id="addUniqueBtn">
-          + Tambah Unique Attribute
-        </button>
-      </div>
+<!-- UNIQUE SPECIFICATION -->
+<div class="q-subsection unique-specification-section">
 
-      <div class="q-grid">
-
-        <label class="q-field">
-          Accessories
-          <input type="text" name="unique1" value="Accessories" readonly>
-        </label>
-
-        <label class="q-field">
-          Accessories Detail
-          <input type="text" name="uniqueDetail1" placeholder="Detail accessories">
-        </label>
-
-        <label class="q-field">
-          Others
-          <input type="text" name="unique2" value="Others">
-        </label>
-
-        <label class="q-field">
-          Others Detail
-          <input type="text" name="uniqueDetail2" placeholder="Detail lainnya">
-        </label>
-
-      </div>
-
-      <div id="dynamicCustomUniqueContainer"></div>
+  <div class="q-subheading-row">
+    <div class="unique-heading-content">
+      <h3>C. UNIQUE SPECIFICATION</h3>
+      <p>Tambahkan informasi accessories yang diperlukan.</p>
     </div>
+
+    <button type="button" class="q-add-button" id="addUniqueBtn">
+      + Tambah Unique Attribute
+    </button>
+  </div>
+
+  <!-- DEFAULT ACCESSORIES -->
+  <div class="unique-default-grid">
+
+    <label class="q-field">
+      Accessories
+      <input
+        type="text"
+        name="unique1"
+        value="Accessories"
+        readonly
+      >
+    </label>
+
+    <label class="q-field">
+      Accessories Detail
+      <input
+        type="text"
+        name="uniqueDetail1"
+        placeholder="Masukkan detail accessories"
+      >
+    </label>
+
+  </div>
+
+  <!-- DYNAMIC UNIQUE ATTRIBUTES -->
+  <div id="dynamicCustomUniqueContainer"></div>
+
+  <!-- KOMPATIBILITAS TEMPLATE PDF LAMA -->
+  <input type="hidden" name="unique2" value="">
+  <input type="hidden" name="uniqueDetail2" value="">
+
+</div>
+
 
   </section>
 
