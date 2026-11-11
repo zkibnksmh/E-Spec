@@ -2005,27 +2005,92 @@ fieldset.q-field {
 
 
 
+
 /* =========================================
-   MECHANICAL SPECIFICATION — UPDATED
+   MECHANICAL SPECIFICATION
+   MATCH DENGAN STRUKTUR BARANG.HTML
 ========================================= */
 
-.mechanical-spec-grid {
+/* MAIN CARD */
+
+.mechanical-spec-card {
+  width: 100%;
+  margin-top: 22px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e9f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+/* HEADING */
+
+.mechanical-spec-card .category-spec-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.mechanical-spec-card .category-spec-heading h4 {
+  margin: 0;
+  color: #172033;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.mechanical-spec-card .category-spec-heading p {
+  margin: 5px 0 0;
+  color: #8791a3;
+  font-size: 12px;
+}
+
+/* ICON */
+
+.mechanical-spec-card .mechanical-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 21px;
+}
+
+/* =========================================
+   MATERIAL & CONNECTION TYPE
+========================================= */
+
+.mechanical-basic-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
   width: 100%;
 }
 
-.mechanical-spec-grid .spec-field {
+.mechanical-basic-grid .spec-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   min-width: 0;
 }
 
-.mechanical-spec-grid .spec-field input,
-.mechanical-spec-grid .spec-field select {
+.mechanical-basic-grid .spec-field span {
+  color: #344054;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mechanical-basic-grid .spec-field input {
   width: 100%;
-  min-width: 0;
   min-height: 43px;
-  padding: 10px 12px;
+  padding: 11px 13px;
   border: 1px solid #dce2eb;
   border-radius: 9px;
   outline: none;
@@ -2036,54 +2101,114 @@ fieldset.q-field {
   transition: .2s ease;
 }
 
-.mechanical-spec-grid .spec-field input:focus,
-.mechanical-spec-grid .spec-field select:focus {
+.mechanical-basic-grid .spec-field input::placeholder {
+  color: #a4adbb;
+}
+
+.mechanical-basic-grid .spec-field input:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
 }
 
-.mechanical-spec-grid .spec-field input::placeholder {
-  color: #a4adbb;
+/* DIVIDER */
+
+.mechanical-divider {
+  width: 100%;
+  height: 1px;
+  margin: 23px 0;
+  background: #edf0f5;
 }
 
 /* =========================================
-   MECHANICAL PARAMETER CARD
+   MECHANICAL PARAMETER LIST
 ========================================= */
 
-.mechanical-parameter-row {
-  display: grid;
-  grid-template-columns:
-    minmax(110px, 1fr)
-    minmax(100px, 1fr)
-    minmax(110px, 1fr)
-    minmax(100px, 1fr)
-    minmax(100px, .85fr);
-  gap: 10px;
-  align-items: start;
+.mechanical-parameter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   width: 100%;
-  padding: 14px;
-  margin-bottom: 12px;
-  background: #fcfdff;
+}
+
+/* PARAMETER CARD */
+
+.mechanical-parameter {
+  width: 100%;
+  padding: 17px;
   border: 1px solid #e7ebf2;
-  border-radius: 11px;
+  border-radius: 12px;
+  background: #fcfdff;
   transition: .2s ease;
 }
 
-.mechanical-parameter-row:hover {
+.mechanical-parameter:hover {
   border-color: #cbdaf8;
   background: #fbfcff;
 }
 
+/* PARAMETER HEADING */
+
+.mechanical-parameter-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.mechanical-parameter-heading strong {
+  color: #26364d;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mechanical-parameter-heading small {
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 500;
+}
+
 /* =========================================
-   MECHANICAL INPUT GROUP
+   PARAMETER GRID
 ========================================= */
 
-.mechanical-parameter-row input[data-mechanical-data],
-.mechanical-parameter-row input[data-mechanical-uom-other],
-.mechanical-parameter-row input[data-mechanical-symbol-other] {
+.mechanical-parameter-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+  width: 100%;
+}
+
+/* FIELD */
+
+.mechanical-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.mechanical-field > span,
+.mechanical-field > label {
+  display: block;
+  margin: 0;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .03em;
+}
+
+/* =========================================
+   DATA INPUT
+========================================= */
+
+.mechanical-field input[data-mechanical-value] {
+  display: block;
   width: 100%;
   min-width: 0;
-  min-height: 41px;
+  min-height: 42px;
   padding: 10px 11px;
   border: 1px solid #dce2eb;
   border-radius: 8px;
@@ -2092,168 +2217,166 @@ fieldset.q-field {
   color: #172033;
   font-family: inherit;
   font-size: 12px;
+  font-weight: 500;
   transition: .2s ease;
 }
 
-.mechanical-parameter-row input[data-mechanical-data]:focus,
-.mechanical-parameter-row input[data-mechanical-uom-other]:focus,
-.mechanical-parameter-row input[data-mechanical-symbol-other]:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, .09);
-}
-
-.mechanical-parameter-row input::placeholder {
+.mechanical-field input[data-mechanical-value]::placeholder {
   color: #a4adbb;
   font-size: 11px;
 }
 
+.mechanical-field input[data-mechanical-value]:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .09);
+}
+
 /* =========================================
-   MECHANICAL DROPDOWN
+   UOM & SYMBOL DROPDOWN
 ========================================= */
 
-.mechanical-parameter-row select[data-mechanical-uom],
-.mechanical-parameter-row select[data-mechanical-symbol] {
+.mechanical-field select[data-mechanical-unit],
+.mechanical-field select[data-mechanical-symbol] {
+  display: block;
   width: 100%;
   min-width: 0;
-  min-height: 41px;
-  padding: 9px 28px 9px 11px;
+  min-height: 42px;
+  padding: 9px 28px 9px 10px;
   border: 1px solid #bfdbfe;
   border-radius: 8px;
   outline: none;
   background-color: #eff6ff;
   color: #1d4ed8;
   font-family: inherit;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   cursor: pointer;
   transition: .2s ease;
 }
 
-.mechanical-parameter-row select[data-mechanical-uom]:hover,
-.mechanical-parameter-row select[data-mechanical-symbol]:hover {
+.mechanical-field select[data-mechanical-unit]:hover,
+.mechanical-field select[data-mechanical-symbol]:hover {
   border-color: #60a5fa;
   background-color: #dbeafe;
 }
 
-.mechanical-parameter-row select[data-mechanical-uom]:focus,
-.mechanical-parameter-row select[data-mechanical-symbol]:focus {
+.mechanical-field select[data-mechanical-unit]:focus,
+.mechanical-field select[data-mechanical-symbol]:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
 }
 
 /* =========================================
-   MECHANICAL OTHERS INPUT
+   OTHERS INPUT
 ========================================= */
 
-.mechanical-parameter-row [data-mechanical-uom-other],
-.mechanical-parameter-row [data-mechanical-symbol-other] {
-  margin-top: 7px;
+.mechanical-field input[data-mechanical-unit-other],
+.mechanical-field input[data-mechanical-symbol-other] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 39px;
+  margin-top: 2px;
+  padding: 9px 10px;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #172033;
+  font-family: inherit;
+  font-size: 11px;
   animation: fadeUp .2s ease both;
 }
 
-.mechanical-parameter-row [data-mechanical-uom-other][hidden],
-.mechanical-parameter-row [data-mechanical-symbol-other][hidden] {
+.mechanical-field input[data-mechanical-unit-other]::placeholder,
+.mechanical-field input[data-mechanical-symbol-other]::placeholder {
+  color: #a4adbb;
+}
+
+.mechanical-field input[data-mechanical-unit-other]:focus,
+.mechanical-field input[data-mechanical-symbol-other]:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .09);
+}
+
+/* PASTIKAN HIDDEN BENAR-BENAR TERSEMBUNYI */
+
+.mechanical-field [hidden] {
   display: none !important;
 }
 
 /* =========================================
-   MECHANICAL FIELD LABEL
-========================================= */
-
-.mechanical-parameter-row label,
-.mechanical-parameter-row .mechanical-field {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  min-width: 0;
-}
-
-.mechanical-parameter-row label span,
-.mechanical-parameter-row .mechanical-field > span {
-  color: #64748b;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: .03em;
-  text-transform: uppercase;
-}
-
-/* =========================================
-   MECHANICAL PARAMETER TITLE
-========================================= */
-
-.mechanical-parameter-row::before {
-  content: attr(data-mechanical-row);
-  display: none;
-}
-
-/* =========================================
-   MECHANICAL SECTION HEADING
-========================================= */
-
-.category-spec-card .category-spec-heading {
-  padding-bottom: 15px;
-  border-bottom: 1px solid #edf0f5;
-}
-
-.category-spec-card .category-spec-heading h4 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 800;
-}
-
-/* =========================================
-   MECHANICAL RESPONSIVE — TABLET
+   TABLET
 ========================================= */
 
 @media (max-width: 900px) {
-  .mechanical-parameter-row {
+
+  .mechanical-spec-card {
+    padding: 19px;
+  }
+
+  .mechanical-parameter-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
+    gap: 13px;
+  }
+
+  .mechanical-parameter {
+    padding: 15px;
   }
 }
 
 /* =========================================
-   MECHANICAL RESPONSIVE — MOBILE
+   MOBILE
 ========================================= */
 
 @media (max-width: 600px) {
-  .mechanical-spec-grid {
+
+  .mechanical-spec-card {
+    padding: 16px;
+    border-radius: 13px;
+  }
+
+  .mechanical-basic-grid {
     grid-template-columns: 1fr;
     gap: 14px;
   }
 
-  .mechanical-parameter-row {
+  .mechanical-parameter-list {
+    gap: 13px;
+  }
+
+  .mechanical-parameter {
+    padding: 13px;
+    border-radius: 10px;
+  }
+
+  .mechanical-parameter-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    padding: 12px;
+    gap: 13px 10px;
   }
 
-  .mechanical-parameter-row input[data-mechanical-data],
-  .mechanical-parameter-row input[data-mechanical-uom-other],
-  .mechanical-parameter-row input[data-mechanical-symbol-other],
-  .mechanical-parameter-row select[data-mechanical-uom],
-  .mechanical-parameter-row select[data-mechanical-symbol] {
+  .mechanical-parameter-heading {
+    margin-bottom: 13px;
+  }
+
+  .mechanical-field input[data-mechanical-value],
+  .mechanical-field select[data-mechanical-unit],
+  .mechanical-field select[data-mechanical-symbol] {
     min-height: 42px;
-    font-size: 12px;
-  }
-
-  .mechanical-parameter-row label,
-  .mechanical-parameter-row .mechanical-field {
-    gap: 6px;
   }
 }
 
-/* =========================================
-   MECHANICAL RESPONSIVE — SMALL MOBILE
-========================================= */
+/* SMALL MOBILE */
 
 @media (max-width: 380px) {
-  .mechanical-parameter-row {
+
+  .mechanical-parameter-grid {
     grid-template-columns: 1fr;
-    gap: 11px;
   }
 
-  .mechanical-parameter-row input,
-  .mechanical-parameter-row select {
-    width: 100%;
+  .mechanical-parameter-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
   }
 }
