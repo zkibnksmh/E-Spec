@@ -905,23 +905,26 @@
   // VALIDASI
   // =====================================================
 
-  function validateForm() {
-    if (!questionnaire.reportValidity()) {
-      return false;
-    }
+  // function validateForm() {
+  //   if (!questionnaire.reportValidity()) {
+  //     return false;
+  //   }
 
-    const catalogue = $('[name="catalogue"]', questionnaire);
+  //   const catalogue = $('[name="catalogue"]', questionnaire);
 
-    if (catalogue && !catalogue.value.trim()) {
-      catalogue.focus();
+  //   if (catalogue && !catalogue.value.trim()) {
+  //     catalogue.focus();
 
-      alert("Catalogue wajib diisi sesuai rancangan form.");
+  //     alert("Catalogue wajib diisi sesuai rancangan form.");
 
-      return false;
-    }
+  //     return false;
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
+    function validateForm() {
+  return questionnaire.reportValidity();
+}
 
   // =====================================================
   // CETAK PDF
