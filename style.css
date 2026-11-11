@@ -3540,3 +3540,109 @@ fieldset.q-field {
   color: #1d4ed8;
   font-weight: 600;
 }
+
+/* =========================================
+   VERSION & IDENTITY DROPDOWNS
+   MATCH ELECTRICAL & MECHANICAL
+========================================= */
+
+.q-field select[name="plant"],
+.q-field select[name="department"],
+.q-field select[name="materialGroup"] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 9px 28px 9px 10px;
+
+  background-color: #eff6ff;
+  color: #1d4ed8;
+
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+
+  outline: none;
+  box-sizing: border-box;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* HOVER */
+.q-field select[name="plant"]:hover,
+.q-field select[name="department"]:hover,
+.q-field select[name="materialGroup"]:hover {
+  background-color: #dbeafe;
+  border-color: #60a5fa;
+}
+
+/* FOCUS */
+.q-field select[name="plant"]:focus,
+.q-field select[name="department"]:focus,
+.q-field select[name="materialGroup"]:focus {
+  background-color: #eff6ff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+/* OPTION */
+.q-field select[name="plant"] option,
+.q-field select[name="department"] option,
+.q-field select[name="materialGroup"] option {
+  background-color: #ffffff;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+/* =========================================
+   PURCHASE OBJECTIVE DROPDOWN
+   MATCH ELECTRICAL & MECHANICAL
+========================================= */
+
+.q-field select[name="reasonChoice"] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 9px 28px 9px 10px;
+
+  background-color: #eff6ff;
+  color: #1d4ed8;
+
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+
+  outline: none;
+  box-sizing: border-box;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* HOVER */
+.q-field select[name="reasonChoice"]:hover {
+  background-color: #dbeafe;
+  border-color: #60a5fa;
+}
+
+/* FOCUS */
+.q-field select[name="reasonChoice"]:focus {
+  background-color: #eff6ff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+/* OPTION */
+.q-field select[name="reasonChoice"] option {
+  background-color: #ffffff;
+  color: #1d4ed8;
+  font-weight: 600;
+}
