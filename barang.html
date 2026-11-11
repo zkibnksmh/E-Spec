@@ -1270,54 +1270,48 @@
     </div>
 
 
-    <!-- UNIQUE SPECIFICATION -->
 
 <!-- UNIQUE SPECIFICATION -->
 <div class="q-subsection unique-specification-section">
 
   <div class="q-subheading-row">
-    <div class="unique-heading-content">
-      <h3>C. UNIQUE SPECIFICATION</h3>
-      <p>Tambahkan informasi accessories yang diperlukan.</p>
-    </div>
+    <h3>C. UNIQUE SPECIFICATION</h3>
 
-    <button type="button" class="q-add-button" id="addUniqueBtn">
+    <button
+      type="button"
+      class="q-add-button"
+      id="addUniqueBtn"
+    >
       + Tambah Unique Attribute
     </button>
   </div>
 
-  <!-- DEFAULT ACCESSORIES -->
-  <div class="unique-default-grid">
+  <div class="q-grid">
 
     <label class="q-field">
       Accessories
+
       <input
         type="text"
         name="unique1"
         value="Accessories"
         readonly
-      >
-    </label>
-
-    <label class="q-field">
-      Accessories Detail
-      <input
-        type="text"
-        name="uniqueDetail1"
-        placeholder="Masukkan detail accessories"
+        placeholder="Accessories"
       >
     </label>
 
   </div>
 
-  <!-- DYNAMIC UNIQUE ATTRIBUTES -->
-  <div id="dynamicCustomUniqueContainer"></div>
-
-  <!-- KOMPATIBILITAS TEMPLATE PDF LAMA -->
+  <!-- Hidden fields untuk kompatibilitas JavaScript dan PDF lama -->
+  <input type="hidden" name="uniqueDetail1" value="">
   <input type="hidden" name="unique2" value="">
   <input type="hidden" name="uniqueDetail2" value="">
 
+  <!-- Tempat atribut tambahan -->
+  <div id="dynamicCustomUniqueContainer"></div>
+
 </div>
+
 
 
   </section>

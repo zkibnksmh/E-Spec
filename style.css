@@ -3742,3 +3742,86 @@ fieldset.q-field {
   cursor: not-allowed;
   opacity: 0.8;
 }
+
+
+
+/* =========================================
+   UNIQUE SPECIFICATION - UPDATED
+========================================= */
+
+/* HEADER */
+.unique-specification-section > .q-subheading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 0;
+  margin-bottom: 18px;
+
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+/* JUDUL */
+.unique-specification-section > .q-subheading-row h3 {
+  margin: 0;
+  padding: 0;
+
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* TOMBOL - SAMA DENGAN OTHER / CUSTOM ATTRIBUTE */
+.unique-specification-section .q-add-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 40px;
+  padding: 0 16px;
+
+  background: #f0eeff;
+  color: #6558e8;
+
+  border: 1px solid #dcd7ff;
+  border-radius: 9px;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.unique-specification-section .q-add-button:hover {
+  background: #e6e2ff;
+  border-color: #c7bfff;
+  color: #5143d0;
+}
+
+/* FIELD ACCESSORIES */
+.unique-specification-section > .q-grid {
+  margin-top: 0;
+}
+
+.unique-specification-section .q-field input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .unique-specification-section > .q-subheading-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .unique-specification-section .q-add-button {
+    width: 100%;
+  }
+}
