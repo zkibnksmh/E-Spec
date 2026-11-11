@@ -3825,3 +3825,20 @@ fieldset.q-field {
     width: 100%;
   }
 }
+
+/* =========================================
+   UNIQUE SPECIFICATION - ACCESSORIES TEXT
+========================================= */
+
+.unique-accessories-field {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+}
+
+.unique-accessories-label {
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
