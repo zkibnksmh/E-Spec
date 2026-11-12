@@ -800,13 +800,6 @@ select:focus-visible {
    STATISTICS
 ========================================= */
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 17px;
-
-  margin-bottom: 27px;
-}
 
 .stat-card {
   position: relative;
