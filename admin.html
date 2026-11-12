@@ -25,10 +25,31 @@
     <div class="sidebar-menu">
       <p class="side-label">MENU UTAMA</p>
 
-      <a href="admin.html" class="nav active" id="dashboardNav">
-        <span class="nav-icon">▦</span>
-        <span>Dashboard</span>
-      </a>
+      
+<!-- DASHBOARD NAVIGATION -->
+<div class="nav-group">
+
+  <a href="admin.html" class="nav active" id="dashboardNav">
+    <span class="nav-icon">▦</span>
+    <span>Dashboard</span>
+  </a>
+
+  <div class="nav-submenu">
+
+    <a href="#totalDokumen" class="nav-submenu-link">
+      <span class="submenu-dot"></span>
+      <span>Total Dokumen</span>
+    </a>
+
+    <a href="#eSpecRepository" class="nav-submenu-link">
+      <span class="submenu-dot"></span>
+      <span>E-Spec Repository</span>
+    </a>
+
+  </div>
+
+</div>
+
 
       <a href="approval.html" class="nav approval-nav" id="approvalNav">
         <span class="nav-icon">✓</span>
@@ -170,7 +191,7 @@
 
 
       <!-- STATISTICS -->
-      <div class="stats">
+      <div class="stats" id="totalDokumen">
 
         <article class="stat-card">
           <div class="stat-icon purple">
@@ -218,7 +239,7 @@
 
 
       <!-- DOCUMENT PANEL -->
-      <section class="panel">
+      <section class="panel" id="eSpecRepository">
 
         <div class="panel-top">
 
