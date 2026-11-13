@@ -3923,3 +3923,8 @@ fieldset.q-field {
   font-weight: 700;
   flex-shrink: 0;
 }
+
+/* Sembunyikan symbol pada baris Dimension terakhir */
+#dimensionRows .dimension-row:last-child .dimension-symbol {
+  display: none;
+}
