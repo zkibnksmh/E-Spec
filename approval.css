@@ -931,60 +931,6 @@
   }
 }
 
-
-/* =========================================
-   STATUS WORKSPACE - NEW LAYOUT
-========================================= */
-
-/* SIDEBAR SUBMENU */
-.nav-group {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.nav-submenu {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 5px 0 9px 43px;
-  padding-left: 13px;
-  border-left: 1px solid #e5e4f1;
-}
-
-.nav-submenu-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 34px;
-  padding: 7px 10px;
-  border-radius: 8px;
-  color: #8791a5;
-  font-size: 11px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all .2s ease;
-}
-
-.nav-submenu-link:hover,
-.nav-submenu-link.active {
-  background: #f0eeff;
-  color: #6558e8;
-}
-
-.submenu-dot {
-  width: 6px;
-  height: 6px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: #c4c7d5;
-}
-
-.nav-submenu-link.active .submenu-dot {
-  background: #6558e8;
-  box-shadow: 0 0 0 3px rgba(101, 88, 232, .12);
-}
-
 /* =========================================
    WORKSPACE NAVIGATION
 ========================================= */

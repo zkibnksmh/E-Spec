@@ -2507,148 +2507,119 @@ tbody td small {
 }
 
 
+
 /* =========================================
-   DASHBOARD SUBMENU
+   SIDEBAR - STATUS & SUBMENU
 ========================================= */
 
-.nav-group {
+/* Grup menu */
+.sidebar-menu .nav-group {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   width: 100%;
+  min-width: 0;
   gap: 4px;
+  flex: 0 0 auto;
 }
 
-/* SUBMENU CONTAINER */
-.nav-submenu {
+/* Tombol Status */
+.status-nav-group > #approvalNav {
   display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 45px;
+  flex: 0 0 45px;
+}
+
+/* Submenu Status */
+.status-nav-group > .nav-submenu {
+  display: none;
   flex-direction: column;
+  align-items: stretch;
+
+  width: 100%;
+  min-width: 0;
   gap: 3px;
 
   padding: 3px 0 8px 45px;
+  margin: 0;
+
+  box-sizing: border-box;
+  border: none;
 }
 
-/* SUBMENU LINK */
-.nav-submenu-link {
+/* Tampilkan submenu ketika Status dibuka */
+.status-nav-group.open > .nav-submenu {
+  display: flex;
+}
+
+/* Link submenu */
+.status-nav-group .nav-submenu-link {
   position: relative;
 
   display: flex;
   align-items: center;
-  gap: 11px;
+  flex: 0 0 35px;
 
   width: 100%;
+  min-width: 0;
   min-height: 35px;
-  padding: 8px 11px;
+  height: 35px;
+
+  padding: 0 11px;
   margin: 0;
 
   box-sizing: border-box;
+  border: none;
   border-radius: 8px;
 
   color: rgba(255,255,255,.68);
 
   font-size: 11px;
   font-weight: 500;
+  line-height: 1;
 
   text-decoration: none;
-  transform: none;
+  white-space: nowrap;
 
+  transform: none;
   transition: color .2s ease, background .2s ease;
 }
 
-/* SUBMENU DOT */
-.submenu-dot {
+/* Titik submenu */
+.status-nav-group .submenu-dot {
+  display: block;
+  flex: 0 0 6px;
+
   width: 6px;
   height: 6px;
-  min-width: 6px;
 
   border-radius: 50%;
-
   background: rgba(255,255,255,.45);
-
-  transition: all .2s ease;
 }
 
-/* HOVER */
-.nav-submenu-link:hover {
+/* Hover submenu */
+.status-nav-group .nav-submenu-link:hover {
   color: #fff;
   background: rgba(255,255,255,.10);
   transform: none;
 }
 
-.nav-submenu-link:hover .submenu-dot {
-  background: #fff;
-}
-
-/* ACTIVE SUBMENU */
-.nav-submenu-link.active {
+/* Submenu aktif */
+.status-nav-group .nav-submenu-link.active {
   color: #fff;
   background: rgba(255,255,255,.13);
   font-weight: 700;
   transform: none;
 }
 
-.nav-submenu-link.active .submenu-dot {
+.status-nav-group .nav-submenu-link.active .submenu-dot {
   background: #fff;
   box-shadow: 0 0 0 3px rgba(255,255,255,.13);
 }
 
-/* SCROLL OFFSET */
-#totalDokumen,
-#eSpecRepository {
-  scroll-margin-top: 95px;
-}
-
-
-/* =========================================
-   RESPONSIVE - TABLET
-========================================= */
-
-@media (max-width: 800px) {
-  .nav-submenu {
-    display: none;
-  }
-
-  .nav-group {
-    width: 100%;
-  }
-}
-
-
-/* =========================================
-   RESPONSIVE - MOBILE
-========================================= */
-
-@media (max-width: 600px) {
-  .nav-group {
-    flex: 0 0 auto;
-    width: auto;
-  }
-
-  .nav-submenu {
-    display: none;
-  }
-}
-
-/* STATUS DROPDOWN */
-
-.status-nav-group .nav-submenu {
-  display: none;
-  padding-left: 20px;
-}
-
-.status-nav-group.open .nav-submenu {
-  display: block;
-}
-
-.status-nav-group .nav-arrow {
-  margin-left: auto;
-  transition: transform 0.2s ease;
-}
-
-.status-nav-group.open .nav-arrow {
-  transform: rotate(180deg);
-}
-
-/* HILANGKAN PANAH DI MENU STATUS */
+/* Hilangkan panah Status */
 #approvalNav::before,
 #approvalNav::after,
 #approvalNav .nav-arrow {
@@ -2656,12 +2627,51 @@ tbody td small {
   content: none !important;
 }
 
-/* HILANGKAN GARIS PENGHUBUNG SUBMENU STATUS */
-.status-nav-group .nav-submenu {
-  border-left: none !important;
-}
-
-.status-nav-group .nav-submenu::before {
+/* Hilangkan garis penghubung submenu */
+.status-nav-group > .nav-submenu::before {
   display: none !important;
   content: none !important;
+  border: none !important;
+}
+
+/* =========================================
+   RESPONSIVE - TABLET
+========================================= */
+
+@media (max-width: 800px) {
+  .sidebar-menu .nav-group {
+    width: 100%;
+  }
+
+  .status-nav-group > .nav-submenu {
+    display: none;
+  }
+
+  .status-nav-group.open > .nav-submenu {
+    display: flex;
+  }
+}
+
+/* =========================================
+   RESPONSIVE - MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .sidebar-menu .nav-group {
+    flex: 0 0 auto;
+    width: auto;
+  }
+
+  .status-nav-group > #approvalNav {
+    width: auto;
+    min-width: max-content;
+  }
+
+  .status-nav-group > .nav-submenu {
+    display: none;
+  }
+
+  .status-nav-group.open > .nav-submenu {
+    display: flex;
+  }
 }
