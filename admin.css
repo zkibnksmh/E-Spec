@@ -2639,3 +2639,11 @@ tbody td small {
 .status-nav-group.open .nav-arrow {
   transform: rotate(180deg);
 }
+
+/* HILANGKAN PANAH DI MENU STATUS */
+#approvalNav::before,
+#approvalNav::after,
+#approvalNav .nav-arrow {
+  display: none !important;
+  content: none !important;
+}
