@@ -3936,25 +3936,3 @@ fieldset.q-field {
     grid-template-columns: 1fr;
   }
 }
-
-.questionnaire-bottom-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #e5e7eb;
-}
-
-.questionnaire-bottom-actions button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.questionnaire-bottom-actions button:hover {
-  background: #1d4ed8;
-}
