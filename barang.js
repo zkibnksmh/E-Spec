@@ -360,7 +360,7 @@ function createDimensionRow(item = {}) {
 
   const removeButton = document.createElement("button");
   removeButton.type = "button";
-  removeButton.className = "dimension-remove";
+  removeButton.className = "remove-dimension";
   removeButton.textContent = "×";
 
   removeButton.addEventListener("click", () => {
@@ -388,7 +388,7 @@ function createDimensionRow(item = {}) {
       .map(row => ({
         type: $(".dimension-type", row)?.value || "",
         value: $(".dimension-value", row)?.value.trim() || "",
-        symbol: $(".dimension-symbol", row)?.value || "x"
+        symbol: $(".dimension-symbol", row)?.value || ""
       }))
       .filter(item => item.type && item.value);
   }
@@ -1573,29 +1573,7 @@ $("#addDimensionBtn")?.addEventListener("click", () => {
   saveDraft();
 });
 
-dimensionContainer?.addEventListener("click", event => {
-  const button = event.target.closest(".remove-dimension");
 
-  if (!button) return;
-
-  const row = button.closest(".dimension-row");
-  const rows = $$(".dimension-row", dimensionContainer);
-
-  if (rows.length > 1) {
-    row.remove();
-  } else {
-    $(".dimension-type", row).value = "";
-    $(".dimension-value", row).value = "";
-
-    const symbol = $(".dimension-symbol", row);
-    if (symbol) {
-      symbol.value = "";
-    }
-  }
-
-  updateDimension();
-  saveDraft();
-});
 
   dimensionContainer?.addEventListener("click", event => {
     const button = event.target.closest(".remove-dimension");
