@@ -348,7 +348,7 @@ function createDimensionRow(item = {}) {
     placeholder.textContent = "-- Pilih Symbol --";
     symbolSelect.appendChild(placeholder);
 
-    ["x", "~", "/", "±", "-"].forEach(value => {
+    ["--Pilih Symbol --","x", "~", "/", "±", "-"].forEach(value => {
       const option = document.createElement("option");
       option.value = value;
       option.textContent = value;
