@@ -3924,3 +3924,15 @@ fieldset.q-field {
   flex-shrink: 0;
 }
 
+.custom-tech-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+@media (max-width: 600px) {
+  .custom-tech-row {
+    grid-template-columns: 1fr;
+  }
+}

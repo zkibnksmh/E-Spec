@@ -762,26 +762,23 @@ function updateDimension() {
       });
     });
 
-    // CUSTOM TECHNICAL
-    $$(".custom-tech-row", questionnaire).forEach(row => {
-      const label =
-        $("[data-custom-tech-name]", row)?.value.trim() || "";
+// CUSTOM TECHNICAL
+$$(".custom-tech-row", questionnaire).forEach(row => {
+  const label =
+    $("[data-custom-tech-name]", row)?.value.trim() || "";
 
-      const value =
-        $("[data-custom-tech-value]", row)?.value.trim() || "";
+  const value =
+    $("[data-custom-tech-value]", row)?.value.trim() || "";
 
-      const unit =
-        $("[data-custom-tech-unit]", row)?.value.trim() || "";
-
-      if (label && value) {
-        attributes.push({
-          category: "Other",
-          label,
-          value,
-          unit
-        });
-      }
+  if (label || value) {
+    attributes.push({
+      category: "Other",
+      label,
+      value,
+      unit: ""
     });
+  }
+});
 
     return attributes;
   }
@@ -940,51 +937,44 @@ function updateDimension() {
   // DYNAMIC TECHNICAL ROWS
   // =====================================================
 
-  function createCustomTechnicalRow(item = {}) {
-    if (!technicalContainer) return;
+function createCustomTechnicalRow(item = {}) {
+  if (!technicalContainer) return;
 
-    const row = document.createElement("div");
-    row.className = "custom-tech-row q-grid";
+  const row = document.createElement("div");
+  row.className = "custom-tech-row q-grid";
 
-    row.innerHTML = `
-      <label class="q-field">
-        Nama Atribut
-        <input
-          type="text"
-          data-custom-tech-name
-          placeholder="Nama atribut"
-        >
-      </label>
+  row.innerHTML = `
+    <label class="q-field">
+      Attribute Name
+      <input
+        type="text"
+        data-custom-tech-name
+        placeholder="Enter attribute name"
+      >
+    </label>
 
-      <label class="q-field">
-        Nilai
-        <input
-          type="text"
-          data-custom-tech-value
-          placeholder="Nilai teknis"
-        >
-      </label>
+    <label class="q-field">
+      Attribute Detail
+      <input
+        type="text"
+        data-custom-tech-value
+        placeholder="Enter attribute detail"
+      >
+    </label>
 
-      <label class="q-field">
-        UoM
-        <input
-          type="text"
-          data-custom-tech-unit
-          placeholder="Satuan"
-        >
-      </label>
+    <button type="button" class="q-remove-button">
+      Hapus
+    </button>
+  `;
 
-      <button type="button" class="q-remove-button">
-        Hapus
-      </button>
-    `;
+  $("[data-custom-tech-name]", row).value =
+    item.label || item.name || "";
 
-    $("[data-custom-tech-name]", row).value = item.label || "";
-    $("[data-custom-tech-value]", row).value = item.value || "";
-    $("[data-custom-tech-unit]", row).value = item.unit || "";
+  $("[data-custom-tech-value]", row).value =
+    item.value || item.detail || "";
 
-    technicalContainer.appendChild(row);
-  }
+  technicalContainer.appendChild(row);
+}
 
   // =====================================================
   // DYNAMIC UNIQUE ROWS
