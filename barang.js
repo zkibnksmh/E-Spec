@@ -220,10 +220,42 @@
   // MATERIAL CATEGORY
   // =====================================================
 
+  // =====================================================
+  // MATERIAL CATEGORY — SINGLE SELECTION
+  // =====================================================
+
   function getSelectedCategories() {
     return $$('[name="materialCategory"]:checked', questionnaire)
       .map(field => field.value);
   }
+
+  function updateCategory() {
+    const selected = getSelectedCategories();
+
+    $$('[name="category"]', questionnaire).forEach(field => {
+      field.checked = selected.some(
+        category => CATEGORY_MAPPING[category] === field.value
+      );
+    });
+  }
+
+  // Hanya boleh memilih satu Material Category
+  questionnaire.addEventListener("change", event => {
+    if (!event.target.matches('[name="materialCategory"]')) {
+      return;
+    }
+
+    if (event.target.checked) {
+      $$('[name="materialCategory"]', questionnaire).forEach(field => {
+        if (field !== event.target) {
+          field.checked = false;
+        }
+      });
+    }
+
+    updateCategory();
+    saveDraft();
+  });
 
   function updateCategory() {
     const selected = getSelectedCategories();
