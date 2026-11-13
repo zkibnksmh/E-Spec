@@ -349,7 +349,7 @@
     const items = collectDimensionItems();
     let previousType = "";
 
-    const groupedTypes = ["ID", "OD", "DN", "Phase"];
+    const groupedTypes = ["ID", "OD", "DN"];
 
     finalField.value = items.map((item, index) => {
       const text = `${item.type} : ${item.value}`;
@@ -1456,43 +1456,46 @@
   // VALIDATION
   // =====================================================
 
-  function validateForm() {
-    updateReason();
-    updateCategory();
+function validateForm() {
+  updateReason();
+  updateCategory();
 
-    if (!questionnaire.reportValidity()) {
-      return false;
-    }
-
-    const categories = getSelectedCategories();
-
-    if (!categories.length) {
-      const firstCategory = $(
-        '[name="materialCategory"]',
-        questionnaire
-      );
-
-      alert("Pilih minimal satu Material Category.");
-
-      firstCategory?.focus();
-
-      return false;
-    }
-
-    if (
-      reasonChoice?.value === "Others" &&
-      !reasonOther?.value.trim()
-    ) {
-      alert("Reason Others wajib diisi.");
-
-      reasonOther?.focus();
-
-      return false;
-    }
-
-    return true;
+  // Validasi seluruh field required dari HTML.
+  // Location tetap wajib jika atribut required masih terpasang.
+  if (!questionnaire.reportValidity()) {
+    return false;
   }
 
+  // Minimal satu Material Category harus dipilih.
+  const categories = getSelectedCategories();
+
+  if (!categories.length) {
+    const firstCategory = $(
+      '[name="materialCategory"]',
+      questionnaire
+    );
+
+    alert("Pilih minimal satu Material Category.");
+
+    firstCategory?.focus();
+
+    return false;
+  }
+
+  // Reason Others wajib diisi jika dipilih.
+  if (
+    reasonChoice?.value === "Others" &&
+    !reasonOther?.value.trim()
+  ) {
+    alert("Reason Others wajib diisi.");
+
+    reasonOther?.focus();
+
+    return false;
+  }
+
+  return true;
+}
   // =====================================================
   // LOCAL TRANSACTION
   // =====================================================
