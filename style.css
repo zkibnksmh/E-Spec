@@ -3936,3 +3936,43 @@ fieldset.q-field {
     grid-template-columns: 1fr;
   }
 }
+
+.questionnaire-bottom-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.questionnaire-bottom-actions button {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#saveAdminBtn {
+  background: #2563eb;
+  color: white;
+}
+
+#pdfBtn {
+  background: #16a34a;
+  color: white;
+}
+
+@media (max-width: 600px) {
+  .questionnaire-bottom-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .questionnaire-bottom-actions button {
+    width: 100%;
+  }
+}
