@@ -2561,7 +2561,7 @@ tbody td small {
   display: flex;
   align-items: center;
   flex: 0 0 35px;
-
+  gap: 10px;
   width: 100%;
   min-width: 0;
   min-height: 35px;
