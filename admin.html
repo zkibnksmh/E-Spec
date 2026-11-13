@@ -412,14 +412,22 @@
 <script src="admin.js"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
+  const statusButton = document.getElementById("approvalNav");
   const statusGroup = document.querySelector(".status-nav-group");
-  const statusButton = document.querySelector("#approvalNav");
 
-  if (!statusGroup || !statusButton) return;
+  if (!statusButton || !statusGroup) {
+    console.error("Elemen Status tidak ditemukan!");
+    return;
+  }
 
-  statusButton.addEventListener("click", () => {
-    const isOpen = statusGroup.classList.toggle("open");
+  statusButton.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    statusGroup.classList.toggle("open");
+
+    const isOpen = statusGroup.classList.contains("open");
+
     statusButton.setAttribute("aria-expanded", isOpen);
   });
 });

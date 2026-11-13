@@ -2619,3 +2619,23 @@ tbody td small {
     display: none;
   }
 }
+
+/* STATUS DROPDOWN */
+
+.status-nav-group .nav-submenu {
+  display: none;
+  padding-left: 20px;
+}
+
+.status-nav-group.open .nav-submenu {
+  display: block;
+}
+
+.status-nav-group .nav-arrow {
+  margin-left: auto;
+  transition: transform 0.2s ease;
+}
+
+.status-nav-group.open .nav-arrow {
+  transform: rotate(180deg);
+}
