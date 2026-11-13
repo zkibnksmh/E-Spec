@@ -229,40 +229,44 @@
       <h2>PURCHASE OBJECTIVE</h2>
     </div>
 
+<div class="q-grid">
 
-<!-- REASON TO PROCURE -->
-<div class="q-field reason-procure-field">
+  <!-- REASON TO PROCURE -->
+  <div class="q-field reason-procure-field">
+    <label for="reasonChoice">Reason to Procure *</label>
 
-  <label for="reasonChoice">Reason to Procure *</label>
-
-  <select name="reasonChoice" id="reasonChoice" required>
-    <option value="">-- Pilih Reason --</option>
-    <option value="Replacement">Replacement</option>
-    <option value="Stock Replenishment">Stock Replenishment</option>
-    <option value="New Project">New Project</option>
-    <option value="Trial">Trial</option>
-    <option value="Others">Others</option>
-  </select>
-
-  <!-- INPUT YANG MUNCUL KETIKA MEMILIH OTHERS -->
-  <div id="reasonOthersBarang" class="reason-others-wrapper" hidden>
-
-    <label for="reasonOther">Reason Others *</label>
+    <select name="reasonChoice" id="reasonChoice" required>
+      <option value="">-- Pilih Reason --</option>
+      <option value="Replacement">Replacement</option>
+      <option value="Stock Replenishment">Stock Replenishment</option>
+      <option value="New Project">New Project</option>
+      <option value="Trial">Trial</option>
+      <option value="Others">Others</option>
+    </select>
 
     <input
       type="text"
       name="reasonOther"
       id="reasonOther"
       placeholder="Masukkan alasan lainnya"
+      hidden
       disabled
     >
-
   </div>
 
+  <!-- LOCATION - TETAP ADA -->
+  <label class="q-field">
+    Location
+    <input
+      type="text"
+      name="location"
+      placeholder="Lokasi penggunaan barang"
+    >
+  </label>
+
+  <input type="hidden" name="reason" id="reasonFinal">
+
 </div>
-
-<input type="hidden" name="reason" id="reasonFinal">
-
   </section>
 
 
