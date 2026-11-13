@@ -337,12 +337,13 @@ function createDimensionRow(item = {}) {
   const currentRowCount =
     dimensionContainer.querySelectorAll(".dimension-row").length + 1;
 
+  let symbolSelect = null;
+
+  if (currentRowCount < 3) {
+    symbolSelect = document.createElement("select");
+    symbolSelect.className = "dimension-symbol";
 
 
-    const placeholder = document.createElement("option");
-    placeholder.value = "";
-    placeholder.textContent = "-- Pilih Symbol --";
-    symbolSelect.appendChild(placeholder);
 
     ["x", "~", "/", "±", "-"].forEach(value => {
       const option = document.createElement("option");
@@ -1210,7 +1211,7 @@ function updateDimension() {
     if (dimensionContainer) {
       dimensionContainer.replaceChildren();
 
-      console.log("DATA DIMENSION TERSIMPAN:", data.dimensionItems);
+      
 
       if (
         Array.isArray(data.dimensionItems) &&
