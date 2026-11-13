@@ -48,6 +48,8 @@
 
   const DIMENSION_OPTIONS = ["L", "W", "H", "T", "ID", "OD", "DN"];
 
+  const DIMENSION_SYMBOLS = ["x", "~", "/", "±", "-"];
+
   const MECHANICAL_PARAMETERS = [
     "Capacity",
     "Pressure",
@@ -217,16 +219,25 @@
   }
 
   // =====================================================
-  // MATERIAL CATEGORY
-  // =====================================================
-
-  // =====================================================
   // MATERIAL CATEGORY — SINGLE SELECTION
   // =====================================================
 
   function getSelectedCategories() {
     return $$('[name="materialCategory"]:checked', questionnaire)
       .map(field => field.value);
+  }
+
+  function normalizeMaterialCategory() {
+    const selected = $$(
+      '[name="materialCategory"]:checked',
+      questionnaire
+    );
+
+    selected.slice(1).forEach(field => {
+      field.checked = false;
+    });
+
+    updateCategory();
   }
 
   function updateCategory() {
@@ -239,7 +250,6 @@
     });
   }
 
-  // Hanya boleh memilih satu Material Category
   questionnaire.addEventListener("change", event => {
     if (!event.target.matches('[name="materialCategory"]')) {
       return;
@@ -257,47 +267,33 @@
     saveDraft();
   });
 
-  function updateCategory() {
-    const selected = getSelectedCategories();
+  // =====================================================
+  // REASON TO PROCURE
+  // =====================================================
 
-    $$('[name="category"]', questionnaire).forEach(field => {
-      field.checked = selected.some(
-        category => CATEGORY_MAPPING[category] === field.value
-      );
-    });
-  }
+  function updateReason() {
+    if (!reasonChoice || !reasonFinal) return;
 
+    const isOthers = reasonChoice.value === "Others";
 
-
-// =====================================================
-// REASON TO PROCURE
-// =====================================================
-
-function updateReason() {
-  if (!reasonChoice || !reasonFinal) return;
-
-  const isOthers = reasonChoice.value === "Others";
-
-  // Tampilkan/sembunyikan input Others
-  if (reasonOthers) {
-    reasonOthers.hidden = !isOthers;
-  }
-
-  if (reasonOther) {
-    reasonOther.hidden = !isOthers;
-    reasonOther.disabled = !isOthers;
-    reasonOther.required = isOthers;
-
-    if (!isOthers) {
-      reasonOther.value = "";
+    if (reasonOthers) {
+      reasonOthers.hidden = !isOthers;
     }
-  }
 
-  // Masukkan alasan akhir ke field PDF
-  reasonFinal.value = isOthers
-    ? (reasonOther?.value.trim() || "")
-    : reasonChoice.value;
-}
+    if (reasonOther) {
+      reasonOther.hidden = !isOthers;
+      reasonOther.disabled = !isOthers;
+      reasonOther.required = isOthers;
+
+      if (!isOthers) {
+        reasonOther.value = "";
+      }
+    }
+
+    reasonFinal.value = isOthers
+      ? (reasonOther?.value.trim() || "")
+      : reasonChoice.value;
+  }
 
   // =====================================================
   // DIMENSION
@@ -309,6 +305,7 @@ function updateReason() {
     const row = document.createElement("div");
     row.className = "dimension-row";
 
+    // DIMENSION TYPE
     const typeSelect = document.createElement("select");
     typeSelect.className = "dimension-type";
 
@@ -327,38 +324,41 @@ function updateReason() {
       typeSelect.appendChild(option);
     });
 
+    // DIMENSION VALUE
     const valueInput = document.createElement("input");
     valueInput.type = "text";
     valueInput.className = "dimension-value";
     valueInput.placeholder = "Masukkan nilai";
 
+    // DIMENSION SYMBOL
     const symbolSelect = document.createElement("select");
     symbolSelect.className = "dimension-symbol";
 
-    [
-      ["x", "x"],
-      ["~", "~"],
-      ["/", "/"],
-      ["±", "±"],
-      ["-", "-"]
-    ].forEach(([value, label]) => {
+    DIMENSION_SYMBOLS.forEach(symbol => {
       const option = document.createElement("option");
 
-      option.value = value;
-      option.textContent = label;
+      option.value = symbol;
+      option.textContent = symbol;
 
       symbolSelect.appendChild(option);
     });
 
+    // REMOVE BUTTON
     const removeButton = document.createElement("button");
     removeButton.type = "button";
     removeButton.className = "remove-dimension";
     removeButton.title = "Hapus";
     removeButton.textContent = "×";
 
+    // RESTORE VALUES
     typeSelect.value = item.type || "";
     valueInput.value = item.value || "";
-    symbolSelect.value = item.symbol || "x";
+
+    const savedSymbol = item.symbol || "x";
+
+    symbolSelect.value = DIMENSION_SYMBOLS.includes(savedSymbol)
+      ? savedSymbol
+      : "x";
 
     row.append(
       typeSelect,
@@ -388,28 +388,27 @@ function updateReason() {
     if (!finalField) return;
 
     const items = collectDimensionItems();
-    let previousType = "";
-
     const groupedTypes = ["ID", "OD", "DN"];
 
     finalField.value = items.map((item, index) => {
       const text = `${item.type} : ${item.value}`;
 
       if (index === 0) {
-        previousType = item.type;
         return text;
       }
 
-      let separator = item.symbol || "x";
+      // Simbol diambil dari baris sebelumnya.
+      const previousItem = items[index - 1];
+
+      let separator = previousItem.symbol || "x";
 
       const currentGrouped = groupedTypes.includes(item.type);
-      const previousGrouped = groupedTypes.includes(previousType);
+      const previousGrouped = groupedTypes.includes(previousItem.type);
 
+      // Aturan khusus ID, OD, dan DN tetap menggunakan "-".
       if (currentGrouped || previousGrouped) {
         separator = "-";
       }
-
-      previousType = item.type;
 
       return `${separator} ${text}`;
     }).join(" ");
@@ -474,10 +473,7 @@ function updateReason() {
         text: option.textContent.trim()
       }));
 
-    $$(
-      '[data-mechanical-unit]',
-      questionnaire
-    ).forEach(select => {
+    $$('[data-mechanical-unit]', questionnaire).forEach(select => {
       const currentValue = select.value;
 
       select.innerHTML = "";
@@ -545,15 +541,8 @@ function updateReason() {
     });
 
     // SYMBOL OTHERS
-    const symbolSelect = $(
-      "[data-mechanical-symbol]",
-      row
-    );
-
-    const symbolOther = $(
-      "[data-mechanical-symbol-other]",
-      row
-    );
+    const symbolSelect = $("[data-mechanical-symbol]", row);
+    const symbolOther = $("[data-mechanical-symbol-other]", row);
 
     if (symbolSelect && symbolOther) {
       const isOthers = symbolSelect.value === "Others";
@@ -598,15 +587,9 @@ function updateReason() {
   }
 
   function getMechanicalEffectiveSymbol(row) {
-    const select = $(
-      "[data-mechanical-symbol]",
-      row
-    );
+    const select = $("[data-mechanical-symbol]", row);
 
-    const otherInput = $(
-      "[data-mechanical-symbol-other]",
-      row
-    );
+    const otherInput = $("[data-mechanical-symbol-other]", row);
 
     if (!select) return "";
 
@@ -632,35 +615,14 @@ function updateReason() {
       const unit1 = getMechanicalEffectiveUnit(row, "1");
       const unit2 = getMechanicalEffectiveUnit(row, "2");
 
-      const unitSelect1 = $(
-        '[data-mechanical-unit="1"]',
-        row
-      );
+      const unitSelect1 = $('[data-mechanical-unit="1"]', row);
+      const unitSelect2 = $('[data-mechanical-unit="2"]', row);
 
-      const unitSelect2 = $(
-        '[data-mechanical-unit="2"]',
-        row
-      );
+      const unitOther1 = $('[data-mechanical-unit-other="1"]', row);
+      const unitOther2 = $('[data-mechanical-unit-other="2"]', row);
 
-      const unitOther1 = $(
-        '[data-mechanical-unit-other="1"]',
-        row
-      );
-
-      const unitOther2 = $(
-        '[data-mechanical-unit-other="2"]',
-        row
-      );
-
-      const symbolSelect = $(
-        "[data-mechanical-symbol]",
-        row
-      );
-
-      const symbolOther = $(
-        "[data-mechanical-symbol-other]",
-        row
-      );
+      const symbolSelect = $("[data-mechanical-symbol]", row);
+      const symbolOther = $("[data-mechanical-symbol-other]", row);
 
       const symbol = getMechanicalEffectiveSymbol(row);
 
@@ -736,10 +698,7 @@ function updateReason() {
   function collectTechnicalAttributes() {
     const attributes = [];
 
-    // -------------------------------------------------
     // ELECTRICAL
-    // -------------------------------------------------
-
     $$("[data-electric-row]", questionnaire).forEach(row => {
       const label = row.dataset.electricRow || "";
 
@@ -771,11 +730,7 @@ function updateReason() {
       let value = first;
 
       if (second) {
-        value += `${
-          first
-            ? ` ${symbol} `
-            : ""
-        }${second}`;
+        value += `${first ? ` ${symbol} ` : ""}${second}`;
       }
 
       attributes.push({
@@ -786,10 +741,7 @@ function updateReason() {
       });
     });
 
-    // -------------------------------------------------
     // MATERIAL, CONNECTION TYPE, LIQUID
-    // -------------------------------------------------
-
     $$("[data-tech-label]", questionnaire).forEach(input => {
       const label = input.dataset.techLabel || "";
       const value = input.value.trim();
@@ -809,10 +761,7 @@ function updateReason() {
       });
     });
 
-    // -------------------------------------------------
     // MECHANICAL PARAMETERS
-    // -------------------------------------------------
-
     const mechanicalAttributes = collectMechanicalAttributes();
 
     mechanicalAttributes.forEach(item => {
@@ -824,10 +773,7 @@ function updateReason() {
       });
     });
 
-    // -------------------------------------------------
     // CUSTOM TECHNICAL
-    // -------------------------------------------------
-
     $$(".custom-tech-row", questionnaire).forEach(row => {
       const label =
         $("[data-custom-tech-name]", row)?.value.trim() || "";
@@ -859,15 +805,8 @@ function updateReason() {
     for (let index = 1; index <= 5; index++) {
       const item = attributes[index - 1];
 
-      const labelField = $(
-        `#technical${index}`,
-        questionnaire
-      );
-
-      const valueField = $(
-        `#technicalUnit${index}`,
-        questionnaire
-      );
+      const labelField = $(`#technical${index}`, questionnaire);
+      const valueField = $(`#technicalUnit${index}`, questionnaire);
 
       if (labelField) {
         labelField.value = item?.label || "";
@@ -1159,45 +1098,17 @@ function updateReason() {
 
       if (!row) return;
 
-      const value1 = $(
-        '[data-mechanical-value="1"]',
-        row
-      );
+      const value1 = $('[data-mechanical-value="1"]', row);
+      const value2 = $('[data-mechanical-value="2"]', row);
 
-      const value2 = $(
-        '[data-mechanical-value="2"]',
-        row
-      );
+      const unitSelect1 = $('[data-mechanical-unit="1"]', row);
+      const unitSelect2 = $('[data-mechanical-unit="2"]', row);
 
-      const unitSelect1 = $(
-        '[data-mechanical-unit="1"]',
-        row
-      );
+      const unitOther1 = $('[data-mechanical-unit-other="1"]', row);
+      const unitOther2 = $('[data-mechanical-unit-other="2"]', row);
 
-      const unitSelect2 = $(
-        '[data-mechanical-unit="2"]',
-        row
-      );
-
-      const unitOther1 = $(
-        '[data-mechanical-unit-other="1"]',
-        row
-      );
-
-      const unitOther2 = $(
-        '[data-mechanical-unit-other="2"]',
-        row
-      );
-
-      const symbolSelect = $(
-        "[data-mechanical-symbol]",
-        row
-      );
-
-      const symbolOther = $(
-        "[data-mechanical-symbol-other]",
-        row
-      );
+      const symbolSelect = $("[data-mechanical-symbol]", row);
+      const symbolOther = $("[data-mechanical-symbol-other]", row);
 
       if (value1) {
         value1.value = item.data1 || "";
@@ -1254,7 +1165,6 @@ function updateReason() {
 
   // =====================================================
   // RESTORE OLD MECHANICAL DATA
-  // Kompatibilitas dengan draft sebelum format baru.
   // =====================================================
 
   function restoreOldMechanicalAttributes(data) {
@@ -1275,10 +1185,7 @@ function updateReason() {
 
         if (!row) return;
 
-        const value1 = $(
-          '[data-mechanical-value="1"]',
-          row
-        );
+        const value1 = $('[data-mechanical-value="1"]', row);
 
         if (value1 && !value1.value) {
           value1.value = item.value || "";
@@ -1339,6 +1246,9 @@ function updateReason() {
 
       setFieldValue(name, value);
     });
+
+    // Pastikan hanya satu Material Category yang dipulihkan.
+    normalizeMaterialCategory();
 
     // Restore mechanical setelah dropdown UoM selesai dibuat.
     if (Array.isArray(data.mechanicalAttributes)) {
@@ -1497,46 +1407,44 @@ function updateReason() {
   // VALIDATION
   // =====================================================
 
-function validateForm() {
-  updateReason();
-  updateCategory();
+  function validateForm() {
+    updateReason();
+    updateCategory();
 
-  // Validasi seluruh field required dari HTML.
-  // Location tetap wajib jika atribut required masih terpasang.
-  if (!questionnaire.reportValidity()) {
-    return false;
+    if (!questionnaire.reportValidity()) {
+      return false;
+    }
+
+    // Wajib memilih tepat satu Material Category.
+    const categories = getSelectedCategories();
+
+    if (categories.length !== 1) {
+      alert("Pilih tepat satu Material Category.");
+
+      const firstCategory = $(
+        '[name="materialCategory"]',
+        questionnaire
+      );
+
+      firstCategory?.focus();
+
+      return false;
+    }
+
+    if (
+      reasonChoice?.value === "Others" &&
+      !reasonOther?.value.trim()
+    ) {
+      alert("Reason Others wajib diisi.");
+
+      reasonOther?.focus();
+
+      return false;
+    }
+
+    return true;
   }
 
-  // Minimal satu Material Category harus dipilih.
-  const categories = getSelectedCategories();
-
-  if (!categories.length) {
-    const firstCategory = $(
-      '[name="materialCategory"]',
-      questionnaire
-    );
-
-    alert("Pilih minimal satu Material Category.");
-
-    firstCategory?.focus();
-
-    return false;
-  }
-
-  // Reason Others wajib diisi jika dipilih.
-  if (
-    reasonChoice?.value === "Others" &&
-    !reasonOther?.value.trim()
-  ) {
-    alert("Reason Others wajib diisi.");
-
-    reasonOther?.focus();
-
-    return false;
-  }
-
-  return true;
-}
   // =====================================================
   // LOCAL TRANSACTION
   // =====================================================
@@ -1597,7 +1505,6 @@ function validateForm() {
 
   // =====================================================
   // PRINT DATA TRANSFER
-  // Template PDF tidak diubah pada tahap ini.
   // =====================================================
 
   function transferToPrint(data = getFormData()) {
@@ -1642,10 +1549,7 @@ function validateForm() {
       revisionDate.value = formatDate(data.createdDate);
     }
 
-    const printDrawing = $(
-      "#drawingPreview",
-      printForm
-    );
+    const printDrawing = $("#drawingPreview", printForm);
 
     if (printDrawing) {
       if (data.drawingImage) {
@@ -1827,7 +1731,6 @@ function validateForm() {
 
   // =====================================================
   // SAVE FOR ADMIN
-  // Catatan: transaksi saat ini disimpan di browser lokal.
   // =====================================================
 
   saveBtn?.addEventListener("click", () => {
@@ -1989,6 +1892,8 @@ function validateForm() {
     ) {
       createDimensionRow();
     }
+
+    normalizeMaterialCategory();
 
     updateReason();
     updateCategory();
