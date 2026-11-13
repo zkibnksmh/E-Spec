@@ -2699,3 +2699,37 @@ tbody td small {
   background: #ffffff !important;
   color: #5146c8 !important;
 }
+
+/* =========================================
+   ACTIVE MENU - DASHBOARD & STATUS
+========================================= */
+
+/* Dashboard aktif ketika Status tertutup */
+.sidebar #dashboardNav.active {
+  background: #ffffff;
+  color: #5146c8;
+  font-weight: 700;
+}
+
+/* Status aktif ketika submenu dibuka */
+.sidebar .status-nav-group.open > #approvalNav {
+  background: #ffffff;
+  color: #5146c8;
+  font-weight: 700;
+}
+
+/* Hilangkan warna aktif Dashboard ketika Status dibuka */
+.sidebar:has(.status-nav-group.open) #dashboardNav {
+  background: transparent !important;
+  color: rgba(255,255,255,.78) !important;
+}
+
+/* Warna ikon Dashboard ketika Status dibuka */
+.sidebar:has(.status-nav-group.open) #dashboardNav .nav-icon {
+  color: rgba(255,255,255,.78) !important;
+}
+
+/* Warna ikon Status */
+.sidebar .status-nav-group.open > #approvalNav .nav-icon {
+  color: #5146c8 !important;
+}
