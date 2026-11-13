@@ -411,5 +411,19 @@
 
 <script src="admin.js"></script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const statusGroup = document.querySelector(".status-nav-group");
+  const statusButton = document.querySelector("#approvalNav");
+
+  if (!statusGroup || !statusButton) return;
+
+  statusButton.addEventListener("click", () => {
+    const isOpen = statusGroup.classList.toggle("open");
+    statusButton.setAttribute("aria-expanded", isOpen);
+  });
+});
+</script>
+
 </body>
 </html>
