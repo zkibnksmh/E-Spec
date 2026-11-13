@@ -358,7 +358,7 @@ function createDimensionRow(item = {}) {
   const removeButton = document.createElement("button");
   removeButton.type = "button";
   removeButton.className = "remove-dimension";
-  removeButton.textContent = "-- Pilih Symbol --";
+  removeButton.textContent = "×";
 
   removeButton.addEventListener("click", () => {
     row.remove();
