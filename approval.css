@@ -1362,3 +1362,8 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Sembunyikan kartu navigasi My E-Spec dan My Approval */
+.status-workspace-tabs {
+  display: none !important;
+}
