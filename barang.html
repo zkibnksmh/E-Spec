@@ -229,45 +229,40 @@
       <h2>PURCHASE OBJECTIVE</h2>
     </div>
 
-    <div class="q-grid">
 
-      <label class="q-field">
-        Reason to Procure *
-        <select name="reasonChoice" id="reasonChoice" required>
-          <option value="">-- Pilih Reason --</option>
-          <option value="Replacement">Replacement</option>
-          <option value="Stock Replenishment">Stock Replenishment</option>
-          <option value="New Project">New Project</option>
-          <option value="Trial">Trial</option>
-          <option value="Others">Others</option>
-        </select>
-      </label>
+<!-- REASON TO PROCURE -->
+<div class="q-field reason-procure-field">
 
-      <label class="q-field" id="reasonOthersBarang" hidden>
-        Reason Others *
+  <label for="reasonChoice">Reason to Procure *</label>
 
+  <select name="reasonChoice" id="reasonChoice" required>
+    <option value="">-- Pilih Reason --</option>
+    <option value="Replacement">Replacement</option>
+    <option value="Stock Replenishment">Stock Replenishment</option>
+    <option value="New Project">New Project</option>
+    <option value="Trial">Trial</option>
+    <option value="Others">Others</option>
+  </select>
 
-        <input
-  type="text"
-  name="reasonOther"
-  id="reasonOther"
-  placeholder="Masukkan alasan lainnya"
-  disabled
->
-      </label>
+  <!-- INPUT YANG MUNCUL KETIKA MEMILIH OTHERS -->
+  <div id="reasonOthersBarang" class="reason-others-wrapper" hidden>
 
-      <label class="q-field">
-        Location
-        <input
-          type="text"
-          name="location"
-          placeholder="Lokasi penggunaan barang"
-        >
-      </label>
+    <label for="reasonOther">Reason Others *</label>
 
-      <input type="hidden" name="reason" id="reasonFinal">
+    <input
+      type="text"
+      name="reasonOther"
+      id="reasonOther"
+      placeholder="Masukkan alasan lainnya"
+      disabled
+    >
 
-    </div>
+  </div>
+
+</div>
+
+<input type="hidden" name="reason" id="reasonFinal">
+
   </section>
 
 
