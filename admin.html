@@ -38,35 +38,11 @@
 </div>
 
 
-      <!-- STATUS MENU -->
-<div class="nav-group status-nav-group">
+      <a href="approval.html" class="nav approval-nav" id="approvalNav">
+        <span class="nav-icon">✓</span>
+        <span>Status</span>
 
-  <a
-    href="javascript:void(0)"
-    class="nav approval-nav"
-    id="approvalNav"
-    aria-expanded="false"
-  >
-    <span class="nav-icon">✓</span>
-    <span>Status</span>
-    <span class="nav-arrow">⌄</span>
-  </a>
-
-  <div class="nav-submenu">
-
-    <a href="approval.html" class="nav-submenu-link">
-      <span class="submenu-dot"></span>
-      <span>My E-Spec</span>
-    </a>
-
-    <a href="my-approval.html" class="nav-submenu-link">
-      <span class="submenu-dot"></span>
-      <span>My Approval</span>
-    </a>
-
-  </div>
-
-</div>
+      </a>
 
       <a href="pilih-spesifikasi.html" class="nav">
         <span class="nav-icon">＋</span>
@@ -410,21 +386,6 @@
 
 
 <script src="admin.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const statusGroup = document.querySelector(".status-nav-group");
-  const statusButton = document.querySelector("#approvalNav");
-
-  if (!statusGroup || !statusButton) return;
-
-  statusButton.addEventListener("click", () => {
-    const isOpen = statusGroup.classList.toggle("open");
-
-    statusButton.setAttribute("aria-expanded", isOpen);
-  });
-});
-</script>
 
 </body>
 </html>
