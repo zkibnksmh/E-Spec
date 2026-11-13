@@ -388,7 +388,7 @@ function createDimensionRow(item = {}) {
       .map(row => ({
         type: $(".dimension-type", row)?.value || "",
         value: $(".dimension-value", row)?.value.trim() || "",
-        symbol: $(".dimension-symbol", row)?.value || "--Pilih Symbol--"
+        symbol: $(".dimension-symbol", row)?.value || ""
       }))
       .filter(item => item.type && item.value);
   }
@@ -1586,10 +1586,15 @@ $("#addDimensionBtn")?.addEventListener("click", () => {
     if (rows.length > 1) {
       row.remove();
     } else {
-      $(".dimension-type", row).value = "";
-      $(".dimension-value", row).value = "";
-      $(".dimension-symbol", row).value = "x";
-    }
+  $(".dimension-type", row).value = "";
+  $(".dimension-value", row).value = "";
+
+  const symbolSelect = $(".dimension-symbol", row);
+
+  if (symbolSelect) {
+    symbolSelect.value = "";
+  }
+}
 
     updateDimension();
     saveDraft();
