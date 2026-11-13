@@ -352,7 +352,7 @@ function createDimensionRow(item = {}) {
       symbolSelect.appendChild(option);
     });
 
-    symbolSelect.value = item.symbol || "--Pilih Symbol --";
+    symbolSelect.value = item.symbol || "--Pilih Symbol--";
   }
 
   const removeButton = document.createElement("button");
