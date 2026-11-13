@@ -12,103 +12,100 @@
 <div class="app-layout">
 
   <!-- SIDEBAR -->
-  <aside class="sidebar">
 
-    <a class="brand" href="admin.html">
-      <span class="brand-mark">E</span>
-      <span class="brand-info">
-        <strong>E-Spec</strong>
-        <small>DOCUMENT WORKSPACE</small>
-      </span>
-    </a>
+<aside class="sidebar">
 
-    <div class="sidebar-menu">
-      <p class="side-label">MENU UTAMA</p>
-
-      
-<!-- DASHBOARD NAVIGATION -->
-<div class="nav-group">
-
-  <a href="admin.html" class="nav active" id="dashboardNav">
-    <span class="nav-icon">▦</span>
-    <span>Dashboard</span>
+  <a class="brand" href="admin.html">
+    <span class="brand-mark">E</span>
+    <span class="brand-info">
+      <strong>E-Spec</strong>
+      <small>DOCUMENT WORKSPACE</small>
+    </span>
   </a>
 
+  <div class="sidebar-menu">
+    <p class="side-label">MENU UTAMA</p>
 
-</div>
+    <!-- DASHBOARD -->
+    <div class="nav-group">
+      <a href="admin.html" class="nav active" id="dashboardNav">
+        <span class="nav-icon">▦</span>
+        <span>Dashboard</span>
+      </a>
+    </div>
 
+    <!-- STATUS -->
+    <div class="nav-group status-nav-group">
 
-      <!-- STATUS NAVIGATION -->
-<div class="nav-group status-nav-group">
+      <a href="javascript:void(0)"
+         class="nav approval-nav"
+         id="approvalNav"
+         aria-expanded="false">
 
-  <a href="javascript:void(0)"
-     class="nav approval-nav"
-     id="approvalNav"
-     aria-expanded="false">
+        <span class="nav-icon">✓</span>
+        <span>Status</span>
+      </a>
 
-    <span class="nav-icon">✓</span>
-    <span>Status</span>
-    
+      <div class="nav-submenu">
 
-  </a>
+        <a href="approval.html" class="nav-submenu-link">
+          <span class="submenu-dot"></span>
+          <span>My E-Spec</span>
+        </a>
 
-  <div class="nav-submenu">
+        <a href="my-approval.html" class="nav-submenu-link">
+          <span class="submenu-dot"></span>
+          <span>My Approval</span>
+        </a>
 
-    <a href="approval.html" class="nav-submenu-link">
-      <span class="submenu-dot"></span>
-      <span>My E-Spec</span>
+      </div>
+    </div>
+
+    <!-- MENU LAINNYA -->
+    <a href="pilih-spesifikasi.html" class="nav">
+      <span class="nav-icon">＋</span>
+      <span>Buat Spesifikasi</span>
     </a>
 
-    <a href="my-approval.html" class="nav-submenu-link">
-      <span class="submenu-dot"></span>
-      <span>My Approval</span>
+    <a href="pengaturan.html" class="nav">
+      <span class="nav-icon">⚙</span>
+      <span>Pengaturan</span>
     </a>
 
   </div>
 
-</div>
+  <div class="sidebar-divider"></div>
 
-      <a href="pilih-spesifikasi.html" class="nav">
-        <span class="nav-icon">＋</span>
-        <span>Buat Spesifikasi</span>
-      </a>
+  <div class="sidebar-menu">
+    <p class="side-label">MANAJEMEN DATA</p>
 
-      <a href="pengaturan.html" class="nav">
-        <span class="nav-icon">⚙</span>
-        <span>Pengaturan</span>
-      </a>
+    <input
+      type="file"
+      id="importFile"
+      accept=".json,application/json"
+      hidden
+    >
+  </div>
+
+  <div class="sidebar-bottom">
+
+    <div class="sidebar-illustration">
+      <div class="illustration-icon">▤</div>
+      <div class="illustration-check">✓</div>
     </div>
 
-    <div class="sidebar-divider"></div>
-
-    <div class="sidebar-menu">
-      <p class="side-label">MANAJEMEN DATA</p>
-
-      <input
-        type="file"
-        id="importFile"
-        accept=".json,application/json"
-        hidden
-      >
-    </div>
-
-    <div class="sidebar-bottom">
-
-      <div class="sidebar-illustration">
-        <div class="illustration-icon">▤</div>
-        <div class="illustration-check">✓</div>
+    <div class="sidebar-help">
+      <div class="help-icon">✦</div>
+      <div>
+        <strong>E-Spec Workspace</strong>
+        <small>Kelola dokumen lebih mudah.</small>
       </div>
-
-      <div class="sidebar-help">
-        <div class="help-icon">✦</div>
-        <div>
-          <strong>E-Spec Workspace</strong>
-          <small>Kelola dokumen lebih mudah.</small>
-        </div>
-      </div>
-
     </div>
-  </aside>
+
+  </div>
+
+</aside>
+
 
 
   <!-- MAIN -->
