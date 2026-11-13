@@ -3870,3 +3870,56 @@ fieldset.q-field {
   border-color: #6558e8;
   box-shadow: 0 0 0 3px rgba(101, 88, 232, 0.10);
 }
+
+/* =========================================
+   AUTO GENERATED FIELD
+========================================= */
+
+.auto-generated-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Input otomatis */
+.auto-generated-field {
+  background: #f0f1f5 !important;
+  color: #687386 !important;
+  border: 1px solid #dfe2e9 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  opacity: 1;
+}
+
+/* Hilangkan efek fokus seperti input biasa */
+.auto-generated-field:focus {
+  outline: none;
+  border-color: #dfe2e9 !important;
+  box-shadow: none !important;
+}
+
+/* Keterangan auto generate */
+.auto-generated-note {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #8992a3;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Ikon centang */
+.auto-generated-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  background: #e5e7eb;
+  color: #687386;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
