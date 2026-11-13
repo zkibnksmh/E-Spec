@@ -2648,25 +2648,12 @@ tbody td small {
   content: none !important;
 }
 
-/* HILANGKAN GARIS PADA SUBMENU STATUS */
-.status-nav-group .nav-submenu-link {
-  text-decoration: none !important;
-  border: none !important;
-  box-shadow: none !important;
-  outline: none;
+/* HILANGKAN GARIS PENGHUBUNG SUBMENU STATUS */
+.status-nav-group .nav-submenu {
+  border-left: none !important;
 }
 
-/* HILANGKAN GARIS SAAT DIKLIK */
-.status-nav-group .nav-submenu-link:focus,
-.status-nav-group .nav-submenu-link:active,
-.status-nav-group .nav-submenu-link:hover {
-  text-decoration: none !important;
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-
-/* ACTIVE SUBMENU */
-.status-nav-group .nav-submenu-link.active {
-  text-decoration: none !important;
-  border-bottom: none !important;
+.status-nav-group .nav-submenu::before {
+  display: none !important;
+  content: none !important;
 }
