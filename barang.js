@@ -299,76 +299,87 @@
   // DIMENSION
   // =====================================================
 
-  function createDimensionRow(item = {}) {
-    if (!dimensionContainer) return;
+function createDimensionRow(item = {}) {
+  if (!dimensionContainer) return;
 
-    const row = document.createElement("div");
-    row.className = "dimension-row";
+  // Maksimal 3 baris
+  if (dimensionContainer.querySelectorAll(".dimension-row").length >= 3) {
+    return;
+  }
 
-    // DIMENSION TYPE
-    const typeSelect = document.createElement("select");
-    typeSelect.className = "dimension-type";
+  const row = document.createElement("div");
+  row.className = "dimension-row";
 
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "";
-    defaultOption.textContent = "-- Pilih Dimension --";
+  const typeSelect = document.createElement("select");
+  typeSelect.className = "dimension-type";
 
-    typeSelect.appendChild(defaultOption);
+  const defaultType = document.createElement("option");
+  defaultType.value = "";
+  defaultType.textContent = "-- Pilih Dimension --";
+  typeSelect.appendChild(defaultType);
 
-    DIMENSION_OPTIONS.forEach(type => {
-      const option = document.createElement("option");
+  DIMENSION_OPTIONS.forEach(value => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    typeSelect.appendChild(option);
+  });
 
-      option.value = type;
-      option.textContent = type;
+  typeSelect.value = item.type || "";
 
-      typeSelect.appendChild(option);
-    });
+  const valueInput = document.createElement("input");
+  valueInput.type = "text";
+  valueInput.className = "dimension-value";
+  valueInput.placeholder = "Masukkan nilai";
+  valueInput.value = item.value || "";
 
-    // DIMENSION VALUE
-    const valueInput = document.createElement("input");
-    valueInput.type = "text";
-    valueInput.className = "dimension-value";
-    valueInput.placeholder = "Masukkan nilai";
+  // Symbol hanya ditampilkan pada baris 1 dan 2
+  const currentRowCount =
+    dimensionContainer.querySelectorAll(".dimension-row").length + 1;
 
-    // DIMENSION SYMBOL
-    const symbolSelect = document.createElement("select");
+  let symbolSelect = null;
+
+  if (currentRowCount < 3) {
+    symbolSelect = document.createElement("select");
     symbolSelect.className = "dimension-symbol";
 
-    DIMENSION_SYMBOLS.forEach(symbol => {
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "-- Pilih Symbol --";
+    symbolSelect.appendChild(placeholder);
+
+    ["x", "~", "/", "±", "-"].forEach(value => {
       const option = document.createElement("option");
-
-      option.value = symbol;
-      option.textContent = symbol;
-
+      option.value = value;
+      option.textContent = value;
       symbolSelect.appendChild(option);
     });
 
-    // REMOVE BUTTON
-    const removeButton = document.createElement("button");
-    removeButton.type = "button";
-    removeButton.className = "remove-dimension";
-    removeButton.title = "Hapus";
-    removeButton.textContent = "×";
-
-    // RESTORE VALUES
-    typeSelect.value = item.type || "";
-    valueInput.value = item.value || "";
-
-    const savedSymbol = item.symbol || "x";
-
-    symbolSelect.value = DIMENSION_SYMBOLS.includes(savedSymbol)
-      ? savedSymbol
-      : "x";
-
-    row.append(
-      typeSelect,
-      valueInput,
-      symbolSelect,
-      removeButton
-    );
-
-    dimensionContainer.appendChild(row);
+    symbolSelect.value = item.symbol || "";
   }
+
+  const removeButton = document.createElement("button");
+  removeButton.type = "button";
+  removeButton.className = "dimension-remove";
+  removeButton.textContent = "×";
+
+  removeButton.addEventListener("click", () => {
+    row.remove();
+    updateDimension();
+    saveDraft();
+  });
+
+  row.append(typeSelect, valueInput);
+
+  if (symbolSelect) {
+    row.appendChild(symbolSelect);
+  }
+
+  row.appendChild(removeButton);
+  dimensionContainer.appendChild(row);
+
+  updateDimension();
+}
 
   function collectDimensionItems() {
     if (!dimensionContainer) return [];
@@ -382,37 +393,18 @@
       .filter(item => item.type && item.value);
   }
 
-  function updateDimension() {
-    const finalField = $("#dimensionFinal", questionnaire);
+function updateDimension() {
+  if (!dimensionContainer) return;
 
-    if (!finalField) return;
+  const rows = $$(".dimension-row", dimensionContainer);
+  const totalRows = rows.length;
 
-    const items = collectDimensionItems();
-    const groupedTypes = ["ID", "OD", "DN"];
+  const addButton = $("#addDimensionBtn");
 
-    finalField.value = items.map((item, index) => {
-      const text = `${item.type} : ${item.value}`;
-
-      if (index === 0) {
-        return text;
-      }
-
-      // Simbol diambil dari baris sebelumnya.
-      const previousItem = items[index - 1];
-
-      let separator = previousItem.symbol || "x";
-
-      const currentGrouped = groupedTypes.includes(item.type);
-      const previousGrouped = groupedTypes.includes(previousItem.type);
-
-      // Aturan khusus ID, OD, dan DN tetap menggunakan "-".
-      if (currentGrouped || previousGrouped) {
-        separator = "-";
-      }
-
-      return `${separator} ${text}`;
-    }).join(" ");
+  if (addButton) {
+    addButton.disabled = totalRows >= 3;
   }
+}
 
   // =====================================================
   // PACK SIZE
@@ -1562,15 +1554,48 @@
     }
   }
 
-  // =====================================================
-  // BUTTON EVENTS — DIMENSION
-  // =====================================================
 
-  $("#addDimensionBtn")?.addEventListener("click", () => {
-    createDimensionRow();
+// =====================================================
+// BUTTON EVENTS — DIMENSION
+// =====================================================
+
+$("#addDimensionBtn")?.addEventListener("click", () => {
+  const totalRows = $$(".dimension-row", dimensionContainer).length;
+
+  // Maksimal 3 baris
+  if (totalRows >= 3) {
     updateDimension();
-    saveDraft();
-  });
+    return;
+  }
+
+  createDimensionRow();
+  updateDimension();
+  saveDraft();
+});
+
+dimensionContainer?.addEventListener("click", event => {
+  const button = event.target.closest(".remove-dimension");
+
+  if (!button) return;
+
+  const row = button.closest(".dimension-row");
+  const rows = $$(".dimension-row", dimensionContainer);
+
+  if (rows.length > 1) {
+    row.remove();
+  } else {
+    $(".dimension-type", row).value = "";
+    $(".dimension-value", row).value = "";
+
+    const symbol = $(".dimension-symbol", row);
+    if (symbol) {
+      symbol.value = "";
+    }
+  }
+
+  updateDimension();
+  saveDraft();
+});
 
   dimensionContainer?.addEventListener("click", event => {
     const button = event.target.closest(".remove-dimension");
