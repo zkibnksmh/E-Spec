@@ -246,7 +246,7 @@ select:focus-visible {
 .nav:hover {
   color: #fff;
   background: rgba(255,255,255,.12);
-  transform: translateX(3px);
+  transform: none;
 }
 
 .nav.active {
@@ -2535,9 +2535,12 @@ tbody td small {
   align-items: center;
   gap: 11px;
 
+  width: 100%;
   min-height: 35px;
   padding: 8px 11px;
+  margin: 0;
 
+  box-sizing: border-box;
   border-radius: 8px;
 
   color: rgba(255,255,255,.68);
@@ -2545,7 +2548,10 @@ tbody td small {
   font-size: 11px;
   font-weight: 500;
 
-  transition: all .2s ease;
+  text-decoration: none;
+  transform: none;
+
+  transition: color .2s ease, background .2s ease;
 }
 
 /* SUBMENU DOT */
@@ -2565,6 +2571,7 @@ tbody td small {
 .nav-submenu-link:hover {
   color: #fff;
   background: rgba(255,255,255,.10);
+  transform: none;
 }
 
 .nav-submenu-link:hover .submenu-dot {
@@ -2576,6 +2583,7 @@ tbody td small {
   color: #fff;
   background: rgba(255,255,255,.13);
   font-weight: 700;
+  transform: none;
 }
 
 .nav-submenu-link.active .submenu-dot {
