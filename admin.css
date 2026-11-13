@@ -2675,3 +2675,27 @@ tbody td small {
     display: flex;
   }
 }
+
+/* =========================================
+   ACTIVE MENU - DASHBOARD & STATUS
+========================================= */
+
+.sidebar .nav.active,
+.sidebar .status-nav-group.open > #approvalNav {
+  background: #ffffff !important;
+  color: #5146c8 !important;
+  font-weight: 700;
+}
+
+/* Samakan warna ikon */
+.sidebar .nav.active .nav-icon,
+.sidebar .status-nav-group.open > #approvalNav .nav-icon {
+  color: #5146c8 !important;
+}
+
+/* Efek hover menu aktif */
+.sidebar .nav.active:hover,
+.sidebar .status-nav-group.open > #approvalNav:hover {
+  background: #ffffff !important;
+  color: #5146c8 !important;
+}
