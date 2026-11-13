@@ -1001,7 +1001,7 @@ function createCustomTechnicalRow(item = {}) {
 
     const detailLabel = document.createElement("label");
     detailLabel.className = "q-field";
-    detailLabel.textContent = "Detail Atribute";
+    detailLabel.textContent = "Atribute Detail";
 
     const detailInput = document.createElement("input");
     detailInput.type = "text";
