@@ -235,28 +235,37 @@
     });
   }
 
-  // =====================================================
-  // REASON TO PROCURE
-  // =====================================================
 
-  function updateReason() {
-    if (!reasonChoice || !reasonFinal) return;
 
-    const isOthers = reasonChoice.value === "Others";
+// =====================================================
+// REASON TO PROCURE
+// =====================================================
 
-    if (reasonOthers) {
-      reasonOthers.hidden = !isOthers;
-    }
+function updateReason() {
+  if (!reasonChoice || !reasonFinal) return;
 
-    if (reasonOther) {
-      reasonOther.disabled = !isOthers;
-      reasonOther.required = isOthers;
-    }
+  const isOthers = reasonChoice.value === "Others";
 
-    reasonFinal.value = isOthers
-      ? (reasonOther?.value.trim() || "")
-      : reasonChoice.value;
+  // Tampilkan/sembunyikan input Others
+  if (reasonOthers) {
+    reasonOthers.hidden = !isOthers;
   }
+
+  if (reasonOther) {
+    reasonOther.hidden = !isOthers;
+    reasonOther.disabled = !isOthers;
+    reasonOther.required = isOthers;
+
+    if (!isOthers) {
+      reasonOther.value = "";
+    }
+  }
+
+  // Masukkan alasan akhir ke field PDF
+  reasonFinal.value = isOthers
+    ? (reasonOther?.value.trim() || "")
+    : reasonChoice.value;
+}
 
   // =====================================================
   // DIMENSION
