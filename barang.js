@@ -1214,6 +1214,8 @@ function updateDimension() {
     if (dimensionContainer) {
       dimensionContainer.replaceChildren();
 
+      console.log("DATA DIMENSION TERSIMPAN:", data.dimensionItems);
+
       if (
         Array.isArray(data.dimensionItems) &&
         data.dimensionItems.length
