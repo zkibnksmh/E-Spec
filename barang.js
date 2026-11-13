@@ -990,7 +990,7 @@ function createCustomTechnicalRow(item = {}) {
 
     const nameLabel = document.createElement("label");
     nameLabel.className = "q-field";
-    nameLabel.textContent = "Nama Unique Attribute";
+    nameLabel.textContent = "Attribute Name";
 
     const nameInput = document.createElement("input");
     nameInput.type = "text";
@@ -1001,7 +1001,7 @@ function createCustomTechnicalRow(item = {}) {
 
     const detailLabel = document.createElement("label");
     detailLabel.className = "q-field";
-    detailLabel.textContent = "Detail Unique Attribute";
+    detailLabel.textContent = "Detail Atribute";
 
     const detailInput = document.createElement("input");
     detailInput.type = "text";
