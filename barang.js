@@ -11,10 +11,6 @@
   const VERSION_STORAGE_KEY = "eSpecBarangVersion.v1";
   const HISTORY_KEY = "eSpecBarangTransactions.v1";
 
-  // Jika backend production berbeda, ubah alamat ini.
-  const API_BASE_URL =
-    window.E_SPEC_API_BASE_URL || "http://localhost:3000";
-
   const questionnaire = document.getElementById("questionnaireForm");
   const printForm = document.getElementById("printSpecForm");
 
@@ -24,10 +20,10 @@
   }
 
   const $ = (selector, parent = document) =>
-    parent?.querySelector(selector) || null;
+    parent.querySelector(selector);
 
   const $$ = (selector, parent = document) =>
-    parent ? [...parent.querySelectorAll(selector)] : [];
+    [...parent.querySelectorAll(selector)];
 
   const pdfBtn = $("#pdfBtn");
   const resetBtn = $("#resetBtn");
@@ -156,9 +152,7 @@
 
     const date = new Date(`${value}T00:00:00`);
 
-    if (Number.isNaN(date.getTime())) {
-      return value;
-    }
+    if (Number.isNaN(date.getTime())) return value;
 
     return date.toLocaleDateString("id-ID", {
       day: "numeric",
@@ -167,11 +161,10 @@
     });
   }
 
-  function safeJSONParse(value, fallback = null) {
+  function safeJSONParse(value, fallback) {
     try {
       return value ? JSON.parse(value) : fallback;
-    } catch (error) {
-      console.warn("Gagal membaca JSON:", error);
+    } catch {
       return fallback;
     }
   }
@@ -192,10 +185,6 @@
     return $('[name="createdDate"]', questionnaire);
   }
 
-  function isValidArray(value) {
-    return Array.isArray(value) ? value : [];
-  }
-
   // =====================================================
   // PLANT & DEPARTMENT
   // =====================================================
@@ -213,9 +202,7 @@
     deptSelect.innerHTML =
       '<option value="">-- Pilih Departemen --</option>';
 
-    const departments = PLANT_DATA[selectedPlant] || [];
-
-    departments.forEach(department => {
+    (PLANT_DATA[selectedPlant] || []).forEach(department => {
       const option = document.createElement("option");
 
       option.value = department;
@@ -230,14 +217,16 @@
   }
 
   // =====================================================
+  // MATERIAL CATEGORY
+  // =====================================================
+
+  // =====================================================
   // MATERIAL CATEGORY — SINGLE SELECTION
   // =====================================================
 
   function getSelectedCategories() {
-    return $$(
-      '[name="materialCategory"]:checked',
-      questionnaire
-    ).map(field => field.value);
+    return $$('[name="materialCategory"]:checked', questionnaire)
+      .map(field => field.value);
   }
 
   function updateCategory() {
@@ -250,20 +239,7 @@
     });
   }
 
-  // Menjaga agar hanya satu kategori yang terpilih.
-  function normalizeMaterialCategory() {
-    const selectedFields = $$(
-      '[name="materialCategory"]:checked',
-      questionnaire
-    );
-
-    selectedFields.slice(1).forEach(field => {
-      field.checked = false;
-    });
-
-    updateCategory();
-  }
-
+  // Hanya boleh memilih satu Material Category
   questionnaire.addEventListener("change", event => {
     if (!event.target.matches('[name="materialCategory"]')) {
       return;
@@ -278,35 +254,50 @@
     }
 
     updateCategory();
+    saveDraft();
   });
 
-  // =====================================================
-  // REASON TO PROCURE
-  // =====================================================
+  function updateCategory() {
+    const selected = getSelectedCategories();
 
-  function updateReason() {
-    if (!reasonChoice || !reasonFinal) return;
-
-    const isOthers = reasonChoice.value === "Others";
-
-    if (reasonOthers) {
-      reasonOthers.hidden = !isOthers;
-    }
-
-    if (reasonOther) {
-      reasonOther.hidden = !isOthers;
-      reasonOther.disabled = !isOthers;
-      reasonOther.required = isOthers;
-
-      if (!isOthers) {
-        reasonOther.value = "";
-      }
-    }
-
-    reasonFinal.value = isOthers
-      ? (reasonOther?.value.trim() || "")
-      : reasonChoice.value;
+    $$('[name="category"]', questionnaire).forEach(field => {
+      field.checked = selected.some(
+        category => CATEGORY_MAPPING[category] === field.value
+      );
+    });
   }
+
+
+
+// =====================================================
+// REASON TO PROCURE
+// =====================================================
+
+function updateReason() {
+  if (!reasonChoice || !reasonFinal) return;
+
+  const isOthers = reasonChoice.value === "Others";
+
+  // Tampilkan/sembunyikan input Others
+  if (reasonOthers) {
+    reasonOthers.hidden = !isOthers;
+  }
+
+  if (reasonOther) {
+    reasonOther.hidden = !isOthers;
+    reasonOther.disabled = !isOthers;
+    reasonOther.required = isOthers;
+
+    if (!isOthers) {
+      reasonOther.value = "";
+    }
+  }
+
+  // Masukkan alasan akhir ke field PDF
+  reasonFinal.value = isOthers
+    ? (reasonOther?.value.trim() || "")
+    : reasonChoice.value;
+}
 
   // =====================================================
   // DIMENSION
@@ -483,7 +474,10 @@
         text: option.textContent.trim()
       }));
 
-    $$("[data-mechanical-unit]", questionnaire).forEach(select => {
+    $$(
+      '[data-mechanical-unit]',
+      questionnaire
+    ).forEach(select => {
       const currentValue = select.value;
 
       select.innerHTML = "";
@@ -529,6 +523,7 @@
   function updateMechanicalOthers(row) {
     if (!row) return;
 
+    // UOM OTHERS
     $$("[data-mechanical-unit]", row).forEach(select => {
       const position = select.dataset.mechanicalUnit;
 
@@ -549,8 +544,16 @@
       }
     });
 
-    const symbolSelect = $("[data-mechanical-symbol]", row);
-    const symbolOther = $("[data-mechanical-symbol-other]", row);
+    // SYMBOL OTHERS
+    const symbolSelect = $(
+      "[data-mechanical-symbol]",
+      row
+    );
+
+    const symbolOther = $(
+      "[data-mechanical-symbol-other]",
+      row
+    );
 
     if (symbolSelect && symbolOther) {
       const isOthers = symbolSelect.value === "Others";
@@ -595,8 +598,15 @@
   }
 
   function getMechanicalEffectiveSymbol(row) {
-    const select = $("[data-mechanical-symbol]", row);
-    const otherInput = $("[data-mechanical-symbol-other]", row);
+    const select = $(
+      "[data-mechanical-symbol]",
+      row
+    );
+
+    const otherInput = $(
+      "[data-mechanical-symbol-other]",
+      row
+    );
 
     if (!select) return "";
 
@@ -622,14 +632,35 @@
       const unit1 = getMechanicalEffectiveUnit(row, "1");
       const unit2 = getMechanicalEffectiveUnit(row, "2");
 
-      const unitSelect1 = $('[data-mechanical-unit="1"]', row);
-      const unitSelect2 = $('[data-mechanical-unit="2"]', row);
+      const unitSelect1 = $(
+        '[data-mechanical-unit="1"]',
+        row
+      );
 
-      const unitOther1 = $('[data-mechanical-unit-other="1"]', row);
-      const unitOther2 = $('[data-mechanical-unit-other="2"]', row);
+      const unitSelect2 = $(
+        '[data-mechanical-unit="2"]',
+        row
+      );
 
-      const symbolSelect = $("[data-mechanical-symbol]", row);
-      const symbolOther = $("[data-mechanical-symbol-other]", row);
+      const unitOther1 = $(
+        '[data-mechanical-unit-other="1"]',
+        row
+      );
+
+      const unitOther2 = $(
+        '[data-mechanical-unit-other="2"]',
+        row
+      );
+
+      const symbolSelect = $(
+        "[data-mechanical-symbol]",
+        row
+      );
+
+      const symbolOther = $(
+        "[data-mechanical-symbol-other]",
+        row
+      );
 
       const symbol = getMechanicalEffectiveSymbol(row);
 
@@ -705,7 +736,10 @@
   function collectTechnicalAttributes() {
     const attributes = [];
 
+    // -------------------------------------------------
     // ELECTRICAL
+    // -------------------------------------------------
+
     $$("[data-electric-row]", questionnaire).forEach(row => {
       const label = row.dataset.electricRow || "";
 
@@ -737,7 +771,11 @@
       let value = first;
 
       if (second) {
-        value += `${first ? ` ${symbol} ` : ""}${second}`;
+        value += `${
+          first
+            ? ` ${symbol} `
+            : ""
+        }${second}`;
       }
 
       attributes.push({
@@ -748,7 +786,10 @@
       });
     });
 
+    // -------------------------------------------------
     // MATERIAL, CONNECTION TYPE, LIQUID
+    // -------------------------------------------------
+
     $$("[data-tech-label]", questionnaire).forEach(input => {
       const label = input.dataset.techLabel || "";
       const value = input.value.trim();
@@ -768,8 +809,13 @@
       });
     });
 
-    // MECHANICAL
-    collectMechanicalAttributes().forEach(item => {
+    // -------------------------------------------------
+    // MECHANICAL PARAMETERS
+    // -------------------------------------------------
+
+    const mechanicalAttributes = collectMechanicalAttributes();
+
+    mechanicalAttributes.forEach(item => {
       attributes.push({
         category: "Mechanical",
         label: item.label,
@@ -778,7 +824,10 @@
       });
     });
 
+    // -------------------------------------------------
     // CUSTOM TECHNICAL
+    // -------------------------------------------------
+
     $$(".custom-tech-row", questionnaire).forEach(row => {
       const label =
         $("[data-custom-tech-name]", row)?.value.trim() || "";
@@ -810,8 +859,15 @@
     for (let index = 1; index <= 5; index++) {
       const item = attributes[index - 1];
 
-      const labelField = $(`#technical${index}`, questionnaire);
-      const valueField = $(`#technicalUnit${index}`, questionnaire);
+      const labelField = $(
+        `#technical${index}`,
+        questionnaire
+      );
+
+      const valueField = $(
+        `#technicalUnit${index}`,
+        questionnaire
+      );
 
       if (labelField) {
         labelField.value = item?.label || "";
@@ -1009,8 +1065,7 @@
   function createCustomUniqueRow(item = {}) {
     if (!uniqueContainer) return;
 
-    const index =
-      Date.now() + Math.floor(Math.random() * 1000);
+    const index = Date.now() + Math.floor(Math.random() * 1000);
 
     const row = document.createElement("div");
     row.className = "q-grid custom-unique-row";
@@ -1088,7 +1143,9 @@
   // =====================================================
 
   function restoreMechanicalAttributes(data) {
-    const savedAttributes = isValidArray(data);
+    const savedAttributes = Array.isArray(data)
+      ? data
+      : [];
 
     savedAttributes.forEach(item => {
       if (!item?.label) return;
@@ -1102,20 +1159,53 @@
 
       if (!row) return;
 
-      const value1 = $('[data-mechanical-value="1"]', row);
-      const value2 = $('[data-mechanical-value="2"]', row);
+      const value1 = $(
+        '[data-mechanical-value="1"]',
+        row
+      );
 
-      const unitSelect1 = $('[data-mechanical-unit="1"]', row);
-      const unitSelect2 = $('[data-mechanical-unit="2"]', row);
+      const value2 = $(
+        '[data-mechanical-value="2"]',
+        row
+      );
 
-      const unitOther1 = $('[data-mechanical-unit-other="1"]', row);
-      const unitOther2 = $('[data-mechanical-unit-other="2"]', row);
+      const unitSelect1 = $(
+        '[data-mechanical-unit="1"]',
+        row
+      );
 
-      const symbolSelect = $("[data-mechanical-symbol]", row);
-      const symbolOther = $("[data-mechanical-symbol-other]", row);
+      const unitSelect2 = $(
+        '[data-mechanical-unit="2"]',
+        row
+      );
 
-      if (value1) value1.value = item.data1 || "";
-      if (value2) value2.value = item.data2 || "";
+      const unitOther1 = $(
+        '[data-mechanical-unit-other="1"]',
+        row
+      );
+
+      const unitOther2 = $(
+        '[data-mechanical-unit-other="2"]',
+        row
+      );
+
+      const symbolSelect = $(
+        "[data-mechanical-symbol]",
+        row
+      );
+
+      const symbolOther = $(
+        "[data-mechanical-symbol-other]",
+        row
+      );
+
+      if (value1) {
+        value1.value = item.data1 || "";
+      }
+
+      if (value2) {
+        value2.value = item.data2 || "";
+      }
 
       // UOM 1
       if (unitSelect1) {
@@ -1164,10 +1254,11 @@
 
   // =====================================================
   // RESTORE OLD MECHANICAL DATA
+  // Kompatibilitas dengan draft sebelum format baru.
   // =====================================================
 
   function restoreOldMechanicalAttributes(data) {
-    const attributes = isValidArray(data.technicalAttributes);
+    const attributes = data.technicalAttributes || [];
 
     attributes
       .filter(item =>
@@ -1184,7 +1275,10 @@
 
         if (!row) return;
 
-        const value1 = $('[data-mechanical-value="1"]', row);
+        const value1 = $(
+          '[data-mechanical-value="1"]',
+          row
+        );
 
         if (value1 && !value1.value) {
           value1.value = item.value || "";
@@ -1200,11 +1294,11 @@
     technicalContainer?.replaceChildren();
     uniqueContainer?.replaceChildren();
 
-    isValidArray(data.technicalAttributes)
+    (data.technicalAttributes || [])
       .filter(item => item.category === "Other")
       .forEach(createCustomTechnicalRow);
 
-    isValidArray(data.uniqueAttributes)
+    (data.uniqueAttributes || [])
       .slice(2)
       .forEach(createCustomUniqueRow);
   }
@@ -1246,17 +1340,13 @@
       setFieldValue(name, value);
     });
 
-    // Normalisasi kategori dari draft lama.
-    normalizeMaterialCategory();
-
-    // Pulihkan Mechanical.
+    // Restore mechanical setelah dropdown UoM selesai dibuat.
     if (Array.isArray(data.mechanicalAttributes)) {
       restoreMechanicalAttributes(data.mechanicalAttributes);
     } else {
       restoreOldMechanicalAttributes(data);
     }
 
-    // Pulihkan gambar.
     drawingImage = data.drawingImage || "";
 
     if (drawingPreview) {
@@ -1269,11 +1359,8 @@
       }
     }
 
-    // Pulihkan Department sesuai Plant.
     if (plantSelect?.value) {
       updateDepartment(data.department || "");
-    } else if (deptSelect) {
-      updateDepartment();
     }
 
     updateReason();
@@ -1295,15 +1382,15 @@
     const versionInput = getVersionInput();
     const createdDateInput = getCreatedDateInput();
 
-    if (versionInput) {
-      const savedVersion = Number(
-        localStorage.getItem(VERSION_STORAGE_KEY) || 0
-      );
+    if (!versionInput || !createdDateInput) return;
 
-      versionInput.value = String(savedVersion).padStart(2, "0");
-    }
+    const savedVersion = Number(
+      localStorage.getItem(VERSION_STORAGE_KEY) || 0
+    );
 
-    if (createdDateInput && !createdDateInput.value) {
+    versionInput.value = String(savedVersion).padStart(2, "0");
+
+    if (!createdDateInput.value) {
       createdDateInput.value = todayISO();
     }
   }
@@ -1343,18 +1430,13 @@
 
       const data = safeJSONParse(saved, null);
 
-      if (!data || typeof data !== "object") {
-        return false;
-      }
+      if (!data) return false;
 
       loadingDocument = true;
 
       restoreForm(data);
 
       loadingDocument = false;
-
-      // Simpan kembali dalam format terbaru setelah migrasi.
-      saveDraft();
 
       setStatus("Draft sebelumnya berhasil dipulihkan");
 
@@ -1415,46 +1497,46 @@
   // VALIDATION
   // =====================================================
 
-  function validateForm() {
-    updateReason();
-    updateCategory();
+function validateForm() {
+  updateReason();
+  updateCategory();
 
-    // Material Category wajib tepat satu.
-    const categories = getSelectedCategories();
-
-    if (categories.length !== 1) {
-      alert("Material Category wajib dipilih tepat satu.");
-
-      const firstCategory = $(
-        '[name="materialCategory"]',
-        questionnaire
-      );
-
-      firstCategory?.focus();
-
-      return false;
-    }
-
-    // Validasi seluruh field required dari HTML.
-    if (!questionnaire.reportValidity()) {
-      return false;
-    }
-
-    // Reason Others wajib diisi jika dipilih.
-    if (
-      reasonChoice?.value === "Others" &&
-      !reasonOther?.value.trim()
-    ) {
-      alert("Reason Others wajib diisi.");
-
-      reasonOther?.focus();
-
-      return false;
-    }
-
-    return true;
+  // Validasi seluruh field required dari HTML.
+  // Location tetap wajib jika atribut required masih terpasang.
+  if (!questionnaire.reportValidity()) {
+    return false;
   }
 
+  // Minimal satu Material Category harus dipilih.
+  const categories = getSelectedCategories();
+
+  if (!categories.length) {
+    const firstCategory = $(
+      '[name="materialCategory"]',
+      questionnaire
+    );
+
+    alert("Pilih minimal satu Material Category.");
+
+    firstCategory?.focus();
+
+    return false;
+  }
+
+  // Reason Others wajib diisi jika dipilih.
+  if (
+    reasonChoice?.value === "Others" &&
+    !reasonOther?.value.trim()
+  ) {
+    alert("Reason Others wajib diisi.");
+
+    reasonOther?.focus();
+
+    return false;
+  }
+
+  return true;
+}
   // =====================================================
   // LOCAL TRANSACTION
   // =====================================================
@@ -1470,14 +1552,10 @@
         versionInput?.value || 0
       );
 
-      const parsedHistory = safeJSONParse(
+      const history = safeJSONParse(
         localStorage.getItem(HISTORY_KEY),
         []
       );
-
-      const history = Array.isArray(parsedHistory)
-        ? parsedHistory
-        : [];
 
       history.push({
         id: Date.now(),
@@ -1519,13 +1597,11 @@
 
   // =====================================================
   // PRINT DATA TRANSFER
+  // Template PDF tidak diubah pada tahap ini.
   // =====================================================
 
   function transferToPrint(data = getFormData()) {
-    if (!printForm) {
-      console.warn("Form PDF #printSpecForm tidak ditemukan.");
-      return;
-    }
+    if (!printForm) return;
 
     printForm.querySelectorAll("[name]").forEach(target => {
       const value = data[target.name];
@@ -1566,7 +1642,10 @@
       revisionDate.value = formatDate(data.createdDate);
     }
 
-    const printDrawing = $("#drawingPreview", printForm);
+    const printDrawing = $(
+      "#drawingPreview",
+      printForm
+    );
 
     if (printDrawing) {
       if (data.drawingImage) {
@@ -1656,6 +1735,7 @@
       )
     ) {
       updateMechanicalOthers(mechanicalRow);
+      saveDraft();
     }
   });
 
@@ -1688,11 +1768,6 @@
   reasonChoice?.addEventListener("change", () => {
     updateReason();
     saveDraft();
-  });
-
-  // Cegah form melakukan reload saat submit biasa.
-  questionnaire.addEventListener("submit", event => {
-    event.preventDefault();
   });
 
   // =====================================================
@@ -1734,8 +1809,8 @@
 
     initializeDocumentInfo();
 
-    normalizeMaterialCategory();
     updateReason();
+    updateCategory();
     updateDimension();
     updatePackSize();
     updateAllMechanicalOthers();
@@ -1752,7 +1827,7 @@
 
   // =====================================================
   // SAVE FOR ADMIN
-  // Saat ini transaksi disimpan di browser lokal.
+  // Catatan: transaksi saat ini disimpan di browser lokal.
   // =====================================================
 
   saveBtn?.addEventListener("click", () => {
@@ -1766,9 +1841,7 @@
     try {
       initializeDocumentInfo();
 
-      if (!saveTransactionLocally()) {
-        return;
-      }
+      if (!saveTransactionLocally()) return;
 
       alert(
         "Transaksi berhasil disimpan di browser!\n" +
@@ -1793,16 +1866,10 @@
       setStatus("Mengambil dokumen dari database...");
 
       const response = await fetch(
-        `${API_BASE_URL}/api/documents/${encodeURIComponent(id)}`
+        `http://localhost:3000/api/documents/${encodeURIComponent(id)}`
       );
 
-      let result;
-
-      try {
-        result = await response.json();
-      } catch {
-        throw new Error("Respons server bukan JSON yang valid.");
-      }
+      const result = await response.json();
 
       if (!response.ok) {
         throw new Error(
@@ -1823,10 +1890,6 @@
         formData = safeJSONParse(formData, {});
       }
 
-      if (!formData || typeof formData !== "object") {
-        formData = {};
-      }
-
       const data = {
         ...formData,
 
@@ -1835,12 +1898,10 @@
         docNo:
           row.doc_no ??
           row.docNo ??
-          formData.docNo ??
           "",
 
         revision:
           row.revision ??
-          formData.revision ??
           "",
 
         plant:
@@ -1870,7 +1931,6 @@
 
         specType:
           row.spec_type ||
-          formData.specType ||
           "Barang"
       };
 
@@ -1882,7 +1942,7 @@
 
       setStatus("Dokumen berhasil dimuat dari database");
 
-      window.setTimeout(() => {
+      setTimeout(() => {
         window.print();
       }, 500);
 
@@ -1930,7 +1990,6 @@
       createDimensionRow();
     }
 
-    normalizeMaterialCategory();
     updateReason();
     updateCategory();
     updateDimension();
