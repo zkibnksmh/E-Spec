@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-Spec | Status Workspace</title>
+  <title>E-Spec | My E-Spec</title>
 
   <link rel="stylesheet" href="admin.css">
   <link rel="stylesheet" href="approval.css">
@@ -13,9 +13,7 @@
 <body>
 <div class="app-layout">
 
-  <!-- =========================================
-       SIDEBAR
-  ========================================== -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
 
     <a class="brand" href="admin.html">
@@ -35,38 +33,35 @@
       </a>
 
       <!-- STATUS -->
-      <div class="nav-group">
+      <div class="nav-group status-nav-group open">
 
-        <a href="approval.html"
+        <a href="javascript:void(0)"
            class="nav active approval-nav"
-           id="approvalNav">
+           id="approvalNav"
+           aria-expanded="true">
 
           <span class="nav-icon">✓</span>
           <span>Status</span>
-
-          
+          <span class="nav-arrow">⌄</span>
         </a>
 
         <div class="nav-submenu">
 
-          <a href="#myEspec"
-             class="nav-submenu-link"
+          <a href="approval.html"
+             class="nav-submenu-link active"
              id="myEspecNav">
-
             <span class="submenu-dot"></span>
             <span>My E-Spec</span>
           </a>
 
-          <a href="#myApproval"
+          <a href="my-approval.html"
              class="nav-submenu-link"
              id="myApprovalNav">
-
             <span class="submenu-dot"></span>
             <span>My Approval</span>
           </a>
 
         </div>
-
       </div>
 
       <a href="pilih-spesifikasi.html" class="nav">
@@ -102,13 +97,10 @@
       </div>
 
     </div>
-
   </aside>
 
 
-  <!-- =========================================
-       MAIN
-  ========================================== -->
+  <!-- MAIN -->
   <main class="main">
 
     <!-- TOPBAR -->
@@ -117,7 +109,7 @@
       <div class="breadcrumb">
         <span>Workspace</span>
         <span class="breadcrumb-separator">/</span>
-        <strong id="breadcrumbCurrent">Status</strong>
+        <strong>My E-Spec</strong>
       </div>
 
       <div class="profile">
@@ -134,9 +126,7 @@
     </header>
 
 
-    <!-- =========================================
-         CONTENT
-    ========================================== -->
+    <!-- CONTENT -->
     <section class="content">
 
       <!-- PAGE HEADING -->
@@ -145,11 +135,11 @@
         <div>
           <span class="eyebrow">DOCUMENT WORKFLOW</span>
 
-          <h2>Status <span>Workspace.</span></h2>
+          <h2>My <span>E-Spec.</span></h2>
 
           <p>
-            Pantau status dokumen dan kelola proses persetujuan
-            spesifikasi Barang dan Jasa.
+            Pantau status dokumen spesifikasi Barang dan Jasa
+            yang telah kamu buat.
           </p>
         </div>
 
@@ -160,57 +150,9 @@
       </div>
 
 
-      <!-- =====================================
-           WORKSPACE NAVIGATION
-      ====================================== -->
-      <div class="status-workspace-tabs">
-
-        <a href="#myEspec"
-           class="status-workspace-tab active"
-           id="myEspecTab">
-
-          <span class="workspace-tab-icon">▤</span>
-
-          <span>
-            <strong>My E-Spec</strong>
-            <small>Dokumen spesifikasi saya</small>
-          </span>
-
-        </a>
-
-        <a href="#myApproval"
-           class="status-workspace-tab"
-           id="myApprovalTab">
-
-          <span class="workspace-tab-icon">✓</span>
-
-          <span>
-            <strong>My Approval</strong>
-            <small>Dokumen yang perlu ditinjau</small>
-          </span>
-
-          <span class="approval-nav-badge"
-                id="myApprovalCount">0</span>
-
-        </a>
-
-      </div>
-
-
-      <!-- =====================================
-           MY E-SPEC
-      ====================================== -->
+      <!-- MY E-SPEC -->
       <section class="status-section" id="myEspec">
 
-        <!-- SECTION HEADING -->
-        <div class="status-section-heading">
-
-
-
-        </div>
-
-
-        <!-- APPROVAL STATUS -->
         <section class="panel my-espec-panel">
 
           <div class="panel-top">
@@ -300,11 +242,10 @@
               </div>
 
             </div>
-
           </div>
 
 
-          <!-- MY ESPEC TABLE -->
+          <!-- TABLE -->
           <div class="table-wrap">
 
             <table>
@@ -363,265 +304,6 @@
           </div>
 
         </section>
-
-      </section>
-
-
-      <!-- =====================================
-           MY APPROVAL
-      ====================================== -->
-      <section class="status-section" id="myApproval">
-
-        <!-- SECTION HEADING -->
-        <div class="status-section-heading">
-
-          <div>
-            <span class="eyebrow">APPROVAL WORKFLOW</span>
-
-            <h2>My <span>Approval.</span></h2>
-
-            <p>
-              Tinjau dokumen yang membutuhkan keputusan
-              persetujuan dari kamu.
-            </p>
-          </div>
-
-        </div>
-
-
-        <!-- APPROVAL SUMMARY -->
-        <div class="stats approval-stats">
-
-          <article class="stat-card">
-            <div class="stat-icon orange">
-              <span>◷</span>
-            </div>
-
-            <div class="stat-info">
-              <small>Menunggu Approval</small>
-              <strong id="pendingApprovalCount">0</strong>
-              <p>Dokumen perlu ditinjau</p>
-            </div>
-          </article>
-
-        </div>
-
-
-        <!-- APPROVAL LIST -->
-        <section class="panel approval-panel">
-
-          <div class="panel-top">
-
-            <div class="panel-heading">
-              <div class="panel-heading-icon">✓</div>
-
-              <div>
-                <h2>Approval Request List</h2>
-                <p>
-                  Daftar dokumen yang perlu diberikan keputusan.
-                </p>
-              </div>
-            </div>
-
-            <div class="database-badge">
-              <span class="database-dot"></span>
-              My Approval
-            </div>
-
-          </div>
-
-
-          <!-- SEARCH AND FILTER -->
-          <div class="table-toolbar">
-
-            <div class="toolbar-title">
-              <strong>Daftar Approval</strong>
-              <small>
-                Pilih keputusan untuk setiap dokumen.
-              </small>
-            </div>
-
-            <div class="tools">
-
-              <div class="search-box">
-                <span class="search-icon">⌕</span>
-
-                <input
-                  type="search"
-                  id="approvalSearch"
-                  placeholder="Cari nomor dokumen atau requestor..."
-                >
-              </div>
-
-              <div class="filter-box">
-                <select id="approvalFilter">
-                  <option value="all">Semua status</option>
-                  <option value="pending">Menunggu Approval</option>
-                  <option value="approved">Disetujui</option>
-                  <option value="rejected">Ditolak</option>
-                  <option value="revision">Perlu Revisi</option>
-                </select>
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <!-- APPROVAL TABLE -->
-          <div class="table-wrap approval-table-wrap">
-
-            <table>
-              <thead>
-                <tr>
-                  <th>NO. DOKUMEN</th>
-                  <th>REQUESTOR</th>
-                  <th>PLANT</th>
-                  <th>TANGGAL</th>
-                  <th>APPROVE</th>
-                  <th>REJECT</th>
-                  <th>REVISI</th>
-                  <th>AKSI</th>
-                </tr>
-              </thead>
-
-              <tbody id="approvalRows"></tbody>
-            </table>
-
-          </div>
-
-
-          <!-- EMPTY STATE -->
-          <div class="empty-state"
-               id="approvalEmptyState">
-
-            <div class="empty-illustration">
-              <span>✓</span>
-            </div>
-
-            <h3>Belum ada dokumen yang perlu di-approve</h3>
-
-            <p>
-              Dokumen yang membutuhkan keputusan persetujuan
-              akan muncul di bagian ini.
-            </p>
-
-          </div>
-
-
-          <!-- FOOTER -->
-          <div class="panel-footer">
-
-            <span id="approvalResultCount">
-              Menampilkan 0 dokumen
-            </span>
-
-            <span>
-              <span class="footer-check">✓</span>
-              Approval Workspace
-            </span>
-
-          </div>
-
-        </section>
-
-
-        <!-- =================================
-             APPROVAL DETAIL
-        ================================== -->
-        <section
-          class="panel approval-detail-panel"
-          id="approvalDetailPanel"
-          hidden>
-
-          <div class="panel-top">
-
-            <div class="panel-heading">
-              <div class="panel-heading-icon">▤</div>
-
-              <div>
-                <h2>Detail Alur Persetujuan</h2>
-                <p id="approvalDetailSubtitle">
-                  Informasi tahapan approval dokumen.
-                </p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              class="secondary-btn"
-              id="closeApprovalDetail">
-              Tutup Detail
-            </button>
-
-          </div>
-
-
-          <!-- DOCUMENT INFORMATION -->
-          <div
-            class="approval-document-info"
-            id="approvalDocumentInfo">
-          </div>
-
-
-          <!-- APPROVAL TIMELINE -->
-          <div class="approval-timeline">
-
-            <h3>Alur Persetujuan Dokumen</h3>
-
-            <div
-              class="approval-steps"
-              id="approvalSteps">
-            </div>
-
-          </div>
-
-
-          <!-- APPROVAL ACTION -->
-          <div class="approval-action-area">
-
-            <div>
-              <strong>Keputusan Approval</strong>
-              <p>
-                Pilih salah satu keputusan setelah memeriksa
-                dokumen spesifikasi.
-              </p>
-            </div>
-
-            <div class="approval-buttons">
-
-              <button
-                type="button"
-                class="reject-btn"
-                id="rejectApprovalBtn">
-                ✕ Reject
-              </button>
-
-              <button
-                type="button"
-                class="revision-btn"
-                id="revisionApprovalBtn">
-                ↻ Revision
-              </button>
-
-              <button
-                type="button"
-                class="approve-btn"
-                id="approveApprovalBtn">
-                ✓ Approve
-              </button>
-
-            </div>
-
-          </div>
-
-          <p class="approval-demo-note">
-            Keputusan akan diproses melalui sistem workflow
-            dan database setelah integrasi backend selesai.
-          </p>
-
-        </section>
-
       </section>
 
 
@@ -632,22 +314,31 @@
       </footer>
 
     </section>
-
   </main>
 
 </div>
 
 
-<!-- =========================================
-     TOAST
-========================================== -->
+<!-- TOAST -->
 <div id="toast" class="toast"></div>
 
 
-<!-- =========================================
-     SCRIPT
-========================================== -->
+<!-- SCRIPT -->
 <script src="approval.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const statusGroup = document.querySelector(".status-nav-group");
+  const statusButton = document.querySelector("#approvalNav");
+
+  if (!statusGroup || !statusButton) return;
+
+  statusButton.addEventListener("click", () => {
+    const isOpen = statusGroup.classList.toggle("open");
+    statusButton.setAttribute("aria-expanded", isOpen);
+  });
+});
+</script>
 
 </body>
 </html>
