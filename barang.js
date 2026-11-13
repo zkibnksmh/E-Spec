@@ -388,7 +388,7 @@ function createDimensionRow(item = {}) {
       .map(row => ({
         type: $(".dimension-type", row)?.value || "",
         value: $(".dimension-value", row)?.value.trim() || "",
-        symbol: $(".dimension-symbol", row)?.value || ""
+        symbol: $(".dimension-symbol", row)?.value || "--Pilih Symbol--"
       }))
       .filter(item => item.type && item.value);
   }
