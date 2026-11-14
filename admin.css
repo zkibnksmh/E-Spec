@@ -2785,6 +2785,7 @@ tbody td small {
 
 
 
+
 /* =========================================
    FINAL FIX - ACTIVE DASHBOARD & STATUS
 ========================================= */
@@ -2794,21 +2795,33 @@ tbody td small {
   background: #ffffff !important;
   color: #5146c8 !important;
   box-shadow: 0 5px 16px rgba(25, 20, 100, .13) !important;
-  font-weight: 700;
+  font-weight: 700 !important;
 }
 
 .sidebar #dashboardNav.active .nav-icon {
   color: #5146c8 !important;
 }
 
-/* DASHBOARD TIDAK AKTIF */
-.sidebar #dashboardNav:not(.active) {
+/* DASHBOARD NORMAL KETIKA STATUS DIBUKA */
+.sidebar:has(.status-nav-group.open) #dashboardNav.active {
   background: transparent !important;
-  color: rgba(255, 255, 255, .85) !important;
+  color: rgba(255, 255, 255, .78) !important;
   box-shadow: none !important;
 }
 
-/* STATUS AKTIF (KETIKA SUBMENU TERBUKA) */
+.sidebar:has(.status-nav-group.open) #dashboardNav.active .nav-icon {
+  color: rgba(255, 255, 255, .78) !important;
+}
+
+/* STATUS NORMAL */
+.sidebar .status-nav-group > #approvalNav {
+  background: transparent !important;
+  color: rgba(255, 255, 255, .78) !important;
+  box-shadow: none !important;
+  font-weight: 600 !important;
+}
+
+/* STATUS AKTIF / SUBMENU TERBUKA */
 .sidebar .status-nav-group.open > #approvalNav {
   background: #ffffff !important;
   color: #5146c8 !important;
@@ -2816,25 +2829,17 @@ tbody td small {
   font-weight: 700 !important;
 }
 
-/* STATUS TIDAK AKTIF */
-.sidebar .status-nav-group:not(.open) > #approvalNav {
-  background: transparent !important;
-  color: rgba(255, 255, 255, .85) !important;
-  box-shadow: none !important;
-}
-
-/* IKON STATUS */
 .sidebar .status-nav-group.open > #approvalNav .nav-icon {
   color: #5146c8 !important;
 }
 
-/* HOVER STATUS */
+/* HOVER STATUS NORMAL */
 .sidebar .status-nav-group:not(.open) > #approvalNav:hover {
   background: rgba(255, 255, 255, .12) !important;
   color: #ffffff !important;
 }
 
-/* SUBMENU AKTIF - TETAP DIPERTAHANKAN */
+/* SUBMENU TETAP SEPERTI SEMULA */
 .sidebar .status-nav-group .nav-submenu-link.active {
   background: rgba(255, 255, 255, .16) !important;
   color: #ffffff !important;
