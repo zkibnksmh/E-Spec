@@ -4046,3 +4046,46 @@ fieldset.q-field {
 .uom-field #uomOther[hidden] {
   display: none;
 }
+
+/* =========================================
+   FIX DIMENSION SYMBOL — MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .dimension-row select.dimension-symbol {
+    display: block !important;
+
+    width: 52px !important;
+    min-width: 52px !important;
+    max-width: 52px !important;
+
+    min-height: 42px !important;
+    height: 42px !important;
+
+    padding: 0 4px !important;
+
+    background-color: #eff6ff !important;
+    color: #1d4ed8 !important;
+
+    font-family: Arial, sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+
+    text-align: center !important;
+    text-align-last: center !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    appearance: auto;
+    -webkit-appearance: menulist;
+
+    box-sizing: border-box !important;
+  }
+
+  .dimension-row select.dimension-symbol option {
+    background-color: #ffffff !important;
+    color: #1d4ed8 !important;
+    font-size: 16px !important;
+  }
+}
