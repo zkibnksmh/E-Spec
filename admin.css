@@ -2783,42 +2783,68 @@ tbody td small {
 
 }
 
+
 /* =========================================
-   PERBAIKAN TAMPILAN DASHBOARD & STATUS
+   FINAL FIX - DASHBOARD & STATUS
 ========================================= */
 
-/* Tampilan menu normal */
-.sidebar .nav {
-  background: transparent;
-  color: rgba(255, 255, 255, .85);
-  box-shadow: none;
-  transform: none;
+/* DASHBOARD AKTIF */
+.sidebar #dashboardNav.active {
+  background: #ffffff !important;
+  color: #5146c8 !important;
+  box-shadow: 0 5px 16px rgba(25, 20, 100, .13) !important;
+  font-weight: 700;
 }
 
-/* Tampilan saat kursor diarahkan */
-.sidebar .nav:hover {
-  background: rgba(255, 255, 255, .12);
-  color: #fff;
-  box-shadow: none;
-  transform: none;
+.sidebar #dashboardNav.active .nav-icon {
+  color: #5146c8 !important;
 }
 
-/* Hanya menu aktif yang berwarna putih */
-.sidebar .nav.active {
-  background: #fff;
-  color: var(--primary);
-  box-shadow: 0 5px 16px rgba(25, 20, 100, .13);
+/* DASHBOARD NORMAL */
+.sidebar #dashboardNav:not(.active) {
+  background: transparent !important;
+  color: rgba(255, 255, 255, .85) !important;
+  box-shadow: none !important;
 }
 
-/* Status tidak ikut berwarna putih */
-.sidebar #approvalNav {
-  background: transparent;
-  color: rgba(255, 255, 255, .85);
-  box-shadow: none;
+/* STATUS SELALU NORMAL, MESKIPUN SUBMENU TERBUKA */
+.sidebar .status-nav-group > #approvalNav,
+.sidebar .status-nav-group.open > #approvalNav {
+  background: transparent !important;
+  color: rgba(255, 255, 255, .85) !important;
+  box-shadow: none !important;
+  font-weight: 600 !important;
+  transform: none !important;
 }
 
-/* Status saat diklik atau diarahkan */
-.sidebar #approvalNav:hover {
-  background: rgba(255, 255, 255, .12);
-  color: #fff;
+/* IKON STATUS */
+.sidebar .status-nav-group > #approvalNav .nav-icon,
+.sidebar .status-nav-group.open > #approvalNav .nav-icon {
+  color: rgba(255, 255, 255, .85) !important;
+}
+
+/* HOVER STATUS */
+.sidebar .status-nav-group > #approvalNav:hover,
+.sidebar .status-nav-group.open > #approvalNav:hover {
+  background: rgba(255, 255, 255, .12) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+/* HOVER IKON STATUS */
+.sidebar .status-nav-group > #approvalNav:hover .nav-icon,
+.sidebar .status-nav-group.open > #approvalNav:hover .nav-icon {
+  color: #ffffff !important;
+}
+
+/* SUBMENU AKTIF */
+.sidebar .status-nav-group .nav-submenu-link.active {
+  background: rgba(255, 255, 255, .16) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.sidebar .status-nav-group .nav-submenu-link.active .submenu-dot {
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .13);
 }
