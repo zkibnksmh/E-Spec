@@ -2782,3 +2782,43 @@ tbody td small {
   }
 
 }
+
+/* =========================================
+   PERBAIKAN TAMPILAN DASHBOARD & STATUS
+========================================= */
+
+/* Tampilan menu normal */
+.sidebar .nav {
+  background: transparent;
+  color: rgba(255, 255, 255, .85);
+  box-shadow: none;
+  transform: none;
+}
+
+/* Tampilan saat kursor diarahkan */
+.sidebar .nav:hover {
+  background: rgba(255, 255, 255, .12);
+  color: #fff;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Hanya menu aktif yang berwarna putih */
+.sidebar .nav.active {
+  background: #fff;
+  color: var(--primary);
+  box-shadow: 0 5px 16px rgba(25, 20, 100, .13);
+}
+
+/* Status tidak ikut berwarna putih */
+.sidebar #approvalNav {
+  background: transparent;
+  color: rgba(255, 255, 255, .85);
+  box-shadow: none;
+}
+
+/* Status saat diklik atau diarahkan */
+.sidebar #approvalNav:hover {
+  background: rgba(255, 255, 255, .12);
+  color: #fff;
+}
