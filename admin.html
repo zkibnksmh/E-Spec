@@ -9,157 +9,144 @@
 </head>
 
 <body>
+
 <div class="app-layout">
 
   <!-- SIDEBAR -->
+  <aside class="sidebar">
 
-<aside class="sidebar">
+    <!-- SIDEBAR HEADER -->
+    <div class="sidebar-header">
 
-  <a class="brand" href="admin.html">
-    <span class="brand-mark">E</span>
-    <span class="brand-info">
-      <strong>E-Spec</strong>
-      <small>DOCUMENT WORKSPACE</small>
-    </span>
-  </a>
+      <a class="brand" href="admin.html">
+        <span class="brand-mark">E</span>
 
-  <div class="sidebar-menu">
-    <p class="side-label">MENU UTAMA</p>
-
-    <!-- DASHBOARD -->
-    <div class="nav-group">
-      <a href="admin.html" class="nav active" id="dashboardNav">
-        <span class="nav-icon">▦</span>
-        <span>Dashboard</span>
+        <span class="brand-info">
+          <strong>E-Spec</strong>
+          <small>DOCUMENT WORKSPACE</small>
+        </span>
       </a>
+
+      <!-- HAMBURGER BUTTON -->
+      <button
+        type="button"
+        class="mobile-menu-toggle"
+        id="mobileMenuToggle"
+        aria-label="Buka menu navigasi"
+        aria-expanded="false">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </button>
+
     </div>
 
-    <!-- STATUS -->
-<aside class="sidebar">
 
-  <div class="sidebar-header">
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar-menu" id="sidebarNavigation">
 
-    <a class="brand" href="admin.html">
-      <span class="brand-mark">E</span>
-      <span class="brand-info">
-        <strong>E-Spec</strong>
-        <small>DOCUMENT WORKSPACE</small>
-      </span>
-    </a>
+      <p class="side-label">MENU UTAMA</p>
 
-    <!-- TOMBOL HAMBURGER -->
-    <button
-      type="button"
-      class="mobile-menu-toggle"
-      id="mobileMenuToggle"
-      aria-label="Buka menu navigasi"
-      aria-expanded="false">
+      <!-- DASHBOARD -->
+      <div class="nav-group">
 
-      <span></span>
-      <span></span>
-      <span></span>
-
-    </button>
-
-  </div>
-
-  <div class="sidebar-menu" id="sidebarNavigation">
-
-    <p class="side-label">MENU UTAMA</p>
-
-    <!-- DASHBOARD -->
-    <div class="nav-group">
-      <a href="admin.html" class="nav active" id="dashboardNav">
-        <span class="nav-icon">▦</span>
-        <span>Dashboard</span>
-      </a>
-    </div>
-
-    <!-- STATUS -->
-    <div class="nav-group status-nav-group">
-
-      <a href="javascript:void(0)"
-         class="nav approval-nav"
-         id="approvalNav"
-         aria-expanded="false">
-
-        <span class="nav-icon">✓</span>
-        <span>Status</span>
-      </a>
-
-      <div class="nav-submenu">
-
-        <a href="approval.html" class="nav-submenu-link">
-          <span class="submenu-dot"></span>
-          <span>My E-Spec</span>
-        </a>
-
-        <a href="my-approval.html" class="nav-submenu-link">
-          <span class="submenu-dot"></span>
-          <span>My Approval</span>
+        <a href="admin.html" class="nav active" id="dashboardNav">
+          <span class="nav-icon">▦</span>
+          <span>Dashboard</span>
         </a>
 
       </div>
-    </div>
 
-    <!-- MENU LAINNYA -->
-    <a href="pilih-spesifikasi.html" class="nav">
-      <span class="nav-icon">＋</span>
-      <span>Buat Spesifikasi</span>
-    </a>
 
-    <a href="pengaturan.html" class="nav">
-      <span class="nav-icon">⚙</span>
-      <span>Pengaturan</span>
-    </a>
+      <!-- STATUS -->
+      <div class="nav-group status-nav-group">
 
-  </div>
+        <a
+          href="javascript:void(0)"
+          class="nav approval-nav"
+          id="approvalNav"
+          aria-expanded="false">
 
-    <!-- MENU LAINNYA -->
-    <a href="pilih-spesifikasi.html" class="nav">
-      <span class="nav-icon">＋</span>
-      <span>Buat Spesifikasi</span>
-    </a>
+          <span class="nav-icon">✓</span>
+          <span>Status</span>
 
-    <a href="pengaturan.html" class="nav">
-      <span class="nav-icon">⚙</span>
-      <span>Pengaturan</span>
-    </a>
+        </a>
 
-  </div>
+        <!-- STATUS SUBMENU -->
+        <div class="nav-submenu">
 
-  <div class="sidebar-divider"></div>
+          <a href="approval.html" class="nav-submenu-link">
+            <span class="submenu-dot"></span>
+            <span>My E-Spec</span>
+          </a>
 
-  <div class="sidebar-menu">
-    <p class="side-label">MANAJEMEN DATA</p>
+          <a href="my-approval.html" class="nav-submenu-link">
+            <span class="submenu-dot"></span>
+            <span>My Approval</span>
+          </a>
 
-    <input
-      type="file"
-      id="importFile"
-      accept=".json,application/json"
-      hidden
-    >
-  </div>
+        </div>
 
-  <div class="sidebar-bottom">
-
-    <div class="sidebar-illustration">
-      <div class="illustration-icon">▤</div>
-      <div class="illustration-check">✓</div>
-    </div>
-
-    <div class="sidebar-help">
-      <div class="help-icon">✦</div>
-      <div>
-        <strong>E-Spec Workspace</strong>
-        <small>Kelola dokumen lebih mudah.</small>
       </div>
+
+
+      <!-- MENU LAINNYA -->
+      <a href="pilih-spesifikasi.html" class="nav">
+        <span class="nav-icon">＋</span>
+        <span>Buat Spesifikasi</span>
+      </a>
+
+      <a href="pengaturan.html" class="nav">
+        <span class="nav-icon">⚙</span>
+        <span>Pengaturan</span>
+      </a>
+
     </div>
 
-  </div>
 
-</aside>
+    <!-- SIDEBAR DIVIDER -->
+    <div class="sidebar-divider"></div>
 
+
+    <!-- MANAJEMEN DATA -->
+    <div class="sidebar-menu">
+
+      <p class="side-label">MANAJEMEN DATA</p>
+
+      <input
+        type="file"
+        id="importFile"
+        accept=".json,application/json"
+        hidden
+      >
+
+    </div>
+
+
+    <!-- SIDEBAR BOTTOM -->
+    <div class="sidebar-bottom">
+
+      <div class="sidebar-illustration">
+        <div class="illustration-icon">▤</div>
+        <div class="illustration-check">✓</div>
+      </div>
+
+      <div class="sidebar-help">
+
+        <div class="help-icon">✦</div>
+
+        <div>
+          <strong>E-Spec Workspace</strong>
+          <small>Kelola dokumen lebih mudah.</small>
+        </div>
+
+      </div>
+
+    </div>
+
+  </aside>
 
 
   <!-- MAIN -->
@@ -175,6 +162,7 @@
       </div>
 
       <div class="profile">
+
         <div class="avatar">R</div>
 
         <div class="profile-info">
@@ -183,6 +171,7 @@
         </div>
 
         <span class="profile-arrow">⌄</span>
+
       </div>
 
     </header>
@@ -190,6 +179,7 @@
 
     <!-- CONTENT -->
     <section class="content">
+
 
       <!-- WELCOME -->
       <section class="welcome-banner">
@@ -212,11 +202,14 @@
 
         </div>
 
+
         <div class="welcome-visual">
+
           <div class="visual-circle circle-one"></div>
           <div class="visual-circle circle-two"></div>
 
           <div class="visual-document">
+
             <div class="visual-doc-top">
               <span></span>
               <span></span>
@@ -227,10 +220,12 @@
             <div class="visual-doc-line medium"></div>
 
             <div class="visual-doc-check">✓</div>
+
           </div>
 
           <div class="visual-decoration decoration-one">✦</div>
           <div class="visual-decoration decoration-two">✧</div>
+
         </div>
 
       </section>
@@ -241,8 +236,14 @@
 
         <div>
           <span class="eyebrow">OVERVIEW</span>
-          <h2>Dashboard <span>Requestor.</span></h2>
-          <p>Pantau dan kelola seluruh dokumen spesifikasi.</p>
+
+          <h2>
+            Dashboard <span>Requestor.</span>
+          </h2>
+
+          <p>
+            Pantau dan kelola seluruh dokumen spesifikasi.
+          </p>
         </div>
 
         <a href="pilih-spesifikasi.html" class="primary-btn">
@@ -256,6 +257,7 @@
       <div class="stats" id="totalDokumen">
 
         <article class="stat-card">
+
           <div class="stat-icon purple">
             <span>▤</span>
           </div>
@@ -267,6 +269,7 @@
           </div>
 
           <div class="stat-decoration purple-decoration"></div>
+
         </article>
 
       </div>
@@ -278,14 +281,17 @@
         <div class="panel-top">
 
           <div class="panel-heading">
+
             <div class="panel-heading-icon">▤</div>
 
             <div>
               <h2>E-Spec Repository</h2>
+
               <p id="tableDescription">
                 Pilih jenis dokumen untuk melihat data yang tersimpan.
               </p>
             </div>
+
           </div>
 
           <div class="database-badge">
@@ -296,31 +302,34 @@
         </div>
 
 
-<!-- DOCUMENT TYPE -->
-<div class="document-switch"
-     role="group"
-     aria-label="Pilih jenis dokumen">
+        <!-- DOCUMENT TYPE -->
+        <div
+          class="document-switch"
+          role="group"
+          aria-label="Pilih jenis dokumen">
 
-  <button
-    type="button"
-    class="active"
-    data-type="Barang"
-    aria-pressed="true">
+          <button
+            type="button"
+            class="active"
+            data-type="Barang"
+            aria-pressed="true">
 
-    <span class="switch-icon">📦</span>
-    <span>Barang</span>
-  </button>
+            <span class="switch-icon">📦</span>
+            <span>Barang</span>
 
-  <button
-    type="button"
-    data-type="Jasa"
-    aria-pressed="false">
+          </button>
 
-    <span class="switch-icon">🛠️</span>
-    <span>Jasa</span>
-  </button>
+          <button
+            type="button"
+            data-type="Jasa"
+            aria-pressed="false">
 
-</div>
+            <span class="switch-icon">🛠️</span>
+            <span>Jasa</span>
+
+          </button>
+
+        </div>
 
 
         <!-- SEARCH -->
@@ -335,6 +344,7 @@
 
             <div class="search-box">
               <span class="search-icon">⌕</span>
+
               <input
                 type="search"
                 id="searchInput"
@@ -343,13 +353,16 @@
             </div>
 
             <div class="filter-box">
+
               <select id="filterSelect">
                 <option value="all">Semua dokumen</option>
                 <option value="today">Hari ini</option>
               </select>
+
             </div>
 
           </div>
+
         </div>
 
 
@@ -357,6 +370,7 @@
         <div class="table-wrap">
 
           <table>
+
             <thead>
               <tr>
                 <th>NO. DOKUMEN</th>
@@ -368,12 +382,13 @@
             </thead>
 
             <tbody id="documentRows"></tbody>
+
           </table>
 
         </div>
 
 
-        <!-- EMPTY -->
+        <!-- EMPTY STATE -->
         <div id="emptyState" class="empty-state">
 
           <div class="empty-illustration">
@@ -398,7 +413,9 @@
         <!-- FOOTER -->
         <div class="panel-footer">
 
-          <span id="resultCount">Menampilkan 0 dokumen</span>
+          <span id="resultCount">
+            Menampilkan 0 dokumen
+          </span>
 
           <span>
             <span class="footer-check">✓</span>
@@ -410,9 +427,12 @@
       </section>
 
 
+      <!-- PAGE FOOTER -->
       <footer class="page-footer">
+
         <span>© 2026 E-Spec Workspace</span>
         <span>Document Management System</span>
+
       </footer>
 
     </section>
@@ -443,8 +463,6 @@
 
     <div class="modal-footer">
 
-
-
       <button id="closeModalBottom" class="primary-btn">
         Tutup
       </button>
@@ -460,29 +478,39 @@
 <div id="toast" class="toast"></div>
 
 
+<!-- ADMIN JAVASCRIPT -->
 <script src="admin.js"></script>
 
+
+<!-- SIDEBAR NAVIGATION SCRIPT -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+
+  const sidebar = document.querySelector(".sidebar");
+
+  const menuToggle = document.getElementById("mobileMenuToggle");
+
+  const sidebarNavigation = document.getElementById("sidebarNavigation");
+
+  const statusButton = document.getElementById("approvalNav");
+
+  const statusGroup = document.querySelector(".status-nav-group");
+
 
   // =========================================
   // HAMBURGER MENU
   // =========================================
 
-  const sidebar = document.querySelector(".sidebar");
-  const menuToggle = document.getElementById("mobileMenuToggle");
-  const sidebarNavigation = document.getElementById("sidebarNavigation");
-
-  if (sidebar && menuToggle) {
+  if (sidebar && menuToggle && sidebarNavigation) {
 
     menuToggle.addEventListener("click", function () {
 
-      sidebar.classList.toggle("mobile-menu-open");
-      menuToggle.classList.toggle("active");
+      const isOpen = sidebar.classList.toggle("mobile-menu-open");
 
-      const isOpen = sidebar.classList.contains("mobile-menu-open");
+      menuToggle.classList.toggle("active", isOpen);
 
-      menuToggle.setAttribute("aria-expanded", isOpen);
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+
       menuToggle.setAttribute(
         "aria-label",
         isOpen ? "Tutup menu navigasi" : "Buka menu navigasi"
@@ -490,15 +518,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
+
     // Tutup menu setelah memilih halaman
     sidebarNavigation.querySelectorAll("a:not(#approvalNav)")
       .forEach(function (link) {
 
         link.addEventListener("click", function () {
+
           sidebar.classList.remove("mobile-menu-open");
+
           menuToggle.classList.remove("active");
+
           menuToggle.setAttribute("aria-expanded", "false");
-          menuToggle.setAttribute("aria-label", "Buka menu navigasi");
+
+          menuToggle.setAttribute(
+            "aria-label",
+            "Buka menu navigasi"
+          );
+
         });
 
       });
@@ -510,24 +547,72 @@ document.addEventListener("DOMContentLoaded", function () {
   // STATUS DROPDOWN
   // =========================================
 
-  const statusButton = document.getElementById("approvalNav");
-  const statusGroup = document.querySelector(".status-nav-group");
-
   if (statusButton && statusGroup) {
 
     statusButton.addEventListener("click", function (event) {
 
       event.preventDefault();
 
-      statusGroup.classList.toggle("open");
+      const isOpen = statusGroup.classList.toggle("open");
 
-      const isOpen = statusGroup.classList.contains("open");
-
-      statusButton.setAttribute("aria-expanded", isOpen);
+      statusButton.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+      );
 
     });
 
   }
+
+
+  // =========================================
+  // TUTUP MENU KETIKA KLIK DI LUAR SIDEBAR
+  // =========================================
+
+  document.addEventListener("click", function (event) {
+
+    if (!sidebar || !menuToggle) return;
+
+    if (window.innerWidth > 768) return;
+
+    if (
+      sidebar.classList.contains("mobile-menu-open") &&
+      !sidebar.contains(event.target)
+    ) {
+
+      sidebar.classList.remove("mobile-menu-open");
+
+      menuToggle.classList.remove("active");
+
+      menuToggle.setAttribute("aria-expanded", "false");
+
+      menuToggle.setAttribute(
+        "aria-label",
+        "Buka menu navigasi"
+      );
+
+    }
+
+  });
+
+
+  // =========================================
+  // RESET MENU KETIKA LAYAR KEMBALI DESKTOP
+  // =========================================
+
+  window.addEventListener("resize", function () {
+
+    if (window.innerWidth > 768 && sidebar && menuToggle) {
+
+      sidebar.classList.remove("mobile-menu-open");
+
+      menuToggle.classList.remove("active");
+
+      menuToggle.setAttribute("aria-expanded", "false");
+
+    }
+
+  });
 
 });
 </script>

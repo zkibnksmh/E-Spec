@@ -1,13 +1,13 @@
 
 /* =========================================
    E-SPEC WORKSPACE
-   MODERN DOCUMENT MANAGEMENT DASHBOARD
+   CLEAN & RESPONSIVE ADMIN DASHBOARD
 ========================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 /* =========================================
-   ROOT & RESET
+   1. ROOT & RESET
 ========================================= */
 
 :root {
@@ -33,8 +33,8 @@
   --red: #e45e70;
   --red-light: #fff0f2;
 
-  --shadow: 0 8px 30px rgba(39, 42, 90, .045);
-  --shadow-hover: 0 14px 35px rgba(72, 65, 160, .09);
+  --shadow: 0 8px 30px rgba(39,42,90,.045);
+  --shadow-hover: 0 14px 35px rgba(72,65,160,.09);
 
   --sidebar-width: 258px;
   --radius: 16px;
@@ -83,34 +83,50 @@ a {
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
-select:focus-visible {
-  outline: 3px solid rgba(101, 88, 232, .25);
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(101,88,232,.25);
   outline-offset: 3px;
 }
 
 /* =========================================
-   MAIN LAYOUT
+   2. MAIN LAYOUT
 ========================================= */
 
 .app-layout {
+  display: flex;
   min-height: 100vh;
+  width: 100%;
 }
+
+.main {
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+  margin-left: var(--sidebar-width);
+}
+
+/* =========================================
+   3. SIDEBAR
+========================================= */
 
 .sidebar {
   position: fixed;
   inset: 0 auto 0 0;
-  z-index: 100;
+  z-index: 1000;
 
   display: flex;
   flex-direction: column;
 
   width: var(--sidebar-width);
   height: 100vh;
-  padding: 27px 17px 20px;
+  padding: 25px 17px 20px;
 
+  overflow-x: hidden;
   overflow-y: auto;
 
   color: #fff;
+
   background:
     radial-gradient(
       circle at 15% 5%,
@@ -124,18 +140,20 @@ select:focus-visible {
       #6658e8 100%
     );
 
-  box-shadow: 5px 0 30px rgba(45, 38, 125, .08);
+  box-shadow: 5px 0 30px rgba(45,38,125,.08);
 }
 
-.main {
-  min-width: 0;
-  min-height: 100vh;
-  margin-left: var(--sidebar-width);
+/* Header sidebar */
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  flex-shrink: 0;
 }
 
-/* =========================================
-   BRAND
-========================================= */
+/* Brand */
 
 .brand {
   display: flex;
@@ -143,7 +161,7 @@ select:focus-visible {
   gap: 11px;
 
   padding: 0 8px;
-  margin-bottom: 53px;
+  margin-bottom: 45px;
 
   color: #fff;
 }
@@ -154,6 +172,7 @@ select:focus-visible {
 
   width: 42px;
   height: 42px;
+  flex-shrink: 0;
 
   border: 1px solid rgba(255,255,255,.27);
   border-radius: 13px;
@@ -186,25 +205,81 @@ select:focus-visible {
   letter-spacing: 1.2px;
 }
 
+/* Hamburger */
+
+.mobile-menu-toggle {
+  display: none;
+  flex-shrink: 0;
+
+  width: 42px;
+  height: 42px;
+  padding: 10px;
+
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 10px;
+
+  background: rgba(255,255,255,.12);
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.mobile-menu-toggle span {
+  display: block;
+  width: 19px;
+  height: 2px;
+
+  border-radius: 5px;
+  background: #fff;
+
+  transition: .2s ease;
+}
+
+.mobile-menu-toggle.active span:first-child {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.active span:last-child {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 /* =========================================
-   SIDEBAR NAVIGATION
+   4. SIDEBAR NAVIGATION
 ========================================= */
+
+#sidebarNavigation {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
 
 .sidebar-menu {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: 6px;
+  width: 100%;
 }
 
 .side-label {
   padding: 0 11px;
-  margin-bottom: 13px;
+  margin: 0 0 13px;
 
   color: rgba(255,255,255,.53);
   font-size: 9px;
   font-weight: 800;
   letter-spacing: 1.5px;
 }
+
+/* Semua menu */
 
 .nav {
   position: relative;
@@ -214,6 +289,7 @@ select:focus-visible {
   gap: 12px;
 
   width: 100%;
+  min-width: 0;
   min-height: 45px;
   padding: 12px 13px;
 
@@ -227,10 +303,11 @@ select:focus-visible {
   font-weight: 600;
   text-align: left;
 
+  white-space: nowrap;
+
   transition:
-    background .25s ease,
-    color .25s ease,
-    transform .25s ease;
+    background .2s ease,
+    color .2s ease;
 }
 
 .nav-icon {
@@ -246,14 +323,24 @@ select:focus-visible {
 .nav:hover {
   color: #fff;
   background: rgba(255,255,255,.12);
-  transform: none;
 }
 
-.nav.active {
-  color: #5144d3;
+/* Menu aktif */
+
+.sidebar #dashboardNav.active,
+.sidebar .status-nav-group.open > #approvalNav {
+  color: #5146c8;
   background: #fff;
+  font-weight: 700;
   box-shadow: 0 5px 16px rgba(25,20,100,.13);
 }
+
+.sidebar #dashboardNav.active .nav-icon,
+.sidebar .status-nav-group.open > #approvalNav .nav-icon {
+  color: #5146c8;
+}
+
+/* Badge approval */
 
 .approval-nav-badge {
   display: grid;
@@ -262,7 +349,6 @@ select:focus-visible {
   min-width: 20px;
   height: 20px;
   padding: 0 5px;
-
   margin-left: auto;
 
   border-radius: 20px;
@@ -279,16 +365,140 @@ select:focus-visible {
   color: var(--primary);
 }
 
+/* =========================================
+   5. STATUS SUBMENU
+========================================= */
+
+.sidebar-menu .nav-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  width: 100%;
+  min-width: 0;
+  flex: 0 0 auto;
+  gap: 4px;
+}
+
+.status-nav-group > #approvalNav {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  min-height: 45px;
+  flex: 0 0 45px;
+}
+
+/* Submenu tertutup */
+
+.status-nav-group > .nav-submenu {
+  display: none;
+  flex-direction: column;
+  align-items: stretch;
+
+  width: 100%;
+  min-width: 0;
+  gap: 4px;
+
+  padding: 4px 0 8px 45px;
+  margin: 0;
+
+  border: none;
+}
+
+/* Submenu terbuka */
+
+.status-nav-group.open > .nav-submenu {
+  display: flex;
+}
+
+/* Link submenu */
+
+.status-nav-group .nav-submenu-link {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  width: 100%;
+  min-width: 0;
+  height: 35px;
+  min-height: 35px;
+  flex: 0 0 35px;
+
+  padding: 0 10px;
+  margin: 0;
+
+  border: none;
+  border-radius: 8px;
+
+  color: rgba(255,255,255,.68);
+
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+
+  white-space: nowrap;
+
+  transition: background .2s ease, color .2s ease;
+}
+
+/* Titik submenu */
+
+.status-nav-group .submenu-dot {
+  display: block;
+  flex: 0 0 6px;
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+  background: rgba(255,255,255,.45);
+}
+
+/* Hover submenu */
+
+.status-nav-group .nav-submenu-link:hover {
+  color: #fff;
+  background: rgba(255,255,255,.10);
+}
+
+/* Submenu aktif */
+
+.status-nav-group .nav-submenu-link.active {
+  color: #fff;
+  background: rgba(255,255,255,.13);
+  font-weight: 700;
+}
+
+.status-nav-group .nav-submenu-link.active .submenu-dot {
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(255,255,255,.13);
+}
+
+/* Hilangkan panah dan garis submenu */
+
+#approvalNav::before,
+#approvalNav::after,
+#approvalNav .nav-arrow,
+.status-nav-group > .nav-submenu::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* =========================================
+   6. SIDEBAR DIVIDER & BOTTOM
+========================================= */
+
 .sidebar-divider {
   height: 1px;
+  flex-shrink: 0;
+
   margin: 23px 8px;
 
   background: rgba(255,255,255,.15);
 }
-
-/* =========================================
-   SIDEBAR BOTTOM
-========================================= */
 
 .sidebar-bottom {
   margin-top: auto;
@@ -327,7 +537,6 @@ select:focus-visible {
   box-shadow: 0 12px 25px rgba(24,20,100,.2);
 
   font-size: 39px;
-
   transform: rotate(-6deg);
 }
 
@@ -375,7 +584,6 @@ select:focus-visible {
   min-width: 33px;
 
   border-radius: 10px;
-
   background: rgba(255,255,255,.17);
 
   font-size: 18px;
@@ -398,7 +606,7 @@ select:focus-visible {
 }
 
 /* =========================================
-   TOPBAR
+   7. TOPBAR
 ========================================= */
 
 .topbar {
@@ -485,7 +693,7 @@ select:focus-visible {
 }
 
 /* =========================================
-   CONTENT
+   8. CONTENT
 ========================================= */
 
 .content {
@@ -496,7 +704,7 @@ select:focus-visible {
 }
 
 /* =========================================
-   WELCOME BANNER
+   9. WELCOME BANNER
 ========================================= */
 
 .welcome-banner {
@@ -510,15 +718,10 @@ select:focus-visible {
   padding: 32px 43px;
 
   overflow: hidden;
-
   border-radius: 20px;
 
   background:
-    radial-gradient(
-      circle at 85% 30%,
-      rgba(255,255,255,.17),
-      transparent 24%
-    ),
+    radial-gradient(circle at 85% 30%,rgba(255,255,255,.17),transparent 24%),
     linear-gradient(110deg,#5144d3 0%,#6b5ce9 55%,#8275f2 100%);
 
   box-shadow: 0 12px 30px rgba(83,69,208,.14);
@@ -553,7 +756,6 @@ select:focus-visible {
   height: 7px;
 
   border-radius: 50%;
-
   background: #5ff0bd;
   box-shadow: 0 0 0 4px rgba(95,240,189,.15);
 }
@@ -564,7 +766,7 @@ select:focus-visible {
   color: #fff;
 
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: clamp(23px, 2.5vw, 32px);
+  font-size: clamp(23px,2.5vw,32px);
   font-weight: 800;
   line-height: 1.25;
   letter-spacing: -.8px;
@@ -580,7 +782,6 @@ select:focus-visible {
   margin-top: 11px;
 
   color: rgba(255,255,255,.76);
-
   font-size: 12px;
   line-height: 1.8;
 }
@@ -589,7 +790,6 @@ select:focus-visible {
 
 .welcome-visual {
   position: relative;
-
   width: 260px;
   height: 190px;
   min-width: 220px;
@@ -597,7 +797,6 @@ select:focus-visible {
 
 .visual-circle {
   position: absolute;
-
   border: 1px solid rgba(255,255,255,.15);
   border-radius: 50%;
 }
@@ -605,7 +804,6 @@ select:focus-visible {
 .circle-one {
   top: -30px;
   right: 5px;
-
   width: 205px;
   height: 205px;
 }
@@ -613,7 +811,6 @@ select:focus-visible {
 .circle-two {
   top: -5px;
   right: 30px;
-
   width: 155px;
   height: 155px;
 }
@@ -631,7 +828,6 @@ select:focus-visible {
   border-radius: 13px;
 
   background: #fff;
-
   box-shadow: 0 15px 30px rgba(32,25,120,.2);
 
   transform: rotate(7deg);
@@ -651,8 +847,8 @@ select:focus-visible {
 }
 
 .visual-doc-line {
-  height: 5px;
   width: 65%;
+  height: 5px;
   margin-top: 8px;
   border-radius: 5px;
   background: #e8e7f5;
@@ -706,7 +902,7 @@ select:focus-visible {
 }
 
 /* =========================================
-   PAGE HEADING
+   10. PAGE HEADING
 ========================================= */
 
 .page-heading {
@@ -720,7 +916,6 @@ select:focus-visible {
 
 .eyebrow {
   display: block;
-
   color: var(--primary);
   font-size: 9px;
   font-weight: 800;
@@ -749,7 +944,7 @@ select:focus-visible {
 }
 
 /* =========================================
-   BUTTONS
+   11. BUTTONS
 ========================================= */
 
 .primary-btn,
@@ -774,7 +969,6 @@ select:focus-visible {
 .primary-btn {
   background: var(--primary);
   color: #fff;
-
   box-shadow: 0 5px 13px rgba(101,88,232,.2);
 }
 
@@ -796,14 +990,13 @@ select:focus-visible {
   color: var(--primary);
 }
 
-
 /* =========================================
-   STATISTICS - TOTAL DOCUMENT CARD
+   12. STATISTICS
 ========================================= */
 
 .stats {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0,1fr);
   gap: 17px;
   margin-bottom: 27px;
 }
@@ -825,28 +1018,20 @@ select:focus-visible {
   border: 1px solid #e6e2ff;
   border-radius: 20px;
 
-  background:
-    linear-gradient(
-      110deg,
-      #ffffff 0%,
-      #ffffff 58%,
-      #f5f3ff 100%
-    );
+  background: linear-gradient(110deg,#fff 0%,#fff 58%,#f5f3ff 100%);
 
   box-shadow:
-    0 8px 28px rgba(72, 65, 160, .055),
-    0 2px 6px rgba(72, 65, 160, .025);
+    0 8px 28px rgba(72,65,160,.055),
+    0 2px 6px rgba(72,65,160,.025);
 
-  transition: all .3s ease;
+  transition: .3s ease;
 }
 
 .stat-card:hover {
   border-color: #cfc8ff;
-  box-shadow: 0 14px 35px rgba(72, 65, 160, .11);
+  box-shadow: 0 14px 35px rgba(72,65,160,.11);
   transform: translateY(-3px);
 }
-
-/* DECORATIVE BACKGROUND */
 
 .stat-card::before {
   content: "";
@@ -859,7 +1044,7 @@ select:focus-visible {
   top: -125px;
   right: 65px;
 
-  border: 1px solid rgba(101, 88, 232, .09);
+  border: 1px solid rgba(101,88,232,.09);
   border-radius: 50%;
 }
 
@@ -875,11 +1060,8 @@ select:focus-visible {
   bottom: -105px;
 
   border-radius: 50%;
-
-  background: rgba(101, 88, 232, .07);
+  background: rgba(101,88,232,.07);
 }
-
-/* ICON */
 
 .stat-icon {
   position: relative;
@@ -895,30 +1077,19 @@ select:focus-visible {
   border: 1px solid #e5e0ff;
   border-radius: 19px;
 
-  background: linear-gradient(
-    145deg,
-    #f1efff,
-    #e8e4ff
-  );
-
+  background: linear-gradient(145deg,#f1efff,#e8e4ff);
   color: var(--primary);
 
   font-size: 27px;
   font-weight: 700;
 
-  box-shadow: 0 7px 18px rgba(101, 88, 232, .09);
+  box-shadow: 0 7px 18px rgba(101,88,232,.09);
 }
 
 .stat-icon.purple {
-  background: linear-gradient(
-    145deg,
-    #f1efff,
-    #e8e4ff
-  );
+  background: linear-gradient(145deg,#f1efff,#e8e4ff);
   color: var(--primary);
 }
-
-/* INFORMATION */
 
 .stat-info {
   position: relative;
@@ -928,9 +1099,7 @@ select:focus-visible {
 
 .stat-info small {
   display: block;
-
   color: #7d87a0;
-
   font-size: 12px;
   font-weight: 700;
   letter-spacing: .2px;
@@ -938,7 +1107,6 @@ select:focus-visible {
 
 .stat-info strong {
   display: block;
-
   margin-top: 4px;
 
   color: #202b45;
@@ -952,13 +1120,9 @@ select:focus-visible {
 
 .stat-info p {
   margin-top: 5px;
-
   color: #929bb0;
-
   font-size: 11px;
 }
-
-/* DECORATION */
 
 .stat-decoration {
   position: absolute;
@@ -975,37 +1139,11 @@ select:focus-visible {
 }
 
 .purple-decoration {
-  background: radial-gradient(
-    circle,
-    rgba(101, 88, 232, .13),
-    transparent 70%
-  );
-}
-
-/* SMALL SCREEN */
-
-@media (max-width: 600px) {
-  .stat-card {
-    min-height: 140px;
-    padding: 22px;
-    gap: 15px;
-  }
-
-  .stat-icon {
-    width: 54px;
-    height: 54px;
-    min-width: 54px;
-    border-radius: 15px;
-    font-size: 23px;
-  }
-
-  .stat-info strong {
-    font-size: 32px;
-  }
+  background: radial-gradient(circle,rgba(101,88,232,.13),transparent 70%);
 }
 
 /* =========================================
-   DOCUMENT PANEL
+   13. DOCUMENT PANEL
 ========================================= */
 
 .panel {
@@ -1044,7 +1182,6 @@ select:focus-visible {
   min-width: 40px;
 
   border-radius: 12px;
-
   background: var(--primary-light);
   color: var(--primary);
 
@@ -1053,7 +1190,6 @@ select:focus-visible {
 
 .panel-heading h2 {
   color: var(--ink);
-
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 14px;
   font-weight: 800;
@@ -1088,69 +1224,90 @@ select:focus-visible {
   height: 7px;
 
   border-radius: 50%;
-
   background: #22b981;
   box-shadow: 0 0 0 3px rgba(34,185,129,.12);
 }
 
 /* =========================================
-   DOCUMENT SWITCH
+   14. DOCUMENT SWITCH
 ========================================= */
 
 .document-switch {
   display: flex;
   align-items: center;
-  gap: 5px;
+  justify-content: center;
+  gap: 6px;
 
   width: fit-content;
-  padding: 5px;
-  margin: 21px 24px 0;
+  max-width: 100%;
+  padding: 6px;
+  margin: 24px auto;
 
-  border: 1px solid #ececf5;
-  border-radius: 11px;
+  border: 1px solid #e8e5f5;
+  border-radius: 16px;
 
-  background: #f7f7fc;
+  background: #f1f0fa;
+  box-shadow: 0 4px 14px rgba(40,35,90,.04);
 }
 
 .document-switch button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 
-  min-width: 112px;
-  padding: 10px 17px;
+  min-width: 145px;
+  padding: 12px 22px;
 
   border: none;
-  border-radius: 8px;
+  border-radius: 11px;
 
   background: transparent;
-  color: var(--muted);
+  color: #77758b;
 
-  font-size: 11px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
   font-weight: 700;
 
-  transition: .2s ease;
+  cursor: pointer;
+  transition: .25s ease;
 }
 
-.document-switch button:hover {
-  color: var(--primary);
+.document-switch button:hover:not(.active) {
   background: rgba(255,255,255,.7);
+  color: var(--primary);
 }
 
 .document-switch button.active {
-  background: #fff;
-  color: var(--primary);
-
-  box-shadow: 0 3px 10px rgba(40,35,100,.08);
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(101,88,232,.25);
 }
 
-.document-switch button span {
-  font-size: 14px;
+.document-switch .switch-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 27px;
+  height: 27px;
+
+  border-radius: 8px;
+  background: rgba(255,255,255,.2);
+
+  font-size: 15px;
+}
+
+.document-switch button:not(.active) .switch-icon {
+  background: #e7e4f6;
+}
+
+.document-switch button:active {
+  transform: scale(.97);
 }
 
 /* =========================================
-   TABLE TOOLBAR
+   15. TABLE TOOLBAR
 ========================================= */
 
 .table-toolbar {
@@ -1193,7 +1350,6 @@ select:focus-visible {
   border-radius: 9px;
 
   background: #fff;
-
   transition: .2s ease;
 }
 
@@ -1225,7 +1381,6 @@ select:focus-visible {
 
   background: transparent;
   color: var(--ink);
-
   font-size: 10px;
 }
 
@@ -1257,7 +1412,7 @@ select:focus-visible {
 }
 
 /* =========================================
-   TABLE
+   16. TABLE
 ========================================= */
 
 .table-wrap {
@@ -1346,14 +1501,13 @@ tbody td small {
 }
 
 /* =========================================
-   TABLE ACTIONS
+   17. TABLE ACTIONS
 ========================================= */
 
 .table-actions {
   display: flex;
   align-items: center;
   gap: 5px;
-
   white-space: nowrap;
 }
 
@@ -1397,7 +1551,7 @@ tbody td small {
 }
 
 /* =========================================
-   STATUS BADGES
+   18. STATUS BADGES
 ========================================= */
 
 .status-badge {
@@ -1436,7 +1590,7 @@ tbody td small {
 }
 
 /* =========================================
-   EMPTY STATE
+   19. EMPTY STATE
 ========================================= */
 
 .empty-state {
@@ -1456,7 +1610,6 @@ tbody td small {
   margin: 0 auto 17px;
 
   border-radius: 22px;
-
   background: var(--primary-light);
   color: var(--primary);
 
@@ -1501,7 +1654,7 @@ tbody td small {
 }
 
 /* =========================================
-   LOADING & ERROR STATES
+   20. LOADING & ERROR
 ========================================= */
 
 .loading-state,
@@ -1515,7 +1668,6 @@ tbody td small {
 
 .loading-state::before {
   content: "";
-
   display: inline-block;
 
   width: 13px;
@@ -1527,18 +1679,15 @@ tbody td small {
   border-radius: 50%;
 
   vertical-align: -3px;
-
   animation: spin .8s linear infinite;
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 /* =========================================
-   PANEL FOOTER
+   21. PANEL FOOTER
 ========================================= */
 
 .panel-footer {
@@ -1550,7 +1699,6 @@ tbody td small {
   padding: 14px 24px;
 
   border-top: 1px solid #f0f1f6;
-
   background: #fcfcfe;
 
   color: var(--muted);
@@ -1571,7 +1719,6 @@ tbody td small {
   height: 16px;
 
   border-radius: 50%;
-
   background: var(--green-light);
   color: var(--green);
 
@@ -1580,7 +1727,7 @@ tbody td small {
 }
 
 /* =========================================
-   PAGE FOOTER
+   22. PAGE FOOTER
 ========================================= */
 
 .page-footer {
@@ -1596,23 +1743,85 @@ tbody td small {
 }
 
 /* =========================================
-   DETAIL MODAL
+   23. DETAIL TABLE
+========================================= */
+
+.detail-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 20px;
+
+  border: 1px solid #e8eaf0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.detail-table {
+  width: 100%;
+  min-width: 650px;
+
+  border-collapse: collapse;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.detail-table thead {
+  background: #f6f7fb;
+}
+
+.detail-table th {
+  padding: 16px 18px;
+
+  color: #555b6e;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .5px;
+  text-align: left;
+  white-space: nowrap;
+
+  border-bottom: 1px solid #e8eaf0;
+}
+
+.detail-table td {
+  padding: 18px;
+
+  color: #34394b;
+  font-size: 13px;
+  font-weight: 500;
+
+  border-bottom: 1px solid #f0f1f5;
+  vertical-align: middle;
+}
+
+.detail-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.detail-table tbody tr:hover {
+  background: #fafaff;
+}
+
+.detail-table td strong {
+  color: var(--primary);
+  font-weight: 800;
+}
+
+/* =========================================
+   24. DETAIL MODAL
 ========================================= */
 
 .modal {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 2000;
 
   display: none;
   align-items: center;
   justify-content: center;
 
   padding: 20px;
-
   overflow-y: auto;
 
-  background: rgba(24, 29, 55, .52);
+  background: rgba(24,29,55,.52);
   backdrop-filter: blur(5px);
 }
 
@@ -1631,7 +1840,6 @@ tbody td small {
   border-radius: 18px;
 
   background: #fff;
-
   box-shadow: 0 25px 80px rgba(20,20,60,.2);
 
   animation: modalIn .22s ease;
@@ -1642,7 +1850,6 @@ tbody td small {
     opacity: 0;
     transform: translateY(12px) scale(.98);
   }
-
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1656,7 +1863,6 @@ tbody td small {
   gap: 20px;
 
   padding: 23px 25px;
-
   border-bottom: 1px solid var(--line);
 }
 
@@ -1664,7 +1870,6 @@ tbody td small {
   margin-top: 5px;
 
   color: var(--ink);
-
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 17px;
   font-weight: 800;
@@ -1731,7 +1936,7 @@ tbody td small {
 
 .detail-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2,minmax(0,1fr));
   gap: 11px;
 }
 
@@ -1756,7 +1961,6 @@ tbody td small {
 
 .detail-item strong {
   display: block;
-
   margin-top: 5px;
 
   overflow-wrap: anywhere;
@@ -1778,16 +1982,16 @@ tbody td small {
 }
 
 /* =========================================
-   TOAST NOTIFICATION
+   25. TOAST
 ========================================= */
 
 .toast {
   position: fixed;
   right: 25px;
   bottom: 25px;
-  z-index: 2000;
+  z-index: 3000;
 
-  max-width: min(380px, calc(100vw - 40px));
+  max-width: min(380px,calc(100vw - 40px));
   padding: 13px 18px;
 
   border: 1px solid #d9f1e6;
@@ -1825,31 +2029,34 @@ tbody td small {
 }
 
 /* =========================================
-   SCROLLBAR
+   26. SCROLLBAR
 ========================================= */
 
 .sidebar::-webkit-scrollbar,
 .modal-card::-webkit-scrollbar,
-.table-wrap::-webkit-scrollbar {
+.table-wrap::-webkit-scrollbar,
+.detail-table-wrapper::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 .sidebar::-webkit-scrollbar-thumb,
 .modal-card::-webkit-scrollbar-thumb,
-.table-wrap::-webkit-scrollbar-thumb {
+.table-wrap::-webkit-scrollbar-thumb,
+.detail-table-wrapper::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background: rgba(130,135,160,.25);
 }
 
 .sidebar::-webkit-scrollbar-track,
 .modal-card::-webkit-scrollbar-track,
-.table-wrap::-webkit-scrollbar-track {
+.table-wrap::-webkit-scrollbar-track,
+.detail-table-wrapper::-webkit-scrollbar-track {
   background: transparent;
 }
 
 /* =========================================
-   RESPONSIVE - TABLET
+   27. RESPONSIVE - LAPTOP
 ========================================= */
 
 @media (max-width: 1100px) {
@@ -1858,7 +2065,7 @@ tbody td small {
   }
 
   .content {
-    padding: 25px 25px;
+    padding: 25px;
   }
 
   .topbar {
@@ -1869,18 +2076,6 @@ tbody td small {
     padding: 28px;
   }
 
-  .stats {
-    gap: 12px;
-  }
-
-  .stat-card {
-    padding: 16px;
-  }
-
-  .stat-info strong {
-    font-size: 21px;
-  }
-
   .welcome-visual {
     transform: scale(.85);
     transform-origin: right center;
@@ -1888,59 +2083,183 @@ tbody td small {
 }
 
 /* =========================================
-   RESPONSIVE - SMALL TABLET
+   28. RESPONSIVE - TABLET & MOBILE
+   HAMBURGER MENU
 ========================================= */
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
+
   :root {
-    --sidebar-width: 76px;
+    --sidebar-width: 0px;
   }
 
+  .app-layout {
+    display: block;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  /* Sidebar menjadi header atas */
+
   .sidebar {
-    align-items: center;
-    padding: 22px 10px;
+    position: relative;
+    inset: auto;
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    width: 100%;
+    height: auto;
+    min-height: 0;
+
+    padding: 12px 16px;
+
+    overflow: visible;
+  }
+
+  .sidebar-header {
+    min-height: 48px;
   }
 
   .brand {
-    justify-content: center;
+    align-items: center;
     padding: 0;
-    margin-bottom: 40px;
+    margin: 0;
   }
 
-  .brand-info,
-  .side-label,
-  .nav > span:not(.nav-icon),
-  .sidebar-bottom,
-  .sidebar-divider {
+  .brand-info {
+    display: block;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Tombol hamburger */
+
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
+  /* Menu tertutup secara default */
+
+  #sidebarNavigation {
     display: none;
+    flex: none;
+
+    width: 100%;
+    margin-top: 14px;
+    padding: 12px 0 4px;
+  }
+
+  /* Menu terbuka setelah hamburger diklik */
+
+  .sidebar.mobile-menu-open #sidebarNavigation {
+    display: flex;
   }
 
   .sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
     width: 100%;
-    align-items: center;
+    gap: 5px;
+  }
+
+  .side-label {
+    display: block;
   }
 
   .nav {
-    justify-content: center;
-    width: 48px;
-    height: 46px;
-    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    height: auto;
+
+    padding: 11px 13px;
+
+    white-space: normal;
+  }
+
+  .nav > span:not(.nav-icon) {
+    display: inline;
   }
 
   .nav-icon {
-    font-size: 18px;
+    width: 20px;
+    min-width: 20px;
   }
 
+  /* Status group */
+
+  #sidebarNavigation .nav-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #sidebarNavigation .status-nav-group > #approvalNav {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* Submenu tetap mengikuti Status */
+
+  #sidebarNavigation .status-nav-group > .nav-submenu {
+    display: none;
+    flex-direction: column;
+
+    width: 100%;
+    padding: 4px 0 8px 45px;
+  }
+
+  #sidebarNavigation .status-nav-group.open > .nav-submenu {
+    display: flex;
+  }
+
+  #sidebarNavigation .nav-submenu-link {
+    width: 100%;
+  }
+
+  /* Badge */
+
   .approval-nav-badge {
-    position: absolute;
-    top: 1px;
-    right: 1px;
+    margin-left: auto;
+  }
 
-    min-width: 16px;
-    height: 16px;
-    padding: 0 3px;
+  /* Sembunyikan dekorasi sidebar */
 
-    font-size: 8px;
+  .sidebar-divider,
+  .sidebar-bottom {
+    display: none !important;
+  }
+
+  /* Main content */
+
+  .main {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    margin-left: 0;
+  }
+
+  .topbar {
+    position: relative;
+    min-height: 65px;
+    padding: 0 20px;
+  }
+
+  .content {
+    width: 100%;
+    padding: 22px 20px;
   }
 
   .welcome-visual {
@@ -1950,7 +2269,7 @@ tbody td small {
   }
 
   .stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2,minmax(0,1fr));
   }
 
   .stat-card:last-child {
@@ -1958,177 +2277,13 @@ tbody td small {
   }
 }
 
-
 /* =========================================
-   RESPONSIVE - MOBILE
+   29. RESPONSIVE - MOBILE
 ========================================= */
 
 @media (max-width: 600px) {
 
-  :root {
-    --sidebar-width: 0px;
-  }
-
-  /* SIDEBAR MOBILE */
-  .sidebar {
-    position: relative;
-    inset: auto;
-    z-index: 100;
-
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-
-    width: 100%;
-    height: auto;
-    min-height: auto;
-
-    padding: 14px 16px 12px;
-    overflow: visible;
-  }
-
-  /* BRAND */
-  .brand {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-
-    padding: 0;
-    margin: 0 0 13px;
-  }
-
-  .brand-info {
-    display: block;
-  }
-
-  /* SIDEBAR MENU */
-  .sidebar-menu {
-    display: flex !important;
-    flex-direction: row;
-    align-items: center;
-
-    width: 100%;
-    gap: 7px;
-
-    padding: 9px 0 2px;
-
-    overflow-x: auto;
-    overflow-y: hidden;
-
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .sidebar-menu::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* SEMBUNYIKAN LABEL KELOMPOK */
-  .side-label {
-    display: none !important;
-  }
-
-  /* TAMPILKAN TEKS MENU */
-  .nav > span:not(.nav-icon) {
-    display: inline !important;
-  }
-
-  /* TOMBOL NAVIGASI */
-  .nav {
-    position: relative;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-
-    flex: 0 0 auto;
-
-    width: auto;
-    min-width: max-content;
-    min-height: 40px;
-    height: 40px;
-
-    padding: 9px 13px;
-
-    border: none;
-    border-radius: 10px;
-
-    color: rgba(255,255,255,.85);
-    background: transparent;
-
-    font-size: 11px;
-    white-space: nowrap;
-
-    transform: none;
-  }
-
-  .nav:hover {
-    color: #fff;
-    background: rgba(255,255,255,.12);
-    transform: none;
-  }
-
-  .nav-icon {
-    display: grid;
-    place-items: center;
-
-    width: auto;
-    min-width: auto;
-
-    font-size: 15px;
-  }
-
-  /* MENU AKTIF */
-  .nav.active {
-    color: var(--primary);
-    background: #fff;
-
-    box-shadow: 0 4px 12px rgba(25,20,100,.13);
-  }
-
-  /* BADGE APPROVAL */
-  .approval-nav-badge {
-    position: static;
-
-    display: grid;
-    place-items: center;
-
-    min-width: 17px;
-    height: 17px;
-    padding: 0 4px;
-
-    margin-left: 2px;
-
-    border-radius: 20px;
-
-    background: rgba(255,255,255,.2);
-    color: #fff;
-
-    font-size: 9px;
-  }
-
-  .nav.active .approval-nav-badge {
-    background: var(--primary-light);
-    color: var(--primary);
-  }
-
-  /* HILANGKAN ELEMEN SIDEBAR TAMBAHAN */
-  .sidebar-divider,
-  .sidebar-bottom {
-    display: none !important;
-  }
-
-  /* MAIN CONTENT */
-  .main {
-    width: 100%;
-    min-width: 0;
-    margin-left: 0;
-  }
-
-  /* TOPBAR */
   .topbar {
-    position: relative;
     min-height: 61px;
     padding: 0 17px;
   }
@@ -2142,7 +2297,8 @@ tbody td small {
     display: none;
   }
 
-  /* WELCOME BANNER */
+  /* Welcome banner */
+
   .welcome-banner {
     min-height: 190px;
     padding: 24px 21px;
@@ -2170,7 +2326,8 @@ tbody td small {
     transform: scale(.8);
   }
 
-  /* PAGE HEADING */
+  /* Page heading */
+
   .page-heading {
     align-items: flex-start;
     flex-direction: column;
@@ -2183,7 +2340,8 @@ tbody td small {
     font-size: 21px;
   }
 
-  /* STATISTICS */
+  /* Statistics */
+
   .stats {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -2192,10 +2350,25 @@ tbody td small {
   .stat-card,
   .stat-card:last-child {
     grid-column: auto;
-    min-height: 100px;
+    min-height: 110px;
+    padding: 22px;
+    gap: 15px;
   }
 
-  /* PANEL */
+  .stat-icon {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    border-radius: 15px;
+    font-size: 23px;
+  }
+
+  .stat-info strong {
+    font-size: 32px;
+  }
+
+  /* Panel */
+
   .panel-top {
     align-items: flex-start;
     flex-direction: column;
@@ -2206,19 +2379,22 @@ tbody td small {
     align-self: flex-start;
   }
 
-  /* DOCUMENT SWITCH */
+  /* Document switch */
+
   .document-switch {
     width: calc(100% - 34px);
-    margin: 17px 17px 0;
+    margin: 18px auto;
   }
 
   .document-switch button {
     flex: 1;
     min-width: 0;
-    padding: 10px 8px;
+    padding: 11px 12px;
+    font-size: 12px;
   }
 
-  /* TABLE TOOLBAR */
+  /* Table toolbar */
+
   .table-toolbar {
     align-items: flex-start;
     flex-direction: column;
@@ -2241,7 +2417,8 @@ tbody td small {
     min-width: 120px;
   }
 
-  /* FOOTER */
+  /* Footer */
+
   .panel-footer {
     align-items: flex-start;
     flex-direction: column;
@@ -2254,7 +2431,8 @@ tbody td small {
     gap: 5px;
   }
 
-  /* MODAL */
+  /* Modal */
+
   .detail-grid {
     grid-template-columns: 1fr;
   }
@@ -2278,19 +2456,28 @@ tbody td small {
     padding: 13px 18px;
   }
 
-  /* TOAST */
+  /* Toast */
+
   .toast {
     right: 15px;
     bottom: 15px;
   }
 }
 
-
 /* =========================================
-   RESPONSIVE - VERY SMALL MOBILE
+   30. VERY SMALL MOBILE
 ========================================= */
 
 @media (max-width: 380px) {
+
+  .brand-info strong {
+    font-size: 17px;
+  }
+
+  .brand-info small {
+    font-size: 8px;
+  }
+
   .welcome-banner h1 {
     font-size: 20px;
   }
@@ -2321,559 +2508,4 @@ tbody td small {
   .modal-footer button {
     width: 100%;
   }
-}
-
-
-/* =========================================
-   POSISI PILIHAN BARANG & JASA DI TENGAH
-========================================= */
-
-.document-switch {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin: 20px auto;
-    gap: 8px;
-}
-
-/* Ukuran tombol */
-.document-switch button {
-    min-width: 115px;
-    justify-content: center;
-}
-
-/* Tampilan responsif */
-@media (max-width: 600px) {
-    .document-switch {
-        justify-content: center;
-    }
-
-    .document-switch button {
-        min-width: 105px;
-    }
-}
-
-/* =========================================
-   DETAIL DOCUMENT TABLE
-========================================= */
-
-.detail-table-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  margin-top: 20px;
-  border: 1px solid #e8eaf0;
-  border-radius: 12px;
-  background: #ffffff;
-}
-
-.detail-table {
-  width: 100%;
-  min-width: 650px;
-  border-collapse: collapse;
-  font-family: 'DM Sans', sans-serif;
-}
-
-.detail-table thead {
-  background: #f6f7fb;
-}
-
-.detail-table th {
-  padding: 16px 18px;
-  color: #555b6e;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  text-align: left;
-  white-space: nowrap;
-  border-bottom: 1px solid #e8eaf0;
-}
-
-.detail-table td {
-  padding: 18px;
-  color: #34394b;
-  font-size: 13px;
-  font-weight: 500;
-  border-bottom: 1px solid #f0f1f5;
-  vertical-align: middle;
-}
-
-.detail-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.detail-table tbody tr:hover {
-  background: #fafaff;
-}
-
-.detail-table td strong {
-  color: #6558e8;
-  font-weight: 800;
-}
-
-/* =========================================
-   DOCUMENT TYPE SWITCH - MODERN DESIGN
-========================================= */
-
-.document-switch {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-
-  width: fit-content;
-  margin: 24px auto;
-  padding: 6px;
-
-  background: #f1f0fa;
-  border: 1px solid #e8e5f5;
-  border-radius: 16px;
-
-  box-shadow: 0 4px 14px rgba(40, 35, 90, 0.04);
-}
-
-.document-switch button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-
-  min-width: 145px;
-  padding: 12px 22px;
-
-  border: none;
-  border-radius: 11px;
-  background: transparent;
-
-  color: #77758b;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.document-switch button:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.7);
-  color: #6558e8;
-}
-
-.document-switch button.active {
-  background: #6558e8;
-  color: #ffffff;
-
-  box-shadow: 0 4px 12px rgba(101, 88, 232, 0.25);
-}
-
-.document-switch .switch-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 27px;
-  height: 27px;
-
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.2);
-
-  font-size: 15px;
-}
-
-.document-switch button:not(.active) .switch-icon {
-  background: #e7e4f6;
-}
-
-/* ANIMATION */
-
-.document-switch button:active {
-  transform: scale(0.97);
-}
-
-/* MOBILE */
-
-@media (max-width: 600px) {
-  .document-switch {
-    width: calc(100% - 34px);
-    margin: 18px auto;
-  }
-
-  .document-switch button {
-    flex: 1;
-    min-width: 0;
-    padding: 11px 12px;
-    font-size: 12px;
-  }
-}
-
-
-
-/* =========================================
-   SIDEBAR - STATUS & SUBMENU
-========================================= */
-
-/* Grup menu */
-.sidebar-menu .nav-group {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  width: 100%;
-  min-width: 0;
-  gap: 4px;
-  flex: 0 0 auto;
-}
-
-/* Tombol Status */
-.status-nav-group > #approvalNav {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  min-height: 45px;
-  flex: 0 0 45px;
-}
-
-/* Submenu Status */
-.status-nav-group > .nav-submenu {
-  display: none;
-  flex-direction: column;
-  align-items: stretch;
-
-  width: 100%;
-  min-width: 0;
-  gap: 3px;
-
-  padding: 3px 0 8px 45px;
-  margin: 0;
-
-  box-sizing: border-box;
-  border: none;
-}
-
-/* Tampilkan submenu ketika Status dibuka */
-.status-nav-group.open > .nav-submenu {
-  display: flex;
-}
-
-/* Link submenu */
-.status-nav-group .nav-submenu-link {
-  position: relative;
-
-  display: flex;
-  align-items: center;
-  flex: 0 0 35px;
-  gap: 10px;
-  width: 100%;
-  min-width: 0;
-  min-height: 35px;
-  height: 35px;
-
-  padding: 0 11px;
-  margin: 0;
-
-  box-sizing: border-box;
-  border: none;
-  border-radius: 8px;
-
-  color: rgba(255,255,255,.68);
-
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1;
-
-  text-decoration: none;
-  white-space: nowrap;
-
-  transform: none;
-  transition: color .2s ease, background .2s ease;
-}
-
-/* Titik submenu */
-.status-nav-group .submenu-dot {
-  display: block;
-  flex: 0 0 6px;
-
-  width: 6px;
-  height: 6px;
-
-  border-radius: 50%;
-  background: rgba(255,255,255,.45);
-}
-
-/* Hover submenu */
-.status-nav-group .nav-submenu-link:hover {
-  color: #fff;
-  background: rgba(255,255,255,.10);
-  transform: none;
-}
-
-/* Submenu aktif */
-.status-nav-group .nav-submenu-link.active {
-  color: #fff;
-  background: rgba(255,255,255,.13);
-  font-weight: 700;
-  transform: none;
-}
-
-.status-nav-group .nav-submenu-link.active .submenu-dot {
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(255,255,255,.13);
-}
-
-/* Hilangkan panah Status */
-#approvalNav::before,
-#approvalNav::after,
-#approvalNav .nav-arrow {
-  display: none !important;
-  content: none !important;
-}
-
-/* Hilangkan garis penghubung submenu */
-.status-nav-group > .nav-submenu::before {
-  display: none !important;
-  content: none !important;
-  border: none !important;
-}
-
-/* =========================================
-   RESPONSIVE - TABLET
-========================================= */
-
-@media (max-width: 800px) {
-  .sidebar-menu .nav-group {
-    width: 100%;
-  }
-
-  .status-nav-group > .nav-submenu {
-    display: none;
-  }
-
-  .status-nav-group.open > .nav-submenu {
-    display: flex;
-  }
-}
-
-/* =========================================
-   RESPONSIVE - MOBILE
-========================================= */
-
-@media (max-width: 600px) {
-  .sidebar-menu .nav-group {
-    flex: 0 0 auto;
-    width: auto;
-  }
-
-  .status-nav-group > #approvalNav {
-    width: auto;
-    min-width: max-content;
-  }
-
-  .status-nav-group > .nav-submenu {
-    display: none;
-  }
-
-  .status-nav-group.open > .nav-submenu {
-    display: flex;
-  }
-}
-
-/* =========================================
-   ACTIVE MENU - DASHBOARD & STATUS
-========================================= */
-
-.sidebar .nav.active,
-.sidebar .status-nav-group.open > #approvalNav {
-  background: #ffffff !important;
-  color: #5146c8 !important;
-  font-weight: 700;
-}
-
-/* Samakan warna ikon */
-.sidebar .nav.active .nav-icon,
-.sidebar .status-nav-group.open > #approvalNav .nav-icon {
-  color: #5146c8 !important;
-}
-
-/* Efek hover menu aktif */
-.sidebar .nav.active:hover,
-.sidebar .status-nav-group.open > #approvalNav:hover {
-  background: #ffffff !important;
-  color: #5146c8 !important;
-}
-
-/* =========================================
-   ACTIVE MENU - DASHBOARD & STATUS
-========================================= */
-
-/* Dashboard aktif ketika Status tertutup */
-.sidebar #dashboardNav.active {
-  background: #ffffff;
-  color: #5146c8;
-  font-weight: 700;
-}
-
-/* Status aktif ketika submenu dibuka */
-.sidebar .status-nav-group.open > #approvalNav {
-  background: #ffffff;
-  color: #5146c8;
-  font-weight: 700;
-}
-
-/* Hilangkan warna aktif Dashboard ketika Status dibuka */
-.sidebar:has(.status-nav-group.open) #dashboardNav {
-  background: transparent !important;
-  color: rgba(255,255,255,.78) !important;
-}
-
-/* Warna ikon Dashboard ketika Status dibuka */
-.sidebar:has(.status-nav-group.open) #dashboardNav .nav-icon {
-  color: rgba(255,255,255,.78) !important;
-}
-
-/* Warna ikon Status */
-.sidebar .status-nav-group.open > #approvalNav .nav-icon {
-  color: #5146c8 !important;
-}
-
-/* =========================================
-   MOBILE HAMBURGER MENU
-========================================= */
-
-/* Header sidebar */
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-/* Tombol hamburger - default desktop disembunyikan */
-.mobile-menu-toggle {
-  display: none;
-  width: 42px;
-  height: 42px;
-  padding: 10px;
-  border: 1px solid rgba(255,255,255,.25);
-  border-radius: 10px;
-  background: rgba(255,255,255,.12);
-  cursor: pointer;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-}
-
-.mobile-menu-toggle span {
-  display: block;
-  width: 19px;
-  height: 2px;
-  border-radius: 5px;
-  background: #fff;
-  transition: .2s ease;
-}
-
-/* Animasi hamburger menjadi X */
-.mobile-menu-toggle.active span:first-child {
-  transform: translateY(7px) rotate(45deg);
-}
-
-.mobile-menu-toggle.active span:nth-child(2) {
-  opacity: 0;
-}
-
-.mobile-menu-toggle.active span:last-child {
-  transform: translateY(-7px) rotate(-45deg);
-}
-
-
-/* =========================================
-   RESPONSIVE MOBILE
-========================================= */
-
-@media (max-width: 768px) {
-
-  .app-layout {
-    display: block;
-    width: 100%;
-    min-height: 100vh;
-  }
-
-  .sidebar {
-    position: relative;
-    top: auto;
-    left: auto;
-    width: 100%;
-    height: auto;
-    min-height: 0;
-    padding: 12px 16px;
-    box-sizing: border-box;
-    z-index: 1000;
-  }
-
-  .sidebar-header {
-    min-height: 48px;
-  }
-
-  .mobile-menu-toggle {
-    display: flex;
-    flex-shrink: 0;
-  }
-
-  /* Menu tertutup secara default */
-  #sidebarNavigation {
-    display: none !important;
-    width: 100%;
-    margin-top: 14px;
-    padding: 12px 0 4px;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 5px;
-  }
-
-  /* Menu ketika hamburger diklik */
-  .sidebar.mobile-menu-open #sidebarNavigation {
-    display: flex !important;
-  }
-
-  #sidebarNavigation .nav-group {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-
-  #sidebarNavigation .nav {
-    display: flex;
-    width: 100%;
-    min-width: 0;
-    min-height: 44px;
-    box-sizing: border-box;
-  }
-
-  /* Submenu Status */
-  #sidebarNavigation .status-nav-group > .nav-submenu {
-    display: none;
-    width: 100%;
-    padding-left: 45px;
-    box-sizing: border-box;
-  }
-
-  #sidebarNavigation .status-nav-group.open > .nav-submenu {
-    display: flex;
-  }
-
-  #sidebarNavigation .nav-submenu-link {
-    width: 100%;
-  }
-
-  /* Sembunyikan bagian dekorasi sidebar */
-  .sidebar-divider,
-  .sidebar-bottom {
-    display: none !important;
-  }
-
-  /* Konten utama */
-  .main {
-    width: 100%;
-    min-width: 0;
-  }
-
 }
