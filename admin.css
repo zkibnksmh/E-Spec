@@ -2733,3 +2733,147 @@ tbody td small {
 .sidebar .status-nav-group.open > #approvalNav .nav-icon {
   color: #5146c8 !important;
 }
+
+/* =========================================
+   MOBILE HAMBURGER MENU
+========================================= */
+
+/* Header sidebar */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Tombol hamburger - default desktop disembunyikan */
+.mobile-menu-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 10px;
+  background: rgba(255,255,255,.12);
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.mobile-menu-toggle span {
+  display: block;
+  width: 19px;
+  height: 2px;
+  border-radius: 5px;
+  background: #fff;
+  transition: .2s ease;
+}
+
+/* Animasi hamburger menjadi X */
+.mobile-menu-toggle.active span:first-child {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.active span:last-child {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* =========================================
+   RESPONSIVE MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+  .app-layout {
+    display: block;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    z-index: 1000;
+  }
+
+  .sidebar-header {
+    min-height: 48px;
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  /* Menu tertutup secara default */
+  #sidebarNavigation {
+    display: none !important;
+    width: 100%;
+    margin-top: 14px;
+    padding: 12px 0 4px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+  }
+
+  /* Menu ketika hamburger diklik */
+  .sidebar.mobile-menu-open #sidebarNavigation {
+    display: flex !important;
+  }
+
+  #sidebarNavigation .nav-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #sidebarNavigation .nav {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    box-sizing: border-box;
+  }
+
+  /* Submenu Status */
+  #sidebarNavigation .status-nav-group > .nav-submenu {
+    display: none;
+    width: 100%;
+    padding-left: 45px;
+    box-sizing: border-box;
+  }
+
+  #sidebarNavigation .status-nav-group.open > .nav-submenu {
+    display: flex;
+  }
+
+  #sidebarNavigation .nav-submenu-link {
+    width: 100%;
+  }
+
+  /* Sembunyikan bagian dekorasi sidebar */
+  .sidebar-divider,
+  .sidebar-bottom {
+    display: none !important;
+  }
+
+  /* Konten utama */
+  .main {
+    width: 100%;
+    min-width: 0;
+  }
+
+}

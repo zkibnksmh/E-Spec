@@ -35,6 +35,47 @@
     </div>
 
     <!-- STATUS -->
+<aside class="sidebar">
+
+  <div class="sidebar-header">
+
+    <a class="brand" href="admin.html">
+      <span class="brand-mark">E</span>
+      <span class="brand-info">
+        <strong>E-Spec</strong>
+        <small>DOCUMENT WORKSPACE</small>
+      </span>
+    </a>
+
+    <!-- TOMBOL HAMBURGER -->
+    <button
+      type="button"
+      class="mobile-menu-toggle"
+      id="mobileMenuToggle"
+      aria-label="Buka menu navigasi"
+      aria-expanded="false">
+
+      <span></span>
+      <span></span>
+      <span></span>
+
+    </button>
+
+  </div>
+
+  <div class="sidebar-menu" id="sidebarNavigation">
+
+    <p class="side-label">MENU UTAMA</p>
+
+    <!-- DASHBOARD -->
+    <div class="nav-group">
+      <a href="admin.html" class="nav active" id="dashboardNav">
+        <span class="nav-icon">▦</span>
+        <span>Dashboard</span>
+      </a>
+    </div>
+
+    <!-- STATUS -->
     <div class="nav-group status-nav-group">
 
       <a href="javascript:void(0)"
@@ -60,6 +101,19 @@
 
       </div>
     </div>
+
+    <!-- MENU LAINNYA -->
+    <a href="pilih-spesifikasi.html" class="nav">
+      <span class="nav-icon">＋</span>
+      <span>Buat Spesifikasi</span>
+    </a>
+
+    <a href="pengaturan.html" class="nav">
+      <span class="nav-icon">⚙</span>
+      <span>Pengaturan</span>
+    </a>
+
+  </div>
 
     <!-- MENU LAINNYA -->
     <a href="pilih-spesifikasi.html" class="nav">
@@ -410,23 +464,71 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+
+  // =========================================
+  // HAMBURGER MENU
+  // =========================================
+
+  const sidebar = document.querySelector(".sidebar");
+  const menuToggle = document.getElementById("mobileMenuToggle");
+  const sidebarNavigation = document.getElementById("sidebarNavigation");
+
+  if (sidebar && menuToggle) {
+
+    menuToggle.addEventListener("click", function () {
+
+      sidebar.classList.toggle("mobile-menu-open");
+      menuToggle.classList.toggle("active");
+
+      const isOpen = sidebar.classList.contains("mobile-menu-open");
+
+      menuToggle.setAttribute("aria-expanded", isOpen);
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen ? "Tutup menu navigasi" : "Buka menu navigasi"
+      );
+
+    });
+
+    // Tutup menu setelah memilih halaman
+    sidebarNavigation.querySelectorAll("a:not(#approvalNav)")
+      .forEach(function (link) {
+
+        link.addEventListener("click", function () {
+          sidebar.classList.remove("mobile-menu-open");
+          menuToggle.classList.remove("active");
+          menuToggle.setAttribute("aria-expanded", "false");
+          menuToggle.setAttribute("aria-label", "Buka menu navigasi");
+        });
+
+      });
+
+  }
+
+
+  // =========================================
+  // STATUS DROPDOWN
+  // =========================================
+
   const statusButton = document.getElementById("approvalNav");
   const statusGroup = document.querySelector(".status-nav-group");
 
-  if (!statusButton || !statusGroup) {
-    console.error("Elemen Status tidak ditemukan!");
-    return;
+  if (statusButton && statusGroup) {
+
+    statusButton.addEventListener("click", function (event) {
+
+      event.preventDefault();
+
+      statusGroup.classList.toggle("open");
+
+      const isOpen = statusGroup.classList.contains("open");
+
+      statusButton.setAttribute("aria-expanded", isOpen);
+
+    });
+
   }
 
-  statusButton.addEventListener("click", function (event) {
-    event.preventDefault();
-
-    statusGroup.classList.toggle("open");
-
-    const isOpen = statusGroup.classList.contains("open");
-
-    statusButton.setAttribute("aria-expanded", isOpen);
-  });
 });
 </script>
 
