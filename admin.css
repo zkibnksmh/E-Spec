@@ -2807,35 +2807,36 @@ tbody td small {
   box-shadow: none !important;
 }
 
-/* STATUS SELALU NORMAL, MESKIPUN SUBMENU TERBUKA */
+
+/* STATUS - SAMA SEPERTI DASHBOARD */
 .sidebar .status-nav-group > #approvalNav,
 .sidebar .status-nav-group.open > #approvalNav {
-  background: transparent !important;
-  color: rgba(255, 255, 255, .85) !important;
-  box-shadow: none !important;
-  font-weight: 600 !important;
+  background: #ffffff !important;
+  color: #5146c8 !important;
+  box-shadow: 0 5px 16px rgba(25, 20, 100, .13) !important;
+  font-weight: 700 !important;
   transform: none !important;
 }
 
 /* IKON STATUS */
 .sidebar .status-nav-group > #approvalNav .nav-icon,
 .sidebar .status-nav-group.open > #approvalNav .nav-icon {
-  color: rgba(255, 255, 255, .85) !important;
+  color: #5146c8 !important;
 }
 
-/* HOVER STATUS */
+/* HOVER STATUS TETAP PUTIH */
 .sidebar .status-nav-group > #approvalNav:hover,
 .sidebar .status-nav-group.open > #approvalNav:hover {
-  background: rgba(255, 255, 255, .12) !important;
-  color: #ffffff !important;
-  box-shadow: none !important;
+  background: #ffffff !important;
+  color: #5146c8 !important;
 }
 
 /* HOVER IKON STATUS */
 .sidebar .status-nav-group > #approvalNav:hover .nav-icon,
 .sidebar .status-nav-group.open > #approvalNav:hover .nav-icon {
-  color: #ffffff !important;
+  color: #5146c8 !important;
 }
+
 
 /* SUBMENU AKTIF */
 .sidebar .status-nav-group .nav-submenu-link.active {
