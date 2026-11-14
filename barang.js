@@ -296,6 +296,27 @@
   }
 
   // =====================================================
+  // MAIN UOM — OTHERS VISIBILITY
+  // =====================================================
+
+  const uomSelect = $("#uomSelect", questionnaire);
+  const uomOther = $("#uomOther", questionnaire);
+
+  function updateUomOther() {
+    if (!uomSelect || !uomOther) return;
+
+    const isOthers = uomSelect.value === "Others";
+
+    uomOther.hidden = !isOthers;
+    uomOther.disabled = !isOthers;
+    uomOther.required = isOthers;
+
+    if (!isOthers) {
+      uomOther.value = "";
+    }
+  }
+
+  // =====================================================
   // DIMENSION
   // =====================================================
 
@@ -1255,6 +1276,7 @@ function createCustomTechnicalRow(item = {}) {
     }
 
     updateReason();
+    updateUomOther();
     updateCategory();
     updateDimension();
     updatePackSize();
@@ -1654,6 +1676,7 @@ $("#addDimensionBtn")?.addEventListener("click", () => {
 
   questionnaire.addEventListener("change", () => {
     updateReason();
+    updateUomOther();
     updateDimension();
     updatePackSize();
     updateCategory();
