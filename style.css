@@ -3976,3 +3976,56 @@ fieldset.q-field {
     width: 100%;
   }
 }
+
+/* =========================================
+   TOMBOL SAVE AS & SUBMIT - FORM JASA
+========================================= */
+
+#questionnaireJasaForm .questionnaire-bottom-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#questionnaireJasaForm #saveJasaAdminBtn,
+#questionnaireJasaForm #submitJasaBtn {
+  min-height: 44px;
+  padding: 0 24px;
+  border: none;
+  border-radius: 9px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+/* SAVE AS - BIRU */
+#questionnaireJasaForm #saveJasaAdminBtn {
+  background: #2864ed;
+}
+
+#questionnaireJasaForm #saveJasaAdminBtn:hover {
+  background: #1f53d0;
+}
+
+/* SUBMIT - HIJAU */
+#questionnaireJasaForm #submitJasaBtn {
+  background: #176f4d;
+}
+
+#questionnaireJasaForm #submitJasaBtn:hover {
+  background: #125a3e;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  #questionnaireJasaForm .questionnaire-bottom-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  #questionnaireJasaForm .questionnaire-bottom-actions button {
+    width: 100%;
+  }
+}
