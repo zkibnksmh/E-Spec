@@ -2509,3 +2509,170 @@ tbody td small {
     width: 100%;
   }
 }
+
+
+
+/* =========================================
+   FIX SIDEBAR HEADER & MENU NAVIGATION
+========================================= */
+
+/* Header sidebar: logo dan hamburger */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 42px;
+  flex: 0 0 auto;
+  margin-bottom: 38px;
+  gap: 10px;
+}
+
+/* Hilangkan margin bawah logo yang terlalu besar */
+.sidebar-header .brand {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin: 0;
+  padding: 0 4px;
+}
+
+/* Tombol hamburger tidak mengecil */
+.mobile-menu-toggle {
+  flex: 0 0 42px;
+}
+
+/* Area navigasi desktop */
+#sidebarNavigation {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  flex: 0 0 auto;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Setiap kelompok menu */
+#sidebarNavigation .sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  gap: 6px;
+}
+
+/* Label MENU UTAMA dan MANAJEMEN DATA */
+#sidebarNavigation .side-label {
+  position: static;
+  display: block;
+  width: 100%;
+  padding: 0 11px;
+  margin: 18px 0 10px;
+  line-height: 1.5;
+  white-space: normal;
+}
+
+/* Jarak pemisah antarkelompok menu */
+#sidebarNavigation .sidebar-divider {
+  display: block;
+  flex: 0 0 1px;
+  width: calc(100% - 16px);
+  margin: 20px 8px 12px;
+}
+
+/* =========================================
+   FIX SIDEBAR MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+  .sidebar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 12px 16px;
+    overflow: visible;
+  }
+
+  .sidebar-header {
+    min-height: 48px;
+    margin-bottom: 0;
+  }
+
+  .sidebar-header .brand {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Menu tertutup sebelum hamburger diklik */
+  #sidebarNavigation {
+    display: none !important;
+    width: 100%;
+    margin-top: 14px;
+    padding: 12px 0 4px;
+  }
+
+  /* Tampilkan seluruh navigasi ketika dibuka */
+  .sidebar.mobile-menu-open #sidebarNavigation {
+    display: flex !important;
+  }
+
+  #sidebarNavigation .sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 5px;
+  }
+
+  #sidebarNavigation .side-label {
+    display: block !important;
+    margin: 15px 0 9px;
+  }
+
+  #sidebarNavigation .nav {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    height: auto;
+    justify-content: flex-start;
+    padding: 11px 13px;
+  }
+
+  #sidebarNavigation .nav-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #sidebarNavigation .status-nav-group > .nav-submenu {
+    display: none;
+    width: 100%;
+    padding-left: 45px;
+  }
+
+  #sidebarNavigation .status-nav-group.open > .nav-submenu {
+    display: flex;
+  }
+
+  /* Elemen dekorasi tidak ditampilkan di HP */
+  .sidebar-divider,
+  .sidebar-bottom {
+    display: none !important;
+  }
+
+  .main {
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+  }
+}
