@@ -4029,3 +4029,20 @@ fieldset.q-field {
     width: 100%;
   }
 }
+
+/* UOM OTHER INPUT */
+
+.uom-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.uom-field #uomOther {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.uom-field #uomOther[hidden] {
+  display: none;
+}
