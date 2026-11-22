@@ -185,13 +185,6 @@
                       aria-pressed="false">
                 Need Revision
               </button>
-
-              <button type="button"
-                      class="approval-status-tab released-tab"
-                      data-my-status="released"
-                      aria-pressed="false">
-                Released
-              </button>
             </div>
 
             <div class="my-espec-search">
@@ -199,30 +192,37 @@
               <input
                 type="search"
                 id="myEspecSearch"
-                placeholder="Cari No. Dokumen / Nama..."
+                placeholder="Cari nama material, jasa, atau requestor..."
                 autocomplete="off"
               >
             </div>
           </div>
 
-          <!-- TABLE -->
-          <div class="table-wrap my-espec-table-wrap">
-            <table class="my-espec-table">
-              <thead>
-                <tr>
-                  <th>NO. DOKUMEN &amp; VER</th>
-                  <th>NAMA MATERIAL / JASA</th>
-                  <th>STATUS</th>
-                  <th>PROGRESS APPROVER / CATATAN REVISI</th>
-                  <th class="action-column">AKSI</th>
-                </tr>
-              </thead>
 
-              <tbody id="myEspecRows">
-                <!-- Diisi oleh approval.js -->
-              </tbody>
-            </table>
-          </div>
+<!-- TABLE -->
+<div class="table-wrap my-espec-table-wrap">
+
+  <table class="my-espec-table">
+
+    <thead>
+      <tr>
+        <th>CATEGORY</th>
+        <th>MATERIAL / SERVICE DESCRIPTION</th>
+        <th>REQUESTOR</th>
+        <th>DEPARTMENT</th>
+        <th>STATUS</th>
+        <th class="action-column">ACTION</th>
+      </tr>
+    </thead>
+
+    <tbody id="myEspecRows">
+      <!-- Diisi oleh approval.js -->
+    </tbody>
+
+  </table>
+
+</div>
+
 
           <!-- EMPTY STATE -->
           <div class="empty-state my-espec-empty"
