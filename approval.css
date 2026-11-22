@@ -1726,3 +1726,135 @@
     flex-direction: column;
   }
 }
+
+
+/* =====================================================
+   MY E-SPEC — TABLE ALIGNMENT REFINEMENT
+   Perapihan proporsi kolom dan jarak tabel
+===================================================== */
+
+/* Area tabel */
+.my-espec-panel .my-espec-table-wrap {
+  margin: 0 16px;
+  overflow-x: auto;
+  border-radius: 9px;
+}
+
+/* Pembagian lebar kolom */
+.my-espec-table {
+  width: 100%;
+  min-width: 850px;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Lebar masing-masing kolom */
+.my-espec-table th:nth-child(1),
+.my-espec-table td:nth-child(1) {
+  width: 14%;
+}
+
+.my-espec-table th:nth-child(2),
+.my-espec-table td:nth-child(2) {
+  width: 25%;
+}
+
+.my-espec-table th:nth-child(3),
+.my-espec-table td:nth-child(3) {
+  width: 14%;
+}
+
+.my-espec-table th:nth-child(4),
+.my-espec-table td:nth-child(4) {
+  width: 17%;
+}
+
+.my-espec-table th:nth-child(5),
+.my-espec-table td:nth-child(5) {
+  width: 17%;
+}
+
+.my-espec-table th:nth-child(6),
+.my-espec-table td:nth-child(6) {
+  width: 13%;
+}
+
+/* Header tabel */
+.my-espec-table th {
+  padding: 14px 12px;
+  vertical-align: middle;
+  line-height: 1.5;
+  white-space: normal;
+}
+
+/* Isi tabel */
+.my-espec-table td {
+  padding: 15px 12px;
+  vertical-align: middle;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* Nama material atau jasa */
+.my-espec-table .document-name {
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* Status */
+.my-espec-table td:nth-child(5) {
+  white-space: nowrap;
+}
+
+/* Action */
+.my-espec-table th:nth-child(6),
+.my-espec-table td:nth-child(6) {
+  text-align: center;
+}
+
+/* Jarak toolbar */
+.my-espec-toolbar {
+  padding: 15px 16px;
+  gap: 16px;
+}
+
+/* Filter agar sejajar */
+.my-espec-panel .approval-status-filter {
+  align-items: center;
+  gap: 7px;
+}
+
+/* Pencarian */
+.my-espec-search {
+  flex: 0 0 290px;
+  max-width: 290px;
+}
+
+/* Hover baris */
+.my-espec-table tbody tr:hover td {
+  background: #fafbfe;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .my-espec-search {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .my-espec-panel .my-espec-table-wrap {
+    margin: 0 12px;
+  }
+
+  .my-espec-table {
+    min-width: 850px;
+  }
+
+  .my-espec-table th,
+  .my-espec-table td {
+    padding: 12px 10px;
+  }
+}
