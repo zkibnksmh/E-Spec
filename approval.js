@@ -240,7 +240,7 @@
         myEspecStatus === "all" ||
         (myEspecStatus === "draft" && status === "draft") ||
         (myEspecStatus === "pending" && status === "pending") ||
-        (myEspecStatus === "revision" && status === "revision") ||;
+        (myEspecStatus === "revision" && status === "revision");
 
       const searchable = normalizeText([
         doc.docNo,
