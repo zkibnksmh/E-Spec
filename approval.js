@@ -240,8 +240,7 @@
         myEspecStatus === "all" ||
         (myEspecStatus === "draft" && status === "draft") ||
         (myEspecStatus === "pending" && status === "pending") ||
-        (myEspecStatus === "revision" && status === "revision") ||
-        (myEspecStatus === "released" && status === "released");
+        (myEspecStatus === "revision" && status === "revision") ||;
 
       const searchable = normalizeText([
         doc.docNo,
@@ -273,114 +272,127 @@
   // RENDER TABLE
   // =====================================================
 
-  function renderMyEspec() {
-    const rows = $("#myEspecRows");
-    const empty = $("#myEspecEmptyState");
-    const table = $(".my-espec-table-wrap");
-    const footer = $(".my-espec-footer");
+  
+function renderMyEspec() {
+  const rows = $("#myEspecRows");
+  const empty = $("#myEspecEmptyState");
+  const table = $(".my-espec-table-wrap");
+  const footer = $(".my-espec-footer");
 
-    if (!rows) return;
+  if (!rows) return;
 
-    const filtered = getFilteredMyEspec();
+  const filtered = getFilteredMyEspec();
 
-    if ($("#myEspecResultCount")) {
-      $("#myEspecResultCount").textContent =
-        `Menampilkan ${filtered.length} dokumen`;
-    }
+  if ($("#myEspecResultCount")) {
+    $("#myEspecResultCount").textContent =
+      `Menampilkan ${filtered.length} dokumen`;
+  }
 
-    // EMPTY STATE
-    if (filtered.length === 0) {
-      rows.innerHTML = "";
+  // TABEL TETAP DITAMPILKAN
+  if (table) table.style.display = "block";
+  if (footer) footer.style.display = "flex";
 
-      if (table) table.style.display = "none";
-      if (footer) footer.style.display = "none";
+  // EMPTY STATE
+  if (filtered.length === 0) {
+    rows.innerHTML = "";
 
-      if (empty) {
-        empty.style.display = "block";
+    if (empty) {
+      empty.style.display = "block";
 
-        const heading = $("h3", empty);
-        const description = $("p", empty);
+      const heading = $("h3", empty);
+      const description = $("p", empty);
 
-        if (documents.length === 0) {
-          if (heading) {
-            heading.textContent =
-              "Belum ada dokumen E-Spec yang dibuat";
-          }
+      if (documents.length === 0) {
+        if (heading) {
+          heading.textContent =
+            "Belum ada dokumen E-Spec yang dibuat";
+        }
 
-          if (description) {
-            description.innerHTML =
-              'Klik tombol <strong>+ Buat Spesifikasi</strong> ' +
-              'untuk membuat pengajuan spesifikasi baru.';
-          }
-        } else {
-          if (heading) {
-            heading.textContent = "Dokumen tidak ditemukan";
-          }
+        if (description) {
+          description.innerHTML =
+            'Klik tombol <strong>+ Buat Spesifikasi</strong> ' +
+            'untuk membuat pengajuan spesifikasi baru.';
+        }
+      } else {
+        if (heading) {
+          heading.textContent = "Dokumen tidak ditemukan";
+        }
 
-          if (description) {
-            description.textContent =
-              "Coba ubah kata pencarian atau pilih status lainnya.";
-          }
+        if (description) {
+          description.textContent =
+            "Coba ubah kata pencarian atau pilih status lainnya.";
         }
       }
-
-      return;
     }
 
-    // SHOW TABLE
-    if (empty) empty.style.display = "none";
-    if (table) table.style.display = "block";
-    if (footer) footer.style.display = "flex";
-
-    rows.innerHTML = filtered.map(doc => {
-      const status = getApprovalStatus(doc);
-
-      const docNo =
-        doc.docNo ||
-        doc.doc_no ||
-        "Belum ada nomor";
-
-      const revision =
-        doc.revision || "—";
-
-      return `
-        <tr>
-          <td>
-            <span class="doc-number">
-              ${escapeHTML(docNo)}
-            </span>
-
-            <div class="secondary-text">
-              Ver. ${escapeHTML(revision)}
-            </div>
-          </td>
-
-          <td>
-            <span class="document-name">
-              ${escapeHTML(getDocumentName(doc))}
-            </span>
-          </td>
-
-          <td>
-            ${getApprovalBadge(status)}
-          </td>
-
-          <td>
-            ${getProgressContent(doc, status)}
-          </td>
-
-          <td>
-            <button
-              type="button"
-              class="table-action"
-              data-espec-detail="${escapeHTML(doc.id)}">
-              Detail
-            </button>
-          </td>
-        </tr>
-      `;
-    }).join("");
+    return;
   }
+
+  if (empty) empty.style.display = "none";
+
+  // RENDER DATA
+  rows.innerHTML = filtered.map((doc) => {
+    const status = getApprovalStatus(doc);
+    const data = doc.formData || doc.form_data || doc;
+
+    const category =
+      doc.category ||
+      data.category ||
+      data.materialCategory ||
+      data.materialGroup ||
+      (normalizeText(doc.specType).includes("jasa")
+        ? "Jasa"
+        : "Barang");
+
+    const requestor =
+      doc.requestor ||
+      data.requestor ||
+      "—";
+
+    const department =
+      doc.department ||
+      data.department ||
+      "—";
+
+    const documentName = getDocumentName(doc);
+
+    return `
+      <tr>
+        <td>
+          ${escapeHTML(category)}
+        </td>
+
+        <td>
+          <span class="document-name">
+            ${escapeHTML(documentName)}
+          </span>
+        </td>
+
+        <td>
+          ${escapeHTML(requestor)}
+        </td>
+
+        <td>
+          ${escapeHTML(department)}
+        </td>
+
+        <td>
+          ${getApprovalBadge(status)}
+        </td>
+
+        <td>
+          <button
+            type="button"
+            class="table-action"
+            data-espec-detail="${escapeHTML(doc.id)}">
+            Detail
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
 
   // =====================================================
   // DOCUMENT DETAIL
