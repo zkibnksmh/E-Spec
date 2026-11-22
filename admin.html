@@ -296,8 +296,8 @@
               <h2>E-Spec Repository</h2>
 
               <p id="tableDescription">
-                Pilih jenis dokumen untuk melihat data yang tersimpan.
-              </p>
+  Daftar dokumen spesifikasi Barang dan Jasa yang telah tersimpan.
+</p>
             </div>
 
           </div>
@@ -345,7 +345,7 @@
 
           <div class="toolbar-title">
             <strong>Daftar Dokumen</strong>
-            <small>Data spesifikasi yang telah direalese</small>
+            <small>Kelola dokumen spesifikasi yang telah direlease.</small>
           </div>
 
           <div class="tools">
@@ -374,26 +374,31 @@
         </div>
 
 
-        <!-- TABLE -->
-        <div class="table-wrap">
 
-          <table>
+<!-- TABLE -->
+<div class="table-wrap">
 
-            <thead>
-              <tr>
-                <th>NO. DOKUMEN</th>
-                <th id="nameColumn">MATERIAL / BARANG</th>
-                <th>REQUESTOR</th>
-                <th>TANGGAL DISIMPAN</th>
-                <th>AKSI</th>
-              </tr>
-            </thead>
+  <table>
 
-            <tbody id="documentRows"></tbody>
+    <thead>
+      <tr>
+        <th>NO. DOCUMENT</th>
+        <th>CATEGORY</th>
+        <th id="nameColumn">MATERIAL / SERVICE DESCRIPTION</th>
+        <th>REQUESTOR</th>
+        <th>DEPARTMENT</th>
+        <th>ACTION</th>
+      </tr>
+    </thead>
 
-          </table>
+    <tbody id="documentRows">
+      <!-- Data dokumen ditampilkan melalui admin.js -->
+    </tbody>
 
-        </div>
+  </table>
+
+</div>
+
 
 
         <!-- EMPTY STATE -->
