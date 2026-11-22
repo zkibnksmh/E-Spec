@@ -526,135 +526,132 @@
   // RENDER MY APPROVAL
   // =========================================
 
-  function renderApproval() {
-    const rows = $("#approvalRows");
-    const empty = $("#approvalEmptyState");
-    const table = $(".approval-table-wrap");
-    const footer = $(".approval-panel .panel-footer");
 
-    if (!rows) return;
+function renderApproval() {
+  const rows = $("#approvalRows");
+  const empty = $("#approvalEmptyState");
+  const table = $(".approval-table-wrap");
+  const footer = $(".approval-panel .panel-footer");
 
-    if (loading) {
-      rows.innerHTML = `
-        <tr>
-          <td colspan="8" class="loading-state">
-            Memuat dokumen...
-          </td>
-        </tr>
-      `;
+  if (!rows) return;
 
-      if (empty) empty.style.display = "none";
-      if (table) table.style.display = "block";
-      if (footer) footer.style.display = "none";
+  // Tabel harus selalu terlihat agar header tetap muncul.
+  if (table) table.style.display = "block";
 
-      if ($("#approvalResultCount")) {
-        $("#approvalResultCount").textContent =
-          "Memuat dokumen...";
-      }
+  if (loading) {
+    rows.innerHTML = `
+      <tr>
+        <td colspan="5" class="loading-state">
+          Memuat dokumen...
+        </td>
+      </tr>
+    `;
 
-      return;
-    }
-
-    const filtered = getFilteredApproval();
+    if (empty) empty.style.display = "none";
+    if (footer) footer.style.display = "none";
 
     if ($("#approvalResultCount")) {
       $("#approvalResultCount").textContent =
-        `Menampilkan ${filtered.length} dokumen`;
+        "Memuat dokumen...";
     }
 
-    if (!filtered.length) {
-      rows.innerHTML = "";
+    return;
+  }
 
-      if (table) table.style.display = "none";
-      if (footer) footer.style.display = "none";
+  const filtered = getFilteredApproval();
 
-      if (empty) {
-        empty.style.display = "block";
+  if ($("#approvalResultCount")) {
+    $("#approvalResultCount").textContent =
+      `Menampilkan ${filtered.length} dokumen`;
+  }
 
-        const heading = empty.querySelector("h3");
-        const description = empty.querySelector("p");
+  // EMPTY STATE
+  if (!filtered.length) {
+    rows.innerHTML = "";
 
-        const hasSearch =
-          ($("#approvalSearch")?.value || "").trim() !== "";
+    if (empty) {
+      empty.style.display = "block";
 
-        if (heading) {
-          heading.textContent = hasSearch
-            ? "Dokumen tidak ditemukan"
-            : "Belum ada dokumen yang perlu di-approve";
-        }
+      const heading = empty.querySelector("h3");
+      const description = empty.querySelector("p");
 
-        if (description) {
-          description.textContent = hasSearch
-            ? "Coba kata pencarian yang berbeda."
-            : "Dokumen yang membutuhkan keputusan persetujuan akan muncul di bagian ini.";
-        }
+      const hasSearch =
+        ($("#approvalSearch")?.value || "").trim() !== "";
+
+      if (heading) {
+        heading.textContent = hasSearch
+          ? "Dokumen tidak ditemukan"
+          : "Belum ada dokumen yang perlu di-approve";
       }
 
-      return;
+      if (description) {
+        description.textContent = hasSearch
+          ? "Coba kata pencarian yang berbeda."
+          : "Dokumen yang membutuhkan keputusan persetujuan akan muncul di bagian ini.";
+      }
     }
 
-    if (empty) empty.style.display = "none";
-    if (table) table.style.display = "block";
     if (footer) footer.style.display = "flex";
 
-    rows.innerHTML = filtered.map((doc) => {
-      const id = String(doc.id);
-
-      return `
-        <tr>
-          <td>
-            <span class="doc-number">
-              ${escapeHTML(doc.docNo || "Belum ada nomor")}
-            </span>
-
-            <div class="secondary-text">
-              ${escapeHTML(doc.specType)}
-            </div>
-          </td>
-
-          <td>${escapeHTML(doc.requestor || "—")}</td>
-
-          <td>${escapeHTML(doc.plant || "—")}</td>
-
-          <td>${escapeHTML(formatDate(doc.savedAt))}</td>
-
-          <td>
-            ${renderDecisionCheckbox(doc, "approve", "Approve")}
-          </td>
-
-          <td>
-            ${renderDecisionCheckbox(doc, "reject", "Reject")}
-          </td>
-
-          <td>
-            ${renderDecisionCheckbox(doc, "revision", "Revision")}
-          </td>
-
-          <td>
-            <div class="approval-row-actions">
-
-              <button
-                type="button"
-                class="table-action"
-                data-approval-action="detail"
-                data-id="${escapeHTML(id)}">
-                Detail
-              </button>
-
-              <button
-                type="button"
-                class="table-action"
-                data-approval-action="submit"
-                data-id="${escapeHTML(id)}">
-                Proses
-              </button>
-
-            </div>
-          </td>
-        </tr>
-      `;
-    }).join("");
+    return;
   }
+
+  // DATA TERSEDIA
+  if (empty) empty.style.display = "none";
+  if (footer) footer.style.display = "flex";
+
+  rows.innerHTML = filtered.map((doc) => {
+    const id = String(doc.id);
+
+    return `
+      <tr>
+
+        <!-- SUBMIT DATE -->
+        <td>
+          ${escapeHTML(formatDate(doc.savedAt))}
+        </td>
+
+        <!-- MATERIAL / SERVICE DESCRIPTION -->
+        <td>
+          <span class="document-name">
+            ${escapeHTML(getDocumentName(doc))}
+          </span>
+
+          <div class="secondary-text">
+            ${escapeHTML(doc.specType)}
+          </div>
+        </td>
+
+        <!-- REQUESTOR -->
+        <td>
+          ${escapeHTML(doc.requestor || "—")}
+        </td>
+
+        <!-- DEPARTMENT -->
+        <td>
+          ${escapeHTML(doc.department || "—")}
+        </td>
+
+        <!-- ACTION -->
+        <td>
+          <div class="approval-row-actions">
+
+            <button
+              type="button"
+              class="table-action"
+              data-approval-action="detail"
+              data-id="${escapeHTML(id)}">
+              Detail
+            </button>
+
+          </div>
+        </td>
+
+      </tr>
+    `;
+  }).join("");
+}
+
 
   // =========================================
   // RENDER ALL

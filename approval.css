@@ -1889,3 +1889,59 @@
 .approval-panel .my-approval-table thead th:last-child {
   text-align: center !important;
 }
+
+
+/* =====================================================
+   MY APPROVAL — 5 COLUMN TABLE
+===================================================== */
+
+.my-approval-table {
+  width: 100%;
+  min-width: 850px;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.my-approval-table th:nth-child(1),
+.my-approval-table td:nth-child(1) {
+  width: 15%;
+}
+
+.my-approval-table th:nth-child(2),
+.my-approval-table td:nth-child(2) {
+  width: 30%;
+}
+
+.my-approval-table th:nth-child(3),
+.my-approval-table td:nth-child(3) {
+  width: 18%;
+}
+
+.my-approval-table th:nth-child(4),
+.my-approval-table td:nth-child(4) {
+  width: 19%;
+}
+
+.my-approval-table th:nth-child(5),
+.my-approval-table td:nth-child(5) {
+  width: 18%;
+  text-align: center;
+}
+
+.my-approval-table .document-name {
+  display: block;
+  color: #34425a;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.my-approval-table td {
+  vertical-align: middle;
+}
+
+.my-approval-table .approval-row-actions {
+  justify-content: center;
+}
