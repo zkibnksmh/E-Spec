@@ -1858,3 +1858,34 @@
     padding: 12px 10px;
   }
 }
+
+/* =====================================================
+   MY APPROVAL — TABLE HEADER
+===================================================== */
+
+.approval-panel .my-approval-table thead {
+  display: table-header-group !important;
+}
+
+.approval-panel .my-approval-table thead tr {
+  display: table-row !important;
+}
+
+.approval-panel .my-approval-table thead th {
+  display: table-cell !important;
+  padding: 16px 14px !important;
+  background: #f5f6fb !important;
+  color: #59627a !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: normal !important;
+  border-bottom: 1px solid #e9eaf1;
+  vertical-align: middle;
+}
+
+.approval-panel .my-approval-table thead th:last-child {
+  text-align: center !important;
+}
