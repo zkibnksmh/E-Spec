@@ -1945,3 +1945,164 @@
 .my-approval-table .approval-row-actions {
   justify-content: center;
 }
+
+
+/* =====================================================
+   MY APPROVAL — TABLE ALIGNMENT REFINEMENT
+   Menyesuaikan tabel dengan struktur terbaru:
+   Submit Date | Description | Requestor | Department | Aksi
+===================================================== */
+
+/* Area tabel */
+.approval-panel .approval-table-wrap {
+  width: auto;
+  margin: 0 16px;
+  overflow-x: auto;
+  border-radius: 9px;
+}
+
+/* Struktur utama tabel */
+.approval-panel .my-approval-table {
+  width: 100%;
+  min-width: 900px;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Lebar setiap kolom */
+.approval-panel .my-approval-table th:nth-child(1),
+.approval-panel .my-approval-table td:nth-child(1) {
+  width: 15%;
+}
+
+.approval-panel .my-approval-table th:nth-child(2),
+.approval-panel .my-approval-table td:nth-child(2) {
+  width: 34%;
+}
+
+.approval-panel .my-approval-table th:nth-child(3),
+.approval-panel .my-approval-table td:nth-child(3) {
+  width: 17%;
+}
+
+.approval-panel .my-approval-table th:nth-child(4),
+.approval-panel .my-approval-table td:nth-child(4) {
+  width: 19%;
+}
+
+.approval-panel .my-approval-table th:nth-child(5),
+.approval-panel .my-approval-table td:nth-child(5) {
+  width: 15%;
+  text-align: center;
+}
+
+/* Header tabel */
+.approval-panel .my-approval-table thead {
+  display: table-header-group !important;
+  background: #f5f7fa;
+}
+
+.approval-panel .my-approval-table thead tr {
+  display: table-row !important;
+}
+
+.approval-panel .my-approval-table thead th {
+  display: table-cell !important;
+  padding: 14px 12px !important;
+  border-top: 1px solid #e9ebf3;
+  border-bottom: 1px solid #e9ebf3;
+  background: #f5f7fa !important;
+  color: #64738b !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: .5px;
+  line-height: 1.5;
+  text-align: left !important;
+  text-transform: uppercase;
+  white-space: normal !important;
+  vertical-align: middle;
+}
+
+.approval-panel .my-approval-table thead th:last-child {
+  text-align: center !important;
+}
+
+/* Isi tabel */
+.approval-panel .my-approval-table td {
+  padding: 15px 12px;
+  border-bottom: 1px solid #edf0f5;
+  color: #46516b;
+  font-size: 11px;
+  line-height: 1.6;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+/* Nama material atau jasa */
+.approval-panel .my-approval-table .document-name {
+  display: block;
+  color: #34425a;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* Keterangan Barang / Jasa */
+.approval-panel .my-approval-table .secondary-text {
+  display: block;
+  margin-top: 4px;
+  color: #929db0;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+/* Kolom tanggal */
+.approval-panel .my-approval-table td:first-child {
+  color: #64738b;
+  white-space: normal;
+}
+
+/* Kolom aksi */
+.approval-panel .my-approval-table td:last-child {
+  text-align: center;
+}
+
+.approval-panel .my-approval-table .approval-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.approval-panel .my-approval-table .table-action {
+  min-width: 65px;
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+/* Hover baris */
+.approval-panel .my-approval-table tbody tr:hover td {
+  background: #fafbfe;
+}
+
+.approval-panel .my-approval-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .approval-panel .approval-table-wrap {
+    margin: 0 12px;
+  }
+
+  .approval-panel .my-approval-table {
+    min-width: 900px;
+  }
+
+  .approval-panel .my-approval-table th,
+  .approval-panel .my-approval-table td {
+    padding: 12px 10px;
+  }
+}
