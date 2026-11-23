@@ -1602,409 +1602,228 @@
        FORMAT DOKUMEN ASLI
   =================================================== -->
 
-  <form id="printSpecForm" class="document print-document">
+<form id="printSpecForm" class="document print-document fsb-sheet">
 
-    <!-- HEADER DOKUMEN -->
-    <div class="doc-top">
-
-<div class="logo">
-  <img src="img/sasa-logo.png" alt="Sasa Melezatkan!" class="sasa-logo">
-</div>
-
-      <h2>
-        Form Spesifikasi<br>
-        Barang
-      </h2>
-
-      <div class="meta">
-
-        <label>
-          No Doc <b>:</b>
-          <input name="docNo" value="F/SCW05" readonly>
-        </label>
-
-        <label>
-          Revisi <b>:</b>
-          <input name="revision" value="02" readonly>
-        </label>
-
-        <label>
-          Tgl Rev <b>:</b>
-          <input name="revisionDate" readonly>
-        </label>
-
-        <label>
-          Halaman <b>:</b>
-          <span>1 / 1</span>
-        </label>
-
-      </div>
+  <!-- HEADER -->
+  <div class="fsb-header">
+    <div class="fsb-logo">
+      <img src="img/sasa-logo.png" alt="Sasa Melezatkan!" class="sasa-logo">
     </div>
 
-
-    <!-- INFORMASI VERSI -->
-    <div class="version">
-
-      <label>
-        Version <b>:</b>
-        <input name="version" readonly>
-      </label>
-
-      <label>
-        Created Date <b>:</b>
-        <input name="createdDate" readonly>
-      </label>
-
+    <div class="fsb-title">
+      FORM SPESIFIKASI BARANG
     </div>
 
+    <div class="fsb-meta">
+      <div><span>No Doc</span><b>:</b><strong>F/SCM/05</strong></div>
+      <div><span>Revisi</span><b>:</b><strong>02</strong></div>
+      <div><span>Tgl Rev</span><b>:</b><strong>1 September 2026</strong></div>
+      <div><span>Halaman</span><b>:</b><strong>1 / 1</strong></div>
+    </div>
+  </div>
 
-    <!-- IDENTITY -->
-    <section>
+  <!-- VERSION -->
+  <div class="fsb-version">
+    <label>
+      <span>Version</span><b>:</b>
+      <input name="version" readonly>
+    </label>
 
-      <h3>IDENTITY</h3>
+    <label>
+      <span>Created Date</span><b>:</b>
+      <input name="createdDate" readonly>
+    </label>
+  </div>
 
-      <div class="identity">
+  <!-- IDENTITY -->
+  <section class="fsb-section">
+    <h3>IDENTITY</h3>
 
-        <div class="lines">
-
-          <label>
-            <span>1 Plant</span>
-            <b>:</b>
-            <input name="plant" readonly>
-          </label>
-
-          <label>
-            <span>2 Requestor</span>
-            <b>:</b>
-            <input name="requestor" readonly>
-          </label>
-
-          <label>
-            <span>3 Departement</span>
-            <b>:</b>
-            <input name="department" readonly>
-          </label>
-
-          <label>
-            <span>4 Material Group</span>
-            <b>:</b>
-            <input name="materialGroup" readonly>
-          </label>
-
-          <label>
-            <span>5 Material Category</span>
-            <b>:</b>
-            <input name="materialCategory" readonly>
-          </label>
-
-        </div>
-
-        <div class="checks">
-
-          <label>
-            <input
-              type="checkbox"
-              name="category"
-              value="Asset Barang"
-              disabled
-            >
-            Asset Barang
-          </label>
-
-          <label>
-            <input
-              type="checkbox"
-              name="category"
-              value="Expense Barang General"
-              disabled
-            >
-            Expense Barang General
-          </label>
-
-          <label>
-            <input
-              type="checkbox"
-              name="category"
-              value="Expense Barang Kimia"
-              disabled
-            >
-            Expense Barang Kimia
-          </label>
-
-        </div>
-
+    <div class="fsb-identity">
+      <div class="fsb-fields">
+        <label><span>1</span><strong>Plant</strong><b>:</b><input name="plant" readonly></label>
+        <label><span>2</span><strong>Requestor</strong><b>:</b><input name="requestor" readonly></label>
+        <label><span>3</span><strong>Departement</strong><b>:</b><input name="department" readonly></label>
+        <label><span>4</span><strong>Material Group</strong><b>:</b><input name="materialGroup" readonly></label>
+        <label><span>5</span><strong>Material Category</strong><b>:</b><input name="materialCategory" readonly></label>
       </div>
-    </section>
 
-
-    <!-- PURCHASE OBJECTIVE -->
-    <section>
-
-      <h3>PURCHASE OBJECTIVE</h3>
-
-      <div class="lines objective">
-
+      <div class="fsb-category">
         <label>
-          <span>1 Reason to Procure</span>
-          <b>:</b>
-          <input name="reason" readonly>
+          <input type="checkbox" name="category" value="Asset Barang" disabled>
+          Asset Barang
         </label>
 
         <label>
-          <span>2 Location</span>
-          <b>:</b>
-          <input name="location" readonly>
+          <input type="checkbox" name="category" value="Expense Barang General" disabled>
+          Expense Barang Umum / Teknik
         </label>
 
+        <label>
+          <input type="checkbox" name="category" value="Expense Barang Kimia" disabled>
+          Expense Bahan Kimia / Sanitasi / Pelumas
+        </label>
       </div>
-    </section>
+    </div>
+  </section>
 
+  <!-- PURCHASE OBJECTIVE -->
+  <section class="fsb-section">
+    <h3>PURCHASE OBJECTIVE</h3>
 
-    <!-- MATERIAL SPECIFICATION -->
-    <section>
+    <div class="fsb-fields fsb-objective">
+      <label><span>1</span><strong>Reason to Procure</strong><b>:</b><input name="reason" readonly></label>
+      <label><span>2</span><strong>Location</strong><b>:</b><input name="location" readonly></label>
+    </div>
+  </section>
 
-      <h3>MATERIAL SPECIFICATION</h3>
+  <!-- SPECIFICATION -->
+  <section class="fsb-section">
+    <h3>SPECIFICATION</h3>
 
-      <div class="spec-head">
-        <span>General Specification*</span>
-        <span>Technical Specification*</span>
-      </div>
+    <div class="fsb-spec-grid">
 
-      <div class="spec-grid">
+      <!-- GENERAL SPECIFICATION -->
+      <div class="fsb-panel fsb-general">
+        <div class="fsb-panel-title">General Spesification</div>
 
-        <!-- GENERAL SPECIFICATION -->
-        <div class="general lines">
-
-          <label>
-            <span>1 Material Description</span>
-            <b>:</b>
-            <input name="materialDescription" readonly>
-          </label>
-
-          <label>
-            <span>2 Material Code</span>
-            <b>:</b>
-            <input name="materialCode" readonly>
-          </label>
-
-          <label>
-            <span>3 Type/Model/Part Number</span>
-            <b>:</b>
-            <input name="partNumber" readonly>
-          </label>
-
-          <label>
-            <span>4 Varians</span>
-            <b>:</b>
-            <input name="variant" readonly>
-          </label>
-
-          <label>
-            <span>5 Dimension</span>
-            <b>:</b>
-            <input name="dimension" readonly>
-          </label>
-
-          <label>
-            <span>6 Brand</span>
-            <b>:</b>
-            <input name="brand" readonly>
-          </label>
-
-          <label>
-            <span>7 Catalogue</span>
-            <b>:</b>
-            <input name="catalogue" readonly>
-          </label>
-
-          <label>
-            <span>8 UoM</span>
-            <b>:</b>
-            <input name="uom" readonly>
-          </label>
-
-          <label>
-            <span>9 Pack Size</span>
-            <b>:</b>
-            <input name="packSize" readonly>
-            <i>PC / Box</i>
-          </label>
-
+        <div class="fsb-fields">
+          <label><span>1</span><strong>Material Description</strong><b>:</b><input name="materialDescription" readonly></label>
+          <label><span>2</span><strong>Material Code</strong><b>:</b><input name="materialCode" readonly></label>
+          <label><span>3</span><strong>Type/Model/Part Number</strong><b>:</b><input name="partNumber" readonly></label>
+          <label><span>4</span><strong>Varians</strong><b>:</b><input name="variant" readonly></label>
+          <label><span>5</span><strong>Dimension</strong><b>:</b><input name="dimension" readonly></label>
+          <label><span>6</span><strong>Brand</strong><b>:</b><input name="brand" readonly></label>
+          <label><span>7</span><strong>Catalogue</strong><b>:</b><input name="catalogue" readonly></label>
+          <label><span>8</span><strong>UoM</strong><b>:</b><input name="uom" readonly></label>
+          <label><span>9</span><strong>Pack Size</strong><b>:</b><input name="packSize" readonly><i>PC / Box</i></label>
         </div>
-
-
-        <!-- TECHNICAL SPECIFICATION -->
-        <div class="technical">
-
-          <div class="techrows">
-
-            <label>
-              <span>1</span>
-              <input name="technical1" readonly placeholder="........................">
-              <b>:</b>
-              <input name="technicalUnit1" readonly placeholder="a CM × a CM × a CM">
-            </label>
-
-            <label>
-              <span>2</span>
-              <input name="technical2" readonly placeholder="........................">
-              <b>:</b>
-              <input name="technicalUnit2" readonly placeholder="a CM × a CM × a CM">
-            </label>
-
-            <label>
-              <span>3</span>
-              <input name="technical3" readonly placeholder="........................">
-              <b>:</b>
-              <input name="technicalUnit3" readonly placeholder="a CM × a CM × a CM">
-            </label>
-
-            <label>
-              <span>4</span>
-              <input name="technical4" readonly placeholder="........................">
-              <b>:</b>
-              <input name="technicalUnit4" readonly placeholder="a CM × a CM × a CM">
-            </label>
-
-            <label>
-              <span>5</span>
-              <input name="technical5" readonly placeholder="........................">
-              <b>:</b>
-              <input name="technicalUnit5" readonly placeholder="a CM × a CM × a CM">
-            </label>
-
-          </div>
-
-
-          <!-- UNIQUE SPECIFICATION -->
-          <div class="unique">
-
-            <div class="subhead">
-              Unique Specification
-            </div>
-
-            <label>
-              <span>1</span>
-              <input name="unique1" readonly>
-              <b>:</b>
-              <input name="uniqueDetail1" readonly>
-            </label>
-
-            <label>
-              <span>2</span>
-              <input name="unique2" readonly placeholder="........................">
-              <b>:</b>
-              <input name="uniqueDetail2" readonly>
-            </label>
-
-          </div>
-
-        </div>
-
       </div>
-    </section>
 
+      <!-- TECHNICAL SPECIFICATION -->
+      <div class="fsb-panel fsb-technical">
+        <div class="fsb-panel-title">Technical Spesification</div>
 
-    <!-- SCOPE -->
-    <section>
+        <div class="fsb-tech-rows">
+          <label><span>1</span><input name="technical1" readonly><b>:</b><input name="technicalUnit1" readonly></label>
+          <label><span>2</span><input name="technical2" readonly><b>:</b><input name="technicalUnit2" readonly></label>
+          <label><span>3</span><input name="technical3" readonly><b>:</b><input name="technicalUnit3" readonly></label>
+          <label><span>4</span><input name="technical4" readonly><b>:</b><input name="technicalUnit4" readonly></label>
+          <label><span>5</span><input name="technical5" readonly><b>:</b><input name="technicalUnit5" readonly></label>
+        </div>
+      </div>
 
-      <h3>SCOPE</h3>
+      <!-- UNIQUE SPECIFICATION -->
+      <div class="fsb-panel fsb-unique">
+        <div class="fsb-panel-title">Unique Spesification</div>
 
-      <div class="scope-grid">
+        <div class="fsb-unique-rows">
+          <label><span>1</span><strong>Accecoris</strong><b>:</b><input name="uniqueDetail1" readonly></label>
+          <label><span>2</span><input name="unique2" readonly><b>:</b><input name="uniqueDetail2" readonly></label>
+        </div>
+      </div>
 
-        <div class="drawing">
+      <!-- SCOPE -->
+      <div class="fsb-panel fsb-scope">
+        <h3>SCOPE</h3>
 
-          <div class="subhead">
-            Design / Drawing / Visual / Illustration*
-          </div>
-
-
-
+        <div class="fsb-drawing">
+          <strong>1 Design / Drawing / Visual / Illustration*</strong>
           <img id="drawingPreview" alt="Pratinjau gambar">
-
         </div>
 
+        <div class="fsb-scope-fields">
+          <label><span>2</span><strong>Additional Service</strong><b>:</b><input name="additionalService" readonly></label>
 
-        <div class="scope">
-
-          <label>
-            <span>2 Additional Service</span>
-            <b>:</b>
-            <input name="additionalService" readonly>
-          </label>
-
-          <label class="tall">
-            <span>3 Health, Safety &amp;<br>Environment Standard</span>
-            <b>:</b>
+          <label class="fsb-tall">
+            <span>3</span><strong>HSE Standard</strong><b>:</b>
             <textarea name="hse" readonly></textarea>
           </label>
 
-          <label>
-            <span>4 Warranty/After Sales<br>Service</span>
-            <b>:</b>
-            <input name="warranty" readonly>
-          </label>
-
-          <label>
-            <span>5 License &amp; Regulation</span>
-            <b>:</b>
-            <input name="license" readonly>
-          </label>
-
-          <label>
-            <span>6 Required Documents</span>
-            <b>:</b>
-            <input name="requiredDocuments" readonly>
-          </label>
-
-
-          <!-- DOKUMEN PENDUKUNG -->
-          <div class="doc-checks">
-
-            <label>
-              <input type="checkbox" name="documentCheck1" disabled>
-              <input name="document1" readonly placeholder="........................">
-            </label>
-
-            <label>
-              <input type="checkbox" name="documentCheck2" disabled>
-              <input name="document2" readonly placeholder="........................">
-            </label>
-
-            <label>
-              <input type="checkbox" name="documentCheck3" disabled>
-              <input name="document3" readonly placeholder="........................">
-            </label>
-
-            <label>
-              <input type="checkbox" name="documentCheck4" disabled>
-              <input name="document4" readonly placeholder="........................">
-            </label>
-
-            <label>
-              <input type="checkbox" name="documentCheck5" disabled>
-              <input name="document5" readonly placeholder="........................">
-            </label>
-
-            <label>
-              <input type="checkbox" name="documentCheck6" disabled>
-              <input name="document6" readonly placeholder="........................">
-            </label>
-
-          </div>
-
+          <label><span>4</span><strong>Warranty/ After Sales Service</strong><b>:</b><input name="warranty" readonly></label>
+          <label><span>5</span><strong>License &amp; Regulation</strong><b>:</b><input name="license" readonly></label>
+          <label><span>6</span><strong>Required Documents</strong><b>:</b><input name="requiredDocuments" readonly></label>
         </div>
 
+        <div class="fsb-doc-checks">
+          <label><input type="checkbox" name="documentCheck1" disabled><input name="document1" readonly></label>
+          <label><input type="checkbox" name="documentCheck2" disabled><input name="document2" readonly></label>
+          <label><input type="checkbox" name="documentCheck3" disabled><input name="document3" readonly></label>
+          <label><input type="checkbox" name="documentCheck4" disabled><input name="document4" readonly></label>
+          <label><input type="checkbox" name="documentCheck5" disabled><input name="document5" readonly></label>
+          <label><input type="checkbox" name="documentCheck6" disabled><input name="document6" readonly></label>
+        </div>
       </div>
-    </section>
 
+    </div>
+  </section>
 
-    <p class="note">
-      Note: Pastikan seluruh informasi dan dokumen pendukung
-      telah dilengkapi sebelum form spesifikasi barang diajukan.
-    </p>
+  <!-- APPROVAL -->
+  <section class="fsb-section fsb-approval">
+    <h3>APPROVAL</h3>
 
-  </form>
+    <div class="fsb-approval-grid">
+
+      <!-- REQUESTOR -->
+      <div class="fsb-approval-box">
+        <strong>1. Requestor</strong>
+
+        <label>
+          <span>Request Date</span><b>:</b>
+          <input name="requestDate" readonly>
+        </label>
+      </div>
+
+      <!-- HEAD OF ENGINEERING -->
+      <div class="fsb-approval-box">
+        <strong>3. Head Of Engineering</strong>
+
+        <label>
+          <span>Approved Date</span><b>:</b>
+          <input name="engineeringApprovedDate" readonly>
+        </label>
+
+        <label>
+          <span>Status</span><b>:</b>
+          <input name="engineeringApprovalStatus" readonly>
+        </label>
+      </div>
+
+      <!-- MANAGER -->
+      <div class="fsb-approval-box">
+        <strong>2. Manager</strong>
+
+        <label>
+          <span>Approved Date</span><b>:</b>
+          <input name="managerApprovedDate" readonly>
+        </label>
+
+        <label>
+          <span>Status</span><b>:</b>
+          <input name="managerApprovalStatus" readonly>
+        </label>
+      </div>
+
+      <!-- PLANT HEAD -->
+      <div class="fsb-approval-box">
+        <strong>4. Plant Head</strong>
+
+        <label>
+          <span>Approved Date</span><b>:</b>
+          <input name="plantHeadApprovedDate" readonly>
+        </label>
+
+        <label>
+          <span>Status</span><b>:</b>
+          <input name="plantHeadApprovalStatus" readonly>
+        </label>
+      </div>
+
+    </div>
+  </section>
+
+</form>
+
 
 
 

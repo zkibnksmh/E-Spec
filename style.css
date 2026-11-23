@@ -1024,6 +1024,456 @@ fieldset.q-field {
 }
 
 
+/* =========================================
+   FSB - FORM SPESIFIKASI BARANG
+   EXCEL STYLE PDF
+========================================= */
+
+/* Halaman khusus Barang */
+@page fsbBarang {
+  size: A4 portrait;
+  margin: 6mm;
+}
+
+@media print {
+
+  .fsb-sheet {
+    page: fsbBarang;
+    width: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: 1px solid #000 !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 7px !important;
+    line-height: 1.15 !important;
+  }
+
+  .fsb-sheet * {
+    box-sizing: border-box !important;
+  }
+
+  /* HEADER */
+
+  .fsb-sheet .fsb-header {
+    display: grid !important;
+    grid-template-columns: 25% 45% 30% !important;
+    min-height: 65px !important;
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .fsb-sheet .fsb-logo {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 5px !important;
+  }
+
+  .fsb-sheet .fsb-logo img {
+    display: block !important;
+    width: 105px !important;
+    max-width: 100% !important;
+    max-height: 45px !important;
+    object-fit: contain !important;
+  }
+
+  .fsb-sheet .fsb-title {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 5px !important;
+    border-left: 1px solid #000 !important;
+    border-right: 1px solid #000 !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+  }
+
+  .fsb-sheet .fsb-meta {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    padding: 5px 7px !important;
+  }
+
+  .fsb-sheet .fsb-meta div {
+    display: grid !important;
+    grid-template-columns: 55px 8px 1fr !important;
+    gap: 3px !important;
+    align-items: center !important;
+    min-height: 12px !important;
+    font-size: 7px !important;
+  }
+
+  .fsb-sheet .fsb-meta strong {
+    font-weight: normal !important;
+  }
+
+  /* VERSION */
+
+  .fsb-sheet .fsb-version {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    min-height: 22px !important;
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .fsb-sheet .fsb-version label {
+    display: grid !important;
+    grid-template-columns: 55px 8px 1fr !important;
+    gap: 3px !important;
+    align-items: center !important;
+    padding: 3px 7px !important;
+    font-size: 7px !important;
+  }
+
+  .fsb-sheet .fsb-version input {
+    width: 100% !important;
+    border: 0 !important;
+    padding: 1px !important;
+  }
+
+  /* SECTION */
+
+  .fsb-sheet > section {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid #000 !important;
+    break-inside: avoid !important;
+  }
+
+  .fsb-sheet > section > h3,
+  .fsb-sheet .fsb-scope > h3 {
+    margin: 0 !important;
+    padding: 4px !important;
+    background: #e5e5e5 !important;
+    border-bottom: 1px solid #000 !important;
+    text-align: left !important;
+    font-size: 8px !important;
+    font-weight: bold !important;
+  }
+
+  /* IDENTITY */
+
+  .fsb-sheet .fsb-identity {
+    display: grid !important;
+    grid-template-columns: 52% 48% !important;
+    min-height: 85px !important;
+  }
+
+  .fsb-sheet .fsb-fields label {
+    display: grid !important;
+    grid-template-columns: 15px 125px 8px minmax(0,1fr) !important;
+    align-items: center !important;
+    gap: 3px !important;
+    min-height: 14px !important;
+    margin: 0 !important;
+    padding: 1px 5px !important;
+  }
+
+  .fsb-sheet .fsb-fields input,
+  .fsb-sheet .fsb-scope-fields input,
+  .fsb-sheet .fsb-scope-fields textarea {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 12px !important;
+    padding: 1px 2px !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    font-size: 7px !important;
+  }
+
+  .fsb-sheet .fsb-fields strong {
+    font-weight: normal !important;
+  }
+
+  .fsb-sheet .fsb-category {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    padding: 5px 12px !important;
+    border-left: 1px solid #000 !important;
+  }
+
+  .fsb-sheet .fsb-category label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    font-size: 7px !important;
+  }
+
+  .fsb-sheet input[type="checkbox"] {
+    width: 9px !important;
+    height: 9px !important;
+    margin: 0 !important;
+    accent-color: #000 !important;
+  }
+
+  /* PURCHASE OBJECTIVE */
+
+  .fsb-sheet .fsb-objective {
+    padding: 3px 0 !important;
+  }
+
+  .fsb-sheet .fsb-objective label {
+    min-height: 17px !important;
+  }
+
+  /* SPECIFICATION GRID */
+
+  .fsb-sheet .fsb-spec-grid {
+    display: grid !important;
+    grid-template-columns: 50% 50% !important;
+    grid-template-areas:
+      "general technical"
+      "unique scope" !important;
+    align-items: stretch !important;
+  }
+
+  .fsb-sheet .fsb-panel {
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-right: 1px solid #000 !important;
+    border-bottom: 1px solid #000 !important;
+    break-inside: avoid !important;
+  }
+
+  .fsb-sheet .fsb-general {
+    grid-area: general;
+  }
+
+  .fsb-sheet .fsb-technical {
+    grid-area: technical;
+    border-right: 0 !important;
+  }
+
+  .fsb-sheet .fsb-unique {
+    grid-area: unique;
+  }
+
+  .fsb-sheet .fsb-scope {
+    grid-area: scope;
+    border-right: 0 !important;
+  }
+
+  .fsb-sheet .fsb-panel-title {
+    min-height: 19px !important;
+    padding: 4px !important;
+    background: #e5e5e5 !important;
+    border-bottom: 1px solid #000 !important;
+    text-align: center !important;
+    font-weight: bold !important;
+  }
+
+  .fsb-sheet .fsb-general .fsb-fields label {
+    grid-template-columns: 13px 125px 7px minmax(0,1fr) !important;
+    min-height: 17px !important;
+  }
+
+  .fsb-sheet .fsb-general .fsb-fields label i {
+    font-size: 6px !important;
+    white-space: nowrap !important;
+  }
+
+  /* TECHNICAL */
+
+  .fsb-sheet .fsb-tech-rows {
+    padding: 3px 5px !important;
+  }
+
+  .fsb-sheet .fsb-tech-rows label {
+    display: grid !important;
+    grid-template-columns: 14px minmax(0,1fr) 8px 65px !important;
+    gap: 3px !important;
+    align-items: center !important;
+    min-height: 23px !important;
+    margin: 0 !important;
+  }
+
+  .fsb-sheet .fsb-tech-rows input {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 15px !important;
+    padding: 1px 2px !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    font-size: 7px !important;
+  }
+
+  /* UNIQUE SPECIFICATION */
+
+  .fsb-sheet .fsb-unique-rows {
+    padding: 4px !important;
+  }
+
+  .fsb-sheet .fsb-unique-rows label {
+    display: grid !important;
+    grid-template-columns: 14px 110px 8px minmax(0,1fr) !important;
+    gap: 3px !important;
+    align-items: center !important;
+    min-height: 22px !important;
+  }
+
+  .fsb-sheet .fsb-unique-rows input {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 15px !important;
+    padding: 1px 2px !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    font-size: 7px !important;
+  }
+
+  .fsb-sheet .fsb-unique-rows strong {
+    font-weight: normal !important;
+  }
+
+  /* SCOPE */
+
+  .fsb-sheet .fsb-drawing {
+    min-height: 75px !important;
+    padding: 5px !important;
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .fsb-sheet .fsb-drawing strong {
+    display: block !important;
+    margin-bottom: 4px !important;
+    font-size: 7px !important;
+  }
+
+  .fsb-sheet .fsb-drawing img {
+    display: block !important;
+    max-width: 100% !important;
+    max-height: 55px !important;
+    margin: auto !important;
+    object-fit: contain !important;
+  }
+
+  .fsb-sheet .fsb-scope-fields {
+    padding: 3px !important;
+  }
+
+  .fsb-sheet .fsb-scope-fields label {
+    display: grid !important;
+    grid-template-columns: 13px 120px 7px minmax(0,1fr) !important;
+    gap: 3px !important;
+    align-items: center !important;
+    min-height: 17px !important;
+    margin: 0 !important;
+  }
+
+  .fsb-sheet .fsb-scope-fields strong {
+    font-weight: normal !important;
+  }
+
+  .fsb-sheet .fsb-scope-fields .fsb-tall {
+    min-height: 30px !important;
+  }
+
+  .fsb-sheet .fsb-scope-fields textarea {
+    height: 25px !important;
+    resize: none !important;
+  }
+
+  .fsb-sheet .fsb-doc-checks {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2px 5px !important;
+    padding: 3px 5px !important;
+  }
+
+  .fsb-sheet .fsb-doc-checks label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 3px !important;
+    min-width: 0 !important;
+  }
+
+  .fsb-sheet .fsb-doc-checks input:not([type="checkbox"]) {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 13px !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+    background: transparent !important;
+    font-size: 6px !important;
+  }
+
+  /* APPROVAL */
+
+  .fsb-sheet .fsb-approval-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .fsb-sheet .fsb-approval-box {
+    min-height: 48px !important;
+    padding: 5px 8px !important;
+    border-right: 1px solid #000 !important;
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .fsb-sheet .fsb-approval-box:nth-child(2n) {
+    border-right: 0 !important;
+  }
+
+  .fsb-sheet .fsb-approval-box:nth-last-child(-n+2) {
+    border-bottom: 0 !important;
+  }
+
+  .fsb-sheet .fsb-approval-box > strong {
+    display: block !important;
+    margin-bottom: 5px !important;
+    font-size: 7px !important;
+  }
+
+  .fsb-sheet .fsb-approval-box label {
+    display: grid !important;
+    grid-template-columns: 90px 7px minmax(0,1fr) !important;
+    gap: 3px !important;
+    align-items: center !important;
+    min-height: 13px !important;
+    margin: 0 !important;
+  }
+
+  .fsb-sheet .fsb-approval-box input {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 12px !important;
+    padding: 1px 2px !important;
+    border: 0 !important;
+    border-bottom: 1px dotted #777 !important;
+    background: transparent !important;
+    font-size: 7px !important;
+  }
+
+  /* PRINT SAFETY */
+
+  .fsb-sheet input,
+  .fsb-sheet textarea {
+    color: #000 !important;
+    font-family: Arial, sans-serif !important;
+    -webkit-text-fill-color: #000 !important;
+  }
+
+  .fsb-sheet img {
+    break-inside: avoid !important;
+  }
+}
+
+
+
 
 /* =========================================
    JASA - TEMPLATE PDF
