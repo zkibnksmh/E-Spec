@@ -1,7 +1,12 @@
 (() => {
   "use strict";
 
-  const API_URL = "http://localhost:3000/api/documents";
+  const API_BASE_URL = window.ESPEC_CONFIG?.API_BASE_URL || "http://localhost:3000/api";
+  const API_URL = `${API_BASE_URL.replace(/\/$/, "")}/documents`;
+
+  const getApiHeaders = () => (
+    window.ESpecDevAuth?.getApiHeaders?.() || { "Content-Type": "application/json" }
+  );
 
   const $ = selector => document.querySelector(selector);
 
@@ -36,7 +41,7 @@
     showStatus("Sedang mengambil data dari database...");
 
     try {
-      const response = await fetch(API_URL);
+      const response = await fetch(API_URL, { headers: getApiHeaders() });
 
       if (!response.ok) {
         throw new Error("Gagal mengambil data.");
@@ -117,9 +122,7 @@
         try {
           const response = await fetch(API_URL, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
+            headers: getApiHeaders(),
             body: JSON.stringify({
               specType,
               formData

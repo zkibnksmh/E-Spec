@@ -6,13 +6,28 @@
   // E-SPEC JASA — QUESTIONNAIRE CONTROLLER
   // =====================================================
 
-  const API_URL = "http://localhost:3000/api/documents";
-  const STORAGE_KEY = "eSpecJasaQuestionnaire.v1";
+  const API_BASE_URL =
+    window.ESPEC_CONFIG?.API_BASE_URL ||
+    "http://localhost:3000/api";
+  const DEV_IDENTITY_ALIASES = ["requestor", "manager", "head-engineering"];
+
+  function getApiHeaders() {
+    const headers = { "Content-Type": "application/json" };
+    const configuredIdentity = window.ESPEC_CONFIG?.DEV_IDENTITY;
+    const identity = typeof configuredIdentity === "string"
+      ? configuredIdentity.trim().toLowerCase()
+      : "";
+
+    if (DEV_IDENTITY_ALIASES.includes(identity)) {
+      headers["X-ESpec-Dev-Identity"] = identity;
+    }
+
+    return headers;
+  }
 
   const questionnaire = document.getElementById("questionnaireJasaForm");
   const printForm = document.getElementById("printJasaForm");
 
-  const pdfBtn = document.getElementById("pdfJasaBtn");
   const resetBtn = document.getElementById("resetJasaBtn");
   const saveBtn = document.getElementById("saveJasaAdminBtn");
   const submitBtn = document.getElementById("submitJasaBtn");
@@ -27,60 +42,21 @@
   // DATA DEPARTMENT — SAMA DENGAN BARANG
   // =====================================================
 
-  const plantData = {
-    "1210 - Plant Gending": [
-      "HRGA",
-      "Fermentation - Decalcium",
-      "Fermentation - Glucose",
-      "Fermentation - Fermentation",
-      "Isolation & Purification - Isolation/Purification",
-      "Packing",
-      "Polycello & Technic Packing",
-      "Liquid Fertilizer Sales",
-      "SCM - PPIC",
-      "SCM - Inderect Sourcing",
-      "Engineering & Technical Development",
-      "Utility",
-      "Electrical Instrument",
-      "Mechanical & Maintenance",
-      "Logistic & Warehouse",
-      "QA & QC",
-      "SHE",
-      "IT",
-      "Costing Associate"
-    ],
-
-    "1220 - Plant Cikarang": [
-      "HRGA",
-      "Production - Dry/Wet",
-      "SCM - PPIC",
-      "SCM - Inderect Sourcing",
-      "Maintenance",
-      "Project",
-      "Warehouse",
-      "QA & QC",
-      "SHE",
-      "IT",
-      "Supply Chain Finance"
-    ],
-
-    "1230 - Plant Minahasa Selatan": [
-      "Production - Opening & Processing",
-      "Production - Production & TCA",
-      "PPIC",
-      "Indirect Sourcing",
-      "Maintenance",
-      "Utility",
-      "Warehouse",
-      "QA & QC",
-      "SHE",
-      "IT",
-      "Plant Operation Controller"
-    ]
-  };
-
   const plantSelect = questionnaire.querySelector('[name="plant"]');
   const deptSelect = questionnaire.querySelector('[name="department"]');
+  const reasonChoice = questionnaire.querySelector('[name="reasonChoice"]');
+  const materialGroupSelect = questionnaire.querySelector('[name="materialGroup"]');
+  let plants = [];
+  let departmentRequestId = 0;
+  let jasaSpecificationTypeId = null;
+  let persistedDraftId = null;
+  let persistedDocumentNo = null;
+  let loadingDocument = false;
+  let hasUnsavedChanges = false;
+  let legacyPendingClear = false;
+  let submitting = false;
+  let jasaMaterialCategoryId = null;
+  let jasaMaterialGroups = [];
 
   // =====================================================
   // UTILITAS
@@ -90,10 +66,66 @@
     return parent.querySelector(selector);
   }
 
-  function setDraftStatus(message) {
-    if (draftStatus) {
-      draftStatus.textContent = message;
+  function setDraftStatus(message, warning = false) {
+    if (!draftStatus) return;
+
+    draftStatus.textContent = message;
+    draftStatus.classList.toggle("warning", Boolean(warning));
+  }
+
+  function confirmDiscardChanges() {
+    return !hasUnsavedChanges || confirm(
+      "Perubahan belum disimpan ke server akan hilang. Lanjutkan?"
+    );
+  }
+
+  function parseDetailFormData(detail) {
+    let formData = detail?.formData || detail?.form_data || {};
+
+    if (typeof formData === "string") {
+      try {
+        formData = JSON.parse(formData);
+      } catch {
+        formData = {};
+      }
     }
+
+    if (!formData || typeof formData !== "object" || Array.isArray(formData)) {
+      formData = {};
+    }
+
+    return {
+      ...formData,
+      persistedDocumentNo: detail?.documentNo || formData.persistedDocumentNo || ""
+    };
+  }
+
+  function normalizeServerFormData(detail) {
+    const data = parseDetailFormData(detail);
+    const group = jasaMaterialGroups.find((item) =>
+      String(item.id) === String(data.materialGroup)
+    );
+
+    if (data.materialCategoryLabel) {
+      data.materialCategory = data.materialCategoryLabel;
+    } else if (
+      jasaMaterialCategoryId !== null &&
+      String(data.materialCategory) === String(jasaMaterialCategoryId)
+    ) {
+      data.materialCategory = "Expense Jasa";
+    }
+
+    if (data.materialGroupCode) {
+      data.materialGroup = data.materialGroupCode;
+    } else if (group?.sapgroupcode) {
+      data.materialGroup = group.sapgroupcode;
+    }
+
+    if (data.reasonToProcure) {
+      data.reasonChoice = data.reasonToProcure;
+    }
+
+    return data;
   }
 
   function getToday() {
@@ -226,37 +258,96 @@
   // DROPDOWN DEPARTMENT BERDASARKAN PLANT
   // =====================================================
 
-  function populateDepartments(selectedDepartment = "") {
+  async function fetchMasterData(path) {
+    const response = await fetch(`${API_BASE_URL}${path}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    return Array.isArray(result.data) ? result.data : [];
+  }
+
+  function setSelectMessage(select, message) {
+    select.innerHTML = "";
+    const option = document.createElement("option");
+    option.value = "";
+    option.textContent = message;
+    select.appendChild(option);
+  }
+
+  function findPlant(value) {
+    return plants.find((plant) =>
+      String(plant.id) === String(value) ||
+      `${plant.plantid} - ${plant.plantname}` === value ||
+      String(plant.plantid) === String(value)
+    );
+  }
+
+  function setSelectedOption(select, value) {
+    if (!value) return;
+
+    const option = [...select.options].find((item) =>
+      item.value === String(value) || item.textContent === String(value)
+    );
+
+    if (option) {
+      select.value = option.value;
+      return;
+    }
+
+    const legacyOption = document.createElement("option");
+    legacyOption.value = String(value);
+    legacyOption.textContent = String(value);
+    legacyOption.dataset.legacy = "true";
+    select.appendChild(legacyOption);
+    select.value = legacyOption.value;
+  }
+
+  async function populateDepartments(selectedDepartment = "") {
     if (!plantSelect || !deptSelect) return;
 
-    const selectedPlant = plantSelect.value;
+    const plant = findPlant(plantSelect.value);
+    const requestId = ++departmentRequestId;
 
-    deptSelect.innerHTML = "";
+    if (!plant) {
+      setSelectMessage(deptSelect, "Pilih Plant terlebih dahulu");
+      return;
+    }
 
-    const placeholder = document.createElement("option");
+    setSelectMessage(deptSelect, "Memuat Departemen...");
+    deptSelect.disabled = true;
 
-    placeholder.value = "";
-    placeholder.textContent = selectedPlant
-      ? "-- Pilih Departemen --"
-      : "Pilih Plant terlebih dahulu";
+    try {
+      const departments = await fetchMasterData(`/plants/${plant.id}/departments`);
 
-    deptSelect.appendChild(placeholder);
+      if (requestId !== departmentRequestId) return;
 
-    const departments = plantData[selectedPlant] || [];
+      setSelectMessage(
+        deptSelect,
+        departments.length ? "-- Pilih Departemen --" : "Tidak ada Departemen tersedia"
+      );
 
-    departments.forEach((department) => {
-      const option = document.createElement("option");
+      departments.forEach((department) => {
+        const option = document.createElement("option");
+        option.value = String(department.id);
+        option.textContent = department.departmentname;
+        deptSelect.appendChild(option);
+      });
 
-      option.value = department;
-      option.textContent = department;
+      setSelectedOption(deptSelect, selectedDepartment);
+    } catch (error) {
+      if (requestId !== departmentRequestId) return;
 
-      deptSelect.appendChild(option);
-    });
-
-    if (selectedDepartment && departments.includes(selectedDepartment)) {
-      deptSelect.value = selectedDepartment;
-    } else {
-      deptSelect.value = "";
+      console.error("Gagal memuat department:", error);
+      setSelectMessage(deptSelect, "Gagal memuat Departemen");
+      setDraftStatus("Gagal memuat Departemen dari server");
+    } finally {
+      if (requestId === departmentRequestId) {
+        deptSelect.disabled = false;
+      }
     }
   }
 
@@ -267,6 +358,107 @@
       saveDraft();
       transferToPrint();
     });
+  }
+
+  async function loadMasterData() {
+    try {
+      const [types, plantRows, categoryRows, groupRows] = await Promise.all([
+        fetchMasterData("/specification-types"),
+        fetchMasterData("/plants"),
+        fetchMasterData("/material-categories"),
+        fetchMasterData("/material-groups")
+      ]);
+
+      const jasaType = types.find((type) =>
+        String(type.typename).toLowerCase() === "jasa" ||
+        String(type.typecode).toLowerCase() === "jasa"
+      );
+
+      if (!jasaType) {
+        throw new Error("Tipe spesifikasi Jasa tidak ditemukan.");
+      }
+
+      jasaSpecificationTypeId = jasaType.id;
+      plants = plantRows;
+      jasaMaterialCategoryId = categoryRows.find((category) =>
+        Number(category.specificationtypeid) === Number(jasaSpecificationTypeId) &&
+        category.categoryname === "OPEX - JASA"
+      )?.id || null;
+      jasaMaterialGroups = groupRows.filter((group) =>
+        String(group.categoryname).toUpperCase() === "OPEX - JASA"
+      );
+
+      const savedPlant = plantSelect?.value || "";
+      const savedDepartment = deptSelect?.value || "";
+      const savedReason = reasonChoice?.value || "";
+      const savedMaterialGroup = materialGroupSelect?.value || "";
+
+      if (materialGroupSelect) {
+        const availableGroups = new Set(
+          jasaMaterialGroups.map((group) => group.sapgroupcode)
+        );
+
+        [...materialGroupSelect.options].forEach((option) => {
+          if (!option.value) return;
+
+          option.disabled = !availableGroups.has(option.value);
+          option.textContent = option.disabled
+            ? `${option.value} (belum tersedia)`
+            : option.value;
+        });
+
+        if (savedMaterialGroup) {
+          const savedOption = [...materialGroupSelect.options].find(
+            (option) => option.value === savedMaterialGroup
+          );
+
+          if (savedOption) {
+            savedOption.disabled = !availableGroups.has(savedMaterialGroup);
+            materialGroupSelect.value = savedMaterialGroup;
+          }
+        }
+      }
+
+      if (plantSelect) {
+        setSelectMessage(plantSelect, "Pilih Plant");
+
+        plants.forEach((plant) => {
+          const option = document.createElement("option");
+          option.value = String(plant.id);
+          option.textContent = `${plant.plantid} - ${plant.plantname}`;
+          plantSelect.appendChild(option);
+        });
+
+        setSelectedOption(plantSelect, savedPlant);
+      }
+
+      if (reasonChoice) {
+        setSelectMessage(reasonChoice, "Pilih alasan pengadaan");
+
+        const reasons = await fetchMasterData(
+          `/reason-to-procure/specification-types/${jasaType.id}`
+        );
+
+        reasons.forEach((reason) => {
+          const option = document.createElement("option");
+          option.value = String(reason.id);
+          option.textContent = reason.optionname;
+          reasonChoice.appendChild(option);
+        });
+
+        const matchingReason = reasons.find((reason) =>
+          String(reason.id) === String(savedReason) ||
+          reason.optionname === savedReason
+        );
+
+        setSelectedOption(reasonChoice, matchingReason?.id || savedReason);
+      }
+
+      await populateDepartments(savedDepartment);
+    } catch (error) {
+      console.error("Gagal memuat master data Jasa:", error);
+      setDraftStatus("Gagal memuat master data dari server. Coba muat ulang halaman.");
+    }
   }
 
   // =====================================================
@@ -308,8 +500,191 @@
     });
 
     data._attachmentFileNames = fileNames;
+    data.attachmentDocuments = getScopeDocumentData(
+      attachmentDocumentList,
+      "attachmentDocumentType[]",
+      "other_attachmentDocumentType[]",
+      "attachmentDocumentFile[]"
+    );
+    data.requiredDocuments = getScopeDocumentData(
+      requiredDocumentList,
+      "requiredDocumentType[]",
+      "other_requiredDocumentType[]"
+    );
 
     return data;
+  }
+
+  function getScopeDocumentData(container, typeName, otherName, fileName) {
+    return getScopeRows(container).map((row) => {
+      const type = row.querySelector(`[name="${CSS.escape(typeName)}"]`);
+      const other = row.querySelector(`[name="${CSS.escape(otherName)}"]`);
+      const file = fileName
+        ? row.querySelector(`[name="${CSS.escape(fileName)}"]`)
+        : null;
+
+      return {
+        type: type?.value || "",
+        other: other?.value || "",
+        fileName: file?.files?.[0]?.name || ""
+      };
+    }).filter((item) => item.type || item.other || item.fileName);
+  }
+
+  function getAttributeValues(formData) {
+    const values = {};
+    const add = (code, value) => {
+      if (value === undefined || value === null || value === "") return;
+      values[code] = value;
+    };
+
+    add("VERSION", formData.version);
+    add("CREATED_DATE", formData.createdDate);
+    add("PLANT", formData.plant);
+    add("REQUESTOR", formData.requestor);
+    add("DEPARTMENT", formData.department);
+    add("REASON_TO_PROCURE", formData.reasonChoice);
+    add("PROJECT_NAME", formData.projectName);
+    add("PROJECT_DESCRIPTION", formData.projectDescription);
+    add("TIMELINE", formData.timeline);
+
+    if (formData.attachmentDocuments?.length) {
+      add("ATTACHMENT_DOCUMENTS", formData.attachmentDocuments);
+    }
+
+    if (formData.requiredDocuments?.length) {
+      add("REQUIRED_DOCUMENTS", formData.requiredDocuments);
+    }
+
+    return values;
+  }
+
+  function getDraftDocumentNumber(formData) {
+    return String(persistedDocumentNo || formData.persistedDocumentNo || "").trim() ||
+      `${formData.docNo || "F/SJ-001"}-${Date.now()}`;
+  }
+
+  async function saveDraftToServer() {
+    if (!jasaSpecificationTypeId) {
+      throw new Error("Tipe spesifikasi Jasa belum tersedia.");
+    }
+
+    const userId = String(window.ESpecDevAuth?.getProfile()?.userId || "").trim();
+
+    if (!userId) {
+      throw new Error("Identitas development tidak tersedia untuk menyimpan Draft.");
+    }
+
+    const formData = getFormData();
+    const documentNo = getDraftDocumentNumber(formData);
+    persistedDocumentNo = documentNo;
+    formData.persistedDocumentNo = documentNo;
+    const selectedCategory = Array.isArray(formData.materialCategory)
+      ? formData.materialCategory[0]
+      : formData.materialCategory;
+    const materialGroupId = jasaMaterialGroups.find((group) =>
+      group.sapgroupcode === formData.materialGroup
+    )?.id;
+
+    if (selectedCategory !== "Expense Jasa" || !jasaMaterialCategoryId) {
+      throw new Error(
+        "Asset Jasa belum memiliki master-data category yang didukung. Pilih Expense Jasa atau lengkapi master data terlebih dahulu."
+      );
+    }
+
+    if (!materialGroupId) {
+      throw new Error(
+        "Material Group Jasa tidak memiliki mapping master data yang valid."
+      );
+    }
+
+    const payloadFormData = {
+      ...formData,
+      materialCategory: jasaMaterialCategoryId,
+      materialCategoryLabel: selectedCategory,
+      materialGroup: materialGroupId,
+      materialGroupCode: formData.materialGroup,
+      reasonToProcure: formData.reasonChoice,
+    };
+    const isUpdate = Boolean(persistedDraftId);
+
+    setDraftStatus(
+      isUpdate
+        ? "Menyimpan perubahan Draft ke server..."
+        : "Menyimpan Draft baru ke server..."
+    );
+
+    const response = await fetch(
+      isUpdate
+        ? `${API_BASE_URL}/specifications/${encodeURIComponent(persistedDraftId)}`
+        : `${API_BASE_URL}/specifications`,
+      {
+        method: isUpdate ? "PUT" : "POST",
+        headers: getApiHeaders(),
+        body: JSON.stringify({
+          ...(isUpdate ? {} : { specificationTypeId: jasaSpecificationTypeId }),
+          documentNo,
+          formData: payloadFormData,
+          attributeValues: getAttributeValues(formData)
+        })
+      }
+    );
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      if (response.status === 403 && /pemilik|akses/i.test(result.message || "")) {
+        persistedDraftId = null;
+        persistedDocumentNo = null;
+        hasUnsavedChanges = true;
+        setDraftStatus(
+          "Server menolak pembaruan karena Draft bukan milik identitas ini. Pilih Draft yang dimiliki atau buat Draft baru.",
+          true
+        );
+      }
+
+      throw new Error(result.message || "Gagal menyimpan draft ke server.");
+    }
+
+    persistedDraftId = result.data?.id || persistedDraftId;
+
+    if (!persistedDraftId) {
+      throw new Error("Server tidak mengembalikan ID spesifikasi.");
+    }
+
+    persistedDocumentNo = result.data?.documentNo || documentNo;
+    formData.persistedDocumentNo = persistedDocumentNo;
+    hasUnsavedChanges = false;
+
+    if (legacyPendingClear) {
+      window.ESpecDraftWorkspace?.clearLegacy?.("jasa");
+      legacyPendingClear = false;
+    }
+
+    window.ESpecDraftWorkspace?.refreshActive?.();
+
+    return { isUpdate };
+  }
+
+
+  async function getSubmissionAction(id) {
+    const response = await fetch(
+      `${API_BASE_URL}/specifications/${encodeURIComponent(id)}`,
+      { headers: getApiHeaders() }
+    );
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(result.message || "Gagal memeriksa status dokumen.");
+    }
+
+    const status = result.data?.status;
+
+    if (status === "Draft") return "submit";
+    if (status === "Revision Required") return "resubmit";
+
+    throw new Error(
+      `Dokumen berstatus ${status || "tidak diketahui"} dan tidak dapat diajukan.`
+    );
   }
 
   // =====================================================
@@ -317,55 +692,21 @@
   // =====================================================
 
   function saveDraft() {
-    try {
-      const data = getFormData();
+    if (loadingDocument) return;
 
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(data)
-      );
-
-      setDraftStatus("Draft tersimpan otomatis di browser");
-
-    } catch (error) {
-      console.error("Gagal menyimpan draft:", error);
-
-      setDraftStatus("Draft tidak dapat disimpan");
-    }
+    hasUnsavedChanges = true;
+    setDraftStatus("Perubahan belum disimpan");
   }
 
-  // =====================================================
-  // RESTORE DRAFT
-  // =====================================================
+  function applyFormDataToQuestionnaire(data) {
+    loadingDocument = true;
 
-  function restoreDraft() {
     try {
-      const saved = JSON.parse(
-        localStorage.getItem(STORAGE_KEY) || "null"
-      );
-
-      if (!saved) {
-        initializeDocumentInfo();
-
-        if (plantSelect && deptSelect) {
-          populateDepartments();
-        }
-
-        return;
+      if (plantSelect && data.plant !== undefined) {
+        plantSelect.value = data.plant;
       }
 
-      // Pulihkan Plant terlebih dahulu.
-      if (plantSelect && saved.plant !== undefined) {
-        plantSelect.value = saved.plant;
-      }
-
-      // Buat pilihan Department berdasarkan Plant.
-      if (plantSelect && deptSelect) {
-        populateDepartments(saved.department || "");
-      }
-
-      // Pulihkan field lainnya.
-      Object.entries(saved).forEach(([name, value]) => {
+      Object.entries(data).forEach(([name, value]) => {
         if (name === "_attachmentFileNames") return;
 
         const fields = questionnaire.querySelectorAll(
@@ -395,16 +736,105 @@
         });
       });
 
+      restoreDynamicQuestions(data);
+      restoreScopeDocumentRows(data);
+      enforceSingleMaterialCategory();
       initializeDocumentInfo();
+      transferToPrint();
 
-      setDraftStatus("Draft sebelumnya berhasil dipulihkan");
-
+      return true;
     } catch (error) {
-      console.error("Gagal memulihkan draft:", error);
-
-      initializeDocumentInfo();
+      console.error("Gagal menerapkan data Draft:", error);
+      return false;
+    } finally {
+      loadingDocument = false;
     }
   }
+
+  async function resumeServerDraft(detail) {
+    if (!confirmDiscardChanges()) return;
+
+    const data = normalizeServerFormData(detail);
+
+    if (!applyFormDataToQuestionnaire(data)) {
+      setDraftStatus("Draft server gagal dipulihkan ke formulir.", true);
+      return;
+    }
+
+    persistedDraftId = detail?.id || null;
+    persistedDocumentNo = detail?.documentNo || null;
+    hasUnsavedChanges = false;
+
+    setDraftStatus(
+      `Draft ${detail?.documentNo || detail?.id || ""} dimuat dari server. Terakhir diperbarui ${
+        window.ESpecDraftWorkspace?.formatUpdatedAt?.(detail?.updatedAt) || "-"
+      }.`
+    );
+  }
+
+  async function resumeDraftFromQuery(id) {
+    if (!/^[1-9]\d*$/.test(String(id))) {
+      setDraftStatus("ID Draft tidak valid.", true);
+      return;
+    }
+
+    try {
+      setDraftStatus("Memuat Draft dari server...");
+
+      const response = await fetch(
+        `${API_BASE_URL}/specifications/my-drafts/${encodeURIComponent(id)}`,
+        { headers: getApiHeaders() }
+      );
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || result.success !== true) {
+        throw new Error(result.message || "Draft tidak ditemukan.");
+      }
+
+      await resumeServerDraft(result.data);
+    } catch (error) {
+      setDraftStatus(error.message || "Gagal memuat Draft dari server.", true);
+    }
+  }
+
+  function importLegacyJasa(legacy) {
+    if (!legacy?.formData) {
+      setDraftStatus("Tidak ada data Draft lama di browser untuk dipulihkan.", true);
+      return;
+    }
+
+    if (!confirmDiscardChanges()) return;
+
+    clearFormForNewDraft();
+    persistedDraftId = null;
+    persistedDocumentNo = null;
+    legacyPendingClear = true;
+
+    const source = legacy?.formData && typeof legacy.formData === "object"
+      ? legacy.formData
+      : {};
+    const legacyFormData = { ...source };
+
+    delete legacyFormData.persistedDocumentNo;
+
+    const data = normalizeServerFormData({
+      formData: legacyFormData,
+      documentNo: ""
+    });
+
+    if (!applyFormDataToQuestionnaire(data)) {
+      legacyPendingClear = false;
+      setDraftStatus("Data Draft lama gagal dipulihkan ke formulir.", true);
+      return;
+    }
+
+    hasUnsavedChanges = true;
+
+    setDraftStatus(
+      "Data Draft lama dimuat sebagai Draft baru. Klik Save As Draft untuk menyimpannya ke server."
+    );
+  }
+
 
 
 // =====================================================
@@ -799,6 +1229,19 @@ function transferToPrint(data = getFormData()) {
 
         if (select) {
           select.value = values[index] ?? "";
+          setupOthersField(select);
+
+          const otherName = `other_${group.fieldName}`;
+          const otherValues = saved[otherName];
+          const otherInput = row.querySelector(
+            `[name="${CSS.escape(otherName)}"]`
+          );
+
+          if (otherInput) {
+            otherInput.value = Array.isArray(otherValues)
+              ? otherValues[index] || ""
+              : otherValues || "";
+          }
         }
 
         // Baris tambahan harus memiliki tombol hapus.
@@ -941,7 +1384,8 @@ function transferToPrint(data = getFormData()) {
 
     try {
       const response = await fetch(
-        `${API_URL}/${encodeURIComponent(documentId)}`
+        `${API_BASE_URL}/specifications/my-documents/${encodeURIComponent(documentId)}`,
+        { headers: getApiHeaders() }
       );
 
       const result = await response.json().catch(() => ({}));
@@ -954,14 +1398,14 @@ function transferToPrint(data = getFormData()) {
         );
       }
 
-      const row = result.document ?? result;
-      const savedData = row.form_data || {};
+      const row = result.data ?? result.document ?? result;
+      const savedData = row.formData || row.form_data || {};
 
       const data = {
         ...savedData,
 
-        docNo: row.doc_no ?? savedData.docNo ?? "",
-        revision: row.revision ?? savedData.revision ?? "",
+        docNo: row.documentNo ?? row.document_no ?? savedData.docNo ?? "",
+        revision: row.revisionNo ?? row.revision ?? savedData.revision ?? "",
         requestor: row.requestor ?? savedData.requestor ?? "",
         department: row.department ?? savedData.department ?? ""
       };
@@ -1001,23 +1445,61 @@ function transferToPrint(data = getFormData()) {
   });
 
   // =====================================================
-  // CETAK PDF
-  // =====================================================
-
-  if (pdfBtn) {
-    pdfBtn.addEventListener("click", () => {
-      if (!questionnaire.reportValidity()) return;
-
-      saveDraft();
-      transferToPrint();
-
-      window.print();
-    });
-  }
-
-  // =====================================================
   // RESET FORM JASA
   // =====================================================
+
+  function clearFormForNewDraft() {
+    questionnaire.reset();
+    resetScopeDocumentRows();
+
+    if (technicalList) {
+      const first = technicalList.querySelector(
+        '[name="technicalSpecification[]"]'
+      );
+
+      technicalList.innerHTML = "";
+
+      if (first) {
+        addQuestion(
+          technicalList,
+          "technicalSpecification[]",
+          "Masukkan technical specification..."
+        );
+      }
+    }
+
+    if (kpiList) {
+      const first = kpiList.querySelector('[name="kpi[]"]');
+
+      kpiList.innerHTML = "";
+
+      if (first) {
+        addQuestion(
+          kpiList,
+          "kpi[]",
+          "Masukkan KPI..."
+        );
+      }
+    }
+
+    if (plantSelect && deptSelect) {
+      populateDepartments();
+    }
+
+    persistedDraftId = null;
+    persistedDocumentNo = null;
+    hasUnsavedChanges = false;
+
+    initializeDocumentInfo();
+    transferToPrint({});
+  }
+
+  function startNewDraft() {
+    if (!confirmDiscardChanges()) return;
+
+    clearFormForNewDraft();
+    setDraftStatus("Draft baru siap dibuat. Klik Save As Draft untuk menyimpannya ke server.");
+  }
 
   if (resetBtn) {
     resetBtn.addEventListener("click", () => {
@@ -1027,59 +1509,13 @@ function transferToPrint(data = getFormData()) {
 
       if (!confirmed) return;
 
-      questionnaire.reset();
-
-      // Reset baris dokumen pada bagian Scope.
-      resetScopeDocumentRows();
-
-      // Hapus field dinamis tambahan.
-      if (technicalList) {
-        const first = technicalList.querySelector(
-          '[name="technicalSpecification[]"]'
-        );
-
-        technicalList.innerHTML = "";
-
-        if (first) {
-          addQuestion(
-            technicalList,
-            "technicalSpecification[]",
-            "Masukkan technical specification..."
-          );
-        }
-      }
-
-      if (kpiList) {
-        const first = kpiList.querySelector('[name="kpi[]"]');
-
-        kpiList.innerHTML = "";
-
-        if (first) {
-          addQuestion(
-            kpiList,
-            "kpi[]",
-            "Masukkan KPI..."
-          );
-        }
-      }
-
-      if (plantSelect && deptSelect) {
-        populateDepartments();
-      }
-
-      localStorage.removeItem(STORAGE_KEY);
-
-      initializeDocumentInfo();
-      transferToPrint({});
-
+      clearFormForNewDraft();
       setDraftStatus("Form telah dikosongkan");
 
       window.scrollTo({
         top: 0,
         behavior: "smooth"
       });
-
-      console.log("Form Spesifikasi Jasa berhasil dikosongkan.");
     });
   }
 
@@ -1134,7 +1570,41 @@ function transferToPrint(data = getFormData()) {
       return false;
     }
 
+    if (categories[0].value !== "Expense Jasa") {
+      alert(
+        "Asset Jasa belum memiliki mapping master data yang didukung dan belum dapat disimpan."
+      );
+      return false;
+    }
+
     return true;
+  }
+
+  function validateScopeDocuments() {
+    for (const row of getScopeRows(attachmentDocumentList)) {
+      const type = row.querySelector('[name="attachmentDocumentType[]"]');
+      const file = row.querySelector('[name="attachmentDocumentFile[]"]');
+
+      if (type?.value && !file?.files?.length) {
+        alert("Attachment Document yang dipilih wajib memiliki file PDF.");
+        file?.focus();
+        return false;
+      }
+
+      if (!type?.value && file?.files?.length) {
+        alert("Pilih kategori untuk file Attachment Document.");
+        type?.focus();
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  function validateForm() {
+    if (!questionnaire.reportValidity()) return false;
+    if (!validateMaterialCategory()) return false;
+    return validateScopeDocuments();
   }
 
   // =====================================================
@@ -1143,15 +1613,7 @@ function transferToPrint(data = getFormData()) {
 
   if (saveBtn) {
     saveBtn.addEventListener("click", async () => {
-      if (!questionnaire.reportValidity()) return;
-      if (!validateMaterialCategory()) return;
-
-      const formData = getFormData();
-
-      const payload = {
-        specType: "Jasa",
-        formData
-      };
+      if (!validateForm()) return;
 
       saveBtn.disabled = true;
 
@@ -1159,35 +1621,28 @@ function transferToPrint(data = getFormData()) {
       saveBtn.textContent = "Menyimpan...";
 
       try {
-        const response = await fetch(API_URL, {
-          method: "POST",
+        saveDraft();
+        setDraftStatus("Menyimpan draft ke server...");
 
-          headers: {
-            "Content-Type": "application/json"
-          },
+        const { isUpdate } = await saveDraftToServer();
 
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-          throw new Error(
-            result.message ||
-            result.error ||
-            "Gagal menyimpan data ke server."
-          );
-        }
-
-        alert("Spesifikasi Jasa berhasil disimpan ke Admin.");
-
-        setDraftStatus("Data berhasil disimpan ke Admin");
+        alert(
+          isUpdate
+            ? "Draft spesifikasi Jasa berhasil diperbarui di server."
+            : "Draft spesifikasi Jasa berhasil disimpan di server."
+        );
+        setDraftStatus(
+          isUpdate
+            ? "Draft berhasil diperbarui di server"
+            : "Draft berhasil disimpan di server"
+        );
 
       } catch (error) {
         console.error("Gagal menyimpan spesifikasi Jasa:", error);
 
+        setDraftStatus("Perubahan belum tersimpan, penyimpanan server gagal", true);
         alert(
-          "Gagal menyimpan ke Admin. Pastikan server backend aktif.\n\n" +
+          "Gagal menyimpan draft ke server.\n\n" +
           error.message
         );
 
@@ -1201,47 +1656,74 @@ function transferToPrint(data = getFormData()) {
   // =====================================================
   // SUBMIT BUTTON
   // =====================================================
-  // Belum dihubungkan ke proses approval.
-  // Alur Submit perlu disamakan dengan mekanisme Barang.
 
   if (submitBtn) {
-    submitBtn.addEventListener("click", () => {
-      alert(
-        "Fitur Submit Jasa belum dihubungkan ke alur approval."
-      );
+    submitBtn.addEventListener("click", async () => {
+      if (submitting) return;
+      if (!validateForm()) return;
+
+      submitting = true;
+      const oldText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Mengajukan...";
+
+      try {
+        setDraftStatus("Menyimpan draft dan memeriksa status dokumen...");
+
+        await saveDraftToServer();
+        const action = await getSubmissionAction(persistedDraftId);
+
+        const response = await fetch(
+          `${API_BASE_URL}/specifications/${encodeURIComponent(persistedDraftId)}/${action}`,
+          { method: "POST", headers: getApiHeaders(), body: JSON.stringify({}) }
+        );
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(result.message || "Gagal mengajukan spesifikasi.");
+        }
+
+        const message = result.message || (
+          action === "resubmit"
+            ? "Spesifikasi berhasil diajukan ulang untuk approval."
+            : "Spesifikasi berhasil diajukan untuk approval."
+        );
+
+        setDraftStatus(message);
+        alert(message);
+      } catch (error) {
+        console.error("Gagal mengajukan spesifikasi Jasa:", error);
+        setDraftStatus("Perubahan belum tersimpan, tetapi pengajuan gagal", true);
+        alert(`Gagal mengajukan spesifikasi.\n\n${error.message}`);
+      } finally {
+        submitting = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = oldText;
+      }
     });
   }
 
-  // =====================================================
-  // INISIALISASI HALAMAN
-  // =====================================================
+  Promise.resolve(window.ESpecRoleNav?.ready).then(() => {
+    const params = new URLSearchParams(window.location.search);
+    const printId = params.get("printId");
+    const legacyImport = params.get("legacyImport");
 
-  const printId = new URLSearchParams(
-    window.location.search
-  ).get("printId");
+    if (printId) {
+      printSavedJasa(printId);
+    } else {
+      initializeDocumentInfo();
+      enforceSingleMaterialCategory();
+      transferToPrint();
 
-  if (printId) {
-    printSavedJasa(printId);
+      loadMasterData().then(async () => {
+        if (legacyImport) {
+          importLegacyJasa(window.ESpecDraftWorkspace?.readLegacy?.("jasa"));
+        }
 
-  } else {
-    initializeDocumentInfo();
+        const resumeId = params.get("resumeId");
 
-    restoreDraft();
-
-    // Pastikan Material Category hanya memiliki satu pilihan.
-    enforceSingleMaterialCategory();
-
-    // Pulihkan pertanyaan dinamis setelah draft dibaca.
-    const savedDraft = JSON.parse(
-      localStorage.getItem(STORAGE_KEY) || "null"
-    );
-
-    if (savedDraft) {
-      restoreDynamicQuestions(savedDraft);
-      restoreScopeDocumentRows(savedDraft);
+        if (resumeId) await resumeDraftFromQuery(resumeId);
+      });
     }
-
-    transferToPrint();
-  }
-
+  });
 })();

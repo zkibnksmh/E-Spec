@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dev-auth.css">
+  <script src="dev-auth.js"></script>
 
   <style>
     :root {
@@ -714,10 +716,12 @@
         <div class="avatar">AD</div>
 
         <div>
-          <strong>Administrator</strong>
-          <small>Admin E-Spec</small>
+          <strong data-dev-identity-name>Administrator</strong>
+          <small data-dev-identity-role>Admin E-Spec</small>
         </div>
       </div>
+
+      <button type="button" class="dev-logout" data-dev-logout>Logout</button>
 
     </div>
   </header>
@@ -916,6 +920,9 @@
     </footer>
 
   </main>
+
+  <script src="frontend.local.js"></script>
+  <script src="role-nav.js"></script>
 
 </body>
 </html>

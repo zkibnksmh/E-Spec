@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>E-Spec — Form Spesifikasi Barang</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dev-auth.css">
+  <script src="dev-auth.js"></script>
 </head>
 
 <body>
@@ -22,6 +24,7 @@
     <button type="button" id="resetBtn">
       Reset Form
     </button>
+    <button type="button" class="dev-logout" data-dev-logout>Logout</button>
   </div>
 </header>
 
@@ -110,9 +113,6 @@
         Plant <span class="required-star">*</span>
         <select id="plantCodeSelect" name="plant" required>
           <option value="">-- Pilih Plant --</option>
-          <option value="1210 - Plant Gending">1210 - Plant Gending</option>
-          <option value="1220 - Plant Cikarang">1220 - Plant Cikarang</option>
-          <option value="1230 - Plant Minahasa Selatan">1230 - Plant Minahasa Selatan</option>
         </select>
       </label>
 
@@ -132,22 +132,9 @@
 
 
 <label class="q-field">
-  Material Group
-
+  Material Group <span class="required-star">*</span>
   <select name="materialGroup" id="materialGroup" required>
-    <option value="">-- Pilih Material Group --</option>
-    <option value="BEARING">BEARING</option>
-    <option value="ELECTRIC">ELECTRIC</option>
-    <option value="PIPE">PIPE</option>
-    <option value="EQUIPMENT">EQUIPMENT</option>
-    <option value="BARANG UM">BARANG UM</option>
-
-    <!-- CAPEX -->
-    <option value="ASSET UMU">ASSET UMU</option>
-    <option value="ASSET TEK">ASSET TEK</option>
-    <option value="ASSET LAB">ASSET LAB</option>
-
-    <option value="Others">Others</option>
+    <option value="">-- Pilih Material Category terlebih dahulu --</option>
   </select>
 
   <input
@@ -167,36 +154,7 @@
     Material Category <span class="required-star">*</span>
   </span>
 
-  <div class="q-checks material-category-checks">
-
-    <label class="q-check">
-      <input
-        type="checkbox"
-        name="materialCategory"
-        value="Asset Barang"
-      >
-      Asset Barang
-    </label>
-
-    <label class="q-check">
-      <input
-        type="checkbox"
-        name="materialCategory"
-        value="Expense Barang Umum / Teknik"
-      >
-      Expense Barang Umum / Teknik
-    </label>
-
-    <label class="q-check">
-      <input
-        type="checkbox"
-        name="materialCategory"
-        value="Expense Bahan Kimia / Sanitasi / Pelumas"
-      >
-      Expense Bahan Kimia / Sanitasi / Pelumas
-    </label>
-
-  </div>
+  <div class="q-checks material-category-checks" id="materialCategoryOptions"></div>
 </div>
 
       <!-- Checkbox tersembunyi untuk kompatibilitas template PDF lama -->
@@ -227,11 +185,6 @@
 
     <select name="reasonChoice" id="reasonChoice" required>
       <option value="">-- Pilih Reason --</option>
-      <option value="Replacement">Replacement</option>
-      <option value="Stock Replenishment">Stock Replenishment</option>
-      <option value="New Project">New Project</option>
-      <option value="Trial">Trial</option>
-      <option value="Others">Others</option>
     </select>
 
     <input
@@ -1586,14 +1539,16 @@
     </p>
   </div>
 
+  <p id="draftStatus" class="draft-status" aria-live="polite"></p>
+
 <div class="questionnaire-bottom-actions">
 
   <button type="button" id="saveAdminBtn">
     Save As Draft
   </button>
 
-  <button type="button" id="pdfBtn">
-    Submit ↗
+  <button type="button" id="submitBtn">
+    Submit
   </button>
 </div>
 
@@ -1866,6 +1821,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<script src="frontend.local.js"></script>
+<script src="role-nav.js"></script>
+<script src="draft-workspace.js"></script>
 <script src="barang.js"></script>
 
 </body>

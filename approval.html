@@ -8,6 +8,8 @@
 
   <link rel="stylesheet" href="admin.css">
   <link rel="stylesheet" href="approval.css">
+  <link rel="stylesheet" href="dev-auth.css">
+  <script src="dev-auth.js"></script>
 </head>
 
 <body>
@@ -104,9 +106,10 @@
       <div class="profile">
         <div class="avatar">R</div>
         <div class="profile-info">
-          <strong>Requestor</strong>
-          <small>Pengguna E-Spec</small>
+          <strong data-dev-identity-name>Requestor</strong>
+          <small data-dev-identity-role>Pengguna E-Spec</small>
         </div>
+        <button type="button" class="dev-logout" data-dev-logout>Logout</button>
         <span class="profile-arrow">⌄</span>
       </div>
     </header>
@@ -129,6 +132,90 @@
           ← Kembali ke Dashboard
         </a>
       </div>
+
+      <!-- DRAFT WORKSPACE -->
+      <section class="panel my-draft-panel">
+
+        <div class="panel-top">
+          <div class="panel-heading">
+            <div class="panel-heading-icon">⌁</div>
+            <div>
+              <h2>Draft Workspace</h2>
+              <p>Kelola Draft server milik Requestor yang sedang login.</p>
+            </div>
+          </div>
+
+          <div class="database-badge">
+            <span class="database-dot"></span>
+            Owner Scoped
+          </div>
+        </div>
+
+        <div class="draft-source-switch">
+          <label for="draftSourceSelect">Jenis Draft</label>
+          <select id="draftSourceSelect">
+            <option value="barang">Barang</option>
+            <option value="jasa">Jasa</option>
+          </select>
+        </div>
+
+        <div id="barangDraftSource" class="draft-source-panel">
+          <div id="barangDraftWorkspace" class="draft-workspace">
+            <div class="draft-workspace-toolbar">
+              <label for="barangDraftPicker">Draft Barang</label>
+              <select id="barangDraftPicker"></select>
+              <button type="button" id="resumeBarangDraftBtn" class="draft-recovery-btn" disabled>
+                Lanjutkan Draft
+              </button>
+              <button type="button" id="newBarangDraftBtn" class="draft-recovery-btn">
+                Draft Baru
+              </button>
+            </div>
+            <p id="barangDraftStatus" class="draft-status" aria-live="polite"></p>
+            <div id="barangLegacyRecovery" class="draft-legacy-recovery" hidden>
+              <span>
+                Data Draft Barang lama masih tersimpan di browser. Ekspor cadangan atau
+                pulihkan sebagai Draft baru; data tidak dihapus otomatis.
+              </span>
+              <button type="button" id="exportBarangLegacyBtn" class="draft-recovery-btn">
+                Ekspor JSON
+              </button>
+              <button type="button" id="recoverBarangLegacyBtn" class="draft-recovery-btn">
+                Pulihkan sebagai Draft baru
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="jasaDraftSource" class="draft-source-panel" hidden>
+          <div id="jasaDraftWorkspace" class="draft-workspace">
+            <div class="draft-workspace-toolbar">
+              <label for="jasaDraftPicker">Draft Jasa</label>
+              <select id="jasaDraftPicker"></select>
+              <button type="button" id="resumeJasaDraftBtn" class="draft-recovery-btn" disabled>
+                Lanjutkan Draft
+              </button>
+              <button type="button" id="newJasaDraftBtn" class="draft-recovery-btn">
+                Draft Baru
+              </button>
+            </div>
+            <p id="jasaDraftStatus" class="draft-status" aria-live="polite"></p>
+            <div id="jasaLegacyRecovery" class="draft-legacy-recovery" hidden>
+              <span>
+                Data Draft Jasa lama masih tersimpan di browser. Ekspor cadangan atau
+                pulihkan sebagai Draft baru; data tidak dihapus otomatis.
+              </span>
+              <button type="button" id="exportJasaLegacyBtn" class="draft-recovery-btn">
+                Ekspor JSON
+              </button>
+              <button type="button" id="recoverJasaLegacyBtn" class="draft-recovery-btn">
+                Pulihkan sebagai Draft baru
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
 
       <!-- MY E-SPEC -->
       <section class="status-section" id="myEspec">
@@ -176,15 +263,28 @@
                       class="approval-status-tab waiting-tab"
                       data-my-status="pending"
                       aria-pressed="false">
-                Waiting Approval
+                In Approval
               </button>
 
               <button type="button"
                       class="approval-status-tab revision-tab"
                       data-my-status="revision"
                       aria-pressed="false">
-                Need Revision
+                Revision Required
               </button>
+<button type="button"
+        class="approval-status-tab released-tab"
+        data-my-status="released"
+        aria-pressed="false">
+  Approved
+</button>
+
+<button type="button"
+        class="approval-status-tab"
+        data-my-status="rejected"
+        aria-pressed="false">
+  Rejected
+</button>
             </div>
 
             <div class="my-espec-search">
@@ -198,6 +298,19 @@
             </div>
           </div>
 
+<!-- TABLE -->
+<div class="table-wrap my-espec-table-wrap">
+  <table class="my-espec-table">
+    <thead>
+      <tr>
+        <th>NO. DOKUMEN</th>
+        <th>TIPE</th>
+        <th>DESKRIPSI</th>
+        <th>DIBUAT / DIPERBARUI</th>
+        <th>STATUS SAAT INI</th>
+        <th class="action-column">AKSI</th>
+      </tr>
+    </thead>
 
 <!-- TABLE -->
 <div class="table-wrap my-espec-table-wrap">
@@ -223,6 +336,11 @@
 
 </div>
 
+
+          <div id="myEspecHistoryPanel" class="approval-timeline" hidden>
+            <h3>Riwayat Workflow</h3>
+            <div id="myEspecHistory" class="approval-steps"></div>
+          </div>
 
           <!-- EMPTY STATE -->
           <div class="empty-state my-espec-empty"
@@ -268,6 +386,10 @@
 <!-- TOAST -->
 <div id="toast" class="toast"></div>
 
+<script src="frontend.local.js"></script>
+<script src="role-nav.js"></script>
+<script src="document-workspace.js"></script>
+<script src="draft-workspace.js"></script>
 <script src="approval.js"></script>
 
 <script>

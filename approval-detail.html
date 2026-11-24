@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Spec | Approval Detail</title>
+
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="approval.css">
+  <link rel="stylesheet" href="dev-auth.css">
+  <script src="dev-auth.js"></script>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <a class="brand" href="admin.html">
+        <span class="brand-mark">E</span>
+        <span class="brand-info">
+          <strong>E-Spec</strong>
+          <small>DOCUMENT WORKSPACE</small>
+        </span>
+      </a>
+
+      <div class="sidebar-menu">
+        <p class="side-label">MENU UTAMA</p>
+
+        <a href="admin.html" class="nav">
+          <span class="nav-icon">▦</span>
+          <span>Dashboard</span>
+        </a>
+
+        <div class="nav-group status-nav-group open">
+          <a href="javascript:void(0)" class="nav approval-nav" id="approvalNav" aria-expanded="true">
+            <span class="nav-icon">✓</span>
+            <span>Status</span>
+          </a>
+
+          <div class="nav-submenu">
+            <a href="approval.html" class="nav-submenu-link" id="myEspecNav">
+              <span class="submenu-dot"></span>
+              <span>My E-Spec</span>
+            </a>
+
+            <a href="my-approval.html" class="nav-submenu-link active" id="myApprovalNav">
+              <span class="submenu-dot"></span>
+              <span>My Approval</span>
+            </a>
+          </div>
+        </div>
+
+        <a href="pilih-spesifikasi.html" class="nav">
+          <span class="nav-icon">＋</span>
+          <span>Buat Spesifikasi</span>
+        </a>
+
+        <a href="pengaturan.html" class="nav">
+          <span class="nav-icon">⚙</span>
+          <span>Pengaturan</span>
+        </a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumb">
+          <span>Status</span>
+          <span>/</span>
+          <strong>My Approval</strong>
+        </div>
+
+        <div class="header-right">
+          <div class="header-admin">
+            <div class="avatar">AD</div>
+            <div>
+              <strong data-dev-identity-name>Development User</strong>
+              <small data-dev-identity-role>Development</small>
+            </div>
+          </div>
+
+          <button type="button" class="dev-logout" data-dev-logout>Logout</button>
+        </div>
+      </header>
+
+      <section class="content approval-detail-content">
+        <div class="page-heading approval-heading">
+          <div>
+            <span class="eyebrow">APPROVAL DETAIL</span>
+            <h2>Detail <span>Spesifikasi</span></h2>
+            <p>Periksa dokumen secara read-only sebelum mengambil keputusan.</p>
+          </div>
+
+          <a href="my-approval.html" class="secondary-btn">← Kembali ke My Approval</a>
+        </div>
+
+        <section class="panel approval-detail-panel">
+          <div class="panel-top">
+            <div class="panel-heading">
+              <div class="panel-heading-icon">▤</div>
+              <div>
+                <h2 id="documentTitle">Memuat dokumen...</h2>
+                <p id="documentSubtitle">Data spesifikasi tersimpan.</p>
+              </div>
+            </div>
+
+            <div class="database-badge">
+              <span class="database-dot"></span>
+              Read Only
+            </div>
+          </div>
+
+          <div id="documentSummary" class="approval-document-info"></div>
+          <div id="documentFields" class="approval-document-info approval-form-fields"></div>
+
+          <div class="approval-timeline">
+            <h3>Riwayat Workflow</h3>
+            <div id="approvalHistory" class="approval-steps"></div>
+          </div>
+
+          <div class="approval-action-area">
+            <div>
+              <strong>Keputusan Approval</strong>
+              <p>Pilih salah satu keputusan untuk dokumen ini.</p>
+            </div>
+
+            <div class="approval-buttons">
+              <select id="decisionSelect" class="decision-select" disabled>
+                <option value="">Memuat dokumen...</option>
+              </select>
+
+              <textarea
+                id="decisionComment"
+                class="decision-comment"
+                placeholder="Masukkan catatan keputusan"
+                rows="3"
+                hidden
+                disabled></textarea>
+
+              <button type="button" class="approve-btn" id="submitDecisionBtn" disabled>
+                Submit Approval
+              </button>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="frontend.local.js"></script>
+  <script src="role-nav.js"></script>
+  <script src="document-workspace.js"></script>
+  <script src="approval-detail.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>E-Spec — Development Login</title>
+  <link rel="stylesheet" href="login.css">
+  <script src="dev-auth.js"></script>
+</head>
+
+<body>
+  <main class="login-shell">
+    <section class="login-card">
+      <div class="brand">
+        <div class="brand-mark">E</div>
+        <div class="brand-text">
+          <strong>E-Spec</strong>
+          <small>ENGINEERING SPECIFICATION</small>
+        </div>
+      </div>
+
+      <div class="dev-badge">Development Login — Test Environment Only</div>
+
+      <h1>Login</h1>
+      <p class="login-subtitle">
+        Pilih identitas development untuk masuk ke workspace E-Spec.
+      </p>
+
+      <form id="loginForm">
+        <fieldset class="identity-options">
+          <legend>Development identity</legend>
+
+          <label class="identity-option">
+            <input type="radio" name="devIdentity" value="requestor" checked>
+            <span class="identity-copy">
+              <strong>Requestor</strong>
+              <small>Menyusun dan mengajukan spesifikasi</small>
+            </span>
+          </label>
+
+          <label class="identity-option">
+            <input type="radio" name="devIdentity" value="manager">
+            <span class="identity-copy">
+              <strong>Manager</strong>
+              <small>Menyetujui spesifikasi pada tahap manajemen</small>
+            </span>
+          </label>
+
+          <label class="identity-option">
+            <input type="radio" name="devIdentity" value="head-engineering">
+            <span class="identity-copy">
+              <strong>Head Engineering</strong>
+              <small>Penyetujuan akhir engineering</small>
+            </span>
+          </label>
+        </fieldset>
+
+        <p id="loginError" class="login-error" role="alert" aria-live="polite"></p>
+
+        <button type="submit" id="loginSubmit" class="login-submit">Sign In</button>
+      </form>
+
+      <p class="login-note">
+        Ini adalah pemilih identitas development, bukan autentikasi produksi.
+        Tidak ada username atau password. Akses tetap dikendalikan oleh backend
+        development/test identity guard.
+      </p>
+    </section>
+  </main>
+
+  <script src="frontend.local.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>

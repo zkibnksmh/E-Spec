@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>E-Spec | Pengaturan</title>
   <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="dev-auth.css">
+  <script src="dev-auth.js"></script>
 
   <style>
     .settings-grid {
@@ -95,9 +97,10 @@
       <div class="profile">
         <div class="avatar">AD</div>
         <div>
-          <strong>Administrator</strong>
-          <small>Admin E-Spec</small>
+          <strong data-dev-identity-name>Administrator</strong>
+          <small data-dev-identity-role>Admin E-Spec</small>
         </div>
+        <button type="button" class="dev-logout" data-dev-logout>Logout</button>
       </div>
     </header>
 
@@ -146,6 +149,8 @@
     </section>
   </main>
 
+  <script src="frontend.local.js"></script>
+  <script src="role-nav.js"></script>
   <script src="pengaturan.js"></script>
 </body>
 </html>

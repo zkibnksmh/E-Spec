@@ -5,10 +5,23 @@
   // E-SPEC BARANG — QUESTIONNAIRE CONTROLLER
   // =====================================================
 
-  const STORAGE_KEY = "eSpecBarangQuestionnaire.v2";
-  const OLD_STORAGE_KEY = "eSpecBarangQuestionnaire.v1";
   const VERSION_STORAGE_KEY = "eSpecBarangVersion.v1";
-  const HISTORY_KEY = "eSpecBarangTransactions.v1";
+  const API_BASE_URL = window.ESPEC_CONFIG?.API_BASE_URL || "http://localhost:3000/api";
+  const DEV_IDENTITY_ALIASES = ["requestor", "manager", "head-engineering"];
+
+  function getApiHeaders() {
+    const headers = { "Content-Type": "application/json" };
+    const configuredIdentity = window.ESPEC_CONFIG?.DEV_IDENTITY;
+    const identity = typeof configuredIdentity === "string"
+      ? configuredIdentity.trim().toLowerCase()
+      : "";
+
+    if (DEV_IDENTITY_ALIASES.includes(identity)) {
+      headers["X-ESpec-Dev-Identity"] = identity;
+    }
+
+    return headers;
+  }
 
   const questionnaire = document.getElementById("questionnaireForm");
   const printForm = document.getElementById("printSpecForm");
@@ -24,14 +37,16 @@
   const $$ = (selector, parent = document) =>
     [...parent.querySelectorAll(selector)];
 
-  const pdfBtn = $("#pdfBtn");
   const resetBtn = $("#resetBtn");
   const saveBtn = $("#saveAdminBtn");
+  const submitBtn = $("#submitBtn");
   const draftStatus = $("#draftStatus");
 
   const plantSelect = $("#plantCodeSelect");
   const plantDesc = $("#plantDescInput");
   const deptSelect = $("#deptSelect");
+  const materialGroupSelect = $("#materialGroup");
+  const materialCategoryOptions = $("#materialCategoryOptions");
 
   const reasonChoice = $("#reasonChoice");
   const reasonOther = $("#reasonOther");
@@ -78,75 +93,52 @@
 
   const MECHANICAL_SYMBOLS = ["x", "--", "~", "/", "±", "-"];
 
-  const PLANT_DATA = {
-    "1210 - Plant Gending": [
-      "HRGA",
-      "Fermentation - Decalcium",
-      "Fermentation - Glucose",
-      "Fermentation - Fermentation",
-      "Isolation & Purification - Isolation",
-      "Isolation & Purification - Purification",
-      "Packing",
-      "Polycello & Technic Packing",
-      "Liquid Fertilizer Sales",
-      "SCM - PPIC",
-      "SCM - Inderect Sourcing",
-      "Engineering & Technical Development",
-      "Utility",
-      "Electrical Instrument",
-      "Mechanical & Maintenance",
-      "Logistic & Warehouse",
-      "QA & QC",
-      "SHE",
-      "IT",
-      "Costing Associate"
-    ],
-
-    "1220 - Plant Cikarang": [
-      "HRGA",
-      "Production - Dry",
-      "Production - Wet",
-      "SCM - PPIC",
-      "SCM - Inderect Sourcing",
-      "Maintenance",
-      "Project",
-      "Warehouse",
-      "QA & QC",
-      "SHE",
-      "IT",
-      "Supply Chain Finance"
-    ],
-
-    "1230 - Plant Minahasa Selatan": [
-      "Production - Opening & Processing",
-      "Production - Production & TCA",
-      "PPIC",
-      "Indirect Sourcing",
-      "Maintenance",
-      "Utility",
-      "Warehouse",
-      "QA & QC",
-      "SHE",
-      "IT",
-      "Plant Operation Controller"
-    ]
-  };
-
-  const CATEGORY_MAPPING = {
-    "Asset Barang": "Asset Barang",
-    "Expense Barang Umum / Teknik": "Expense Barang General",
-    "Expense Bahan Kimia / Sanitasi / Pelumas": "Expense Barang Kimia"
+  // Source: OLAH DATA WEB.xlsx, MATRIKS ATT. MAT (2). Only `*` values
+  // become save blockers; `O` values remain optional.
+  const MATERIAL_GROUP_REQUIRED_FIELDS = {
+    BEARING: ["materialDescription", "partNumber", "variant", "dimension", "brand", "uom"],
+    MATERIAL: ["materialDescription", "variant", "dimension", "uom"],
+    GASKET: ["materialDescription", "variant", "dimension", "uom", "technical:Material"],
+    MS: ["materialDescription", "variant", "dimension", "uom", "technical:Material"],
+    ELECTRIC: ["materialDescription", "partNumber", "variant", "brand", "uom", "technical:Voltage", "technical:Phase", "technical:Power", "technical:Current", "technical:Frequency"],
+    PIPE: ["materialDescription", "variant", "dimension", "uom", "technical:Material"],
+    BNR: ["materialDescription", "variant", "dimension", "uom", "technical:Material"],
+    LUBRICANT: ["materialDescription", "partNumber", "uom", "packSize", "technical:Konsentrasi", "technical:Viscositas"],
+    CABLE: ["materialDescription", "partNumber", "variant", "dimension", "uom"],
+    VALVE: ["materialDescription", "variant", "dimension", "uom", "technical:Material", "technical:Connection Type"],
+    EQUIPMENT: ["materialDescription", "partNumber", "variant", "dimension", "uom"],
+    PAINT: ["materialDescription", "partNumber", "variant", "brand", "catalogue", "uom", "packSize"],
+    IT: ["materialDescription", "partNumber", "variant", "uom"],
+    "BARANG UM": ["materialDescription", "partNumber", "variant", "uom"],
+    K3: ["materialDescription", "partNumber", "variant", "uom"],
+    LAB_MAT: ["materialDescription", "variant", "brand", "catalogue", "uom", "packSize"],
+    ATK: ["materialDescription", "variant", "uom"],
+    "ASSET UMU": ["materialDescription", "uom"],
+    "ASSET TEK": ["materialDescription", "uom"],
+    "ASSET LAB": ["materialDescription", "uom"]
   };
 
   let drawingImage = "";
   let loadingDocument = false;
   let saving = false;
+  let submitting = false;
+  let masterDataReady = false;
+  let barangSpecificationTypeId = null;
+  let persistedDraftId = null;
+  let persistedDocumentNo = null;
+  let hasUnsavedChanges = false;
+  let legacyPendingClear = false;
+  let plants = [];
+  let categories = [];
+  let departmentRequestId = 0;
+  let materialGroupRequestId = 0;
+  let pendingMaterialCategoryValue = "";
+  let pendingMaterialGroupValue = "";
 
   // =====================================================
   // MATERIAL GROUP — OTHERS
   // =====================================================
 
-  const materialGroupSelect = $("#materialGroup", questionnaire);
   const materialGroupOtherInput = $("#materialGroupOther", questionnaire);
 
   function updateMaterialGroupOther(clearValue = true) {
@@ -1007,8 +999,19 @@ updateShowHiddenCounter(hiddenCount);
     return `${year}-${month}-${day}`;
   }
 
-  function setStatus(message) {
-    if (draftStatus) draftStatus.textContent = message;
+  function setStatus(message, warning = false) {
+    if (!draftStatus) return;
+
+    draftStatus.textContent = message;
+    draftStatus.classList.toggle("warning", Boolean(warning));
+  }
+
+  function showDraftOwnershipIssue(message) {
+    setStatus(message, true);
+  }
+
+  function clearDraftOwnershipIssue() {
+    setStatus(draftStatus?.textContent || "", false);
   }
 
   function formatDate(value) {
@@ -1053,25 +1056,120 @@ updateShowHiddenCounter(hiddenCount);
   // PLANT & DEPARTMENT
   // =====================================================
 
-  function updateDepartment(restoreValue = "") {
+  async function fetchMasterData(path) {
+    const response = await fetch(`${API_BASE_URL}${path}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    return Array.isArray(result.data) ? result.data : [];
+  }
+
+  function setSelectMessage(select, message) {
+    if (!select) return;
+
+    select.innerHTML = "";
+    const option = document.createElement("option");
+    option.value = "";
+    option.textContent = message;
+    select.appendChild(option);
+  }
+
+  function findPlant(value) {
+    return plants.find((plant) =>
+      String(plant.id) === String(value) ||
+      `${plant.plantid} - ${plant.plantname}` === value ||
+      String(plant.plantid) === String(value)
+    );
+  }
+
+  function setSelectedOption(select, value, label) {
+    if (!select || value === undefined || value === null || value === "") {
+      return;
+    }
+
+    const target = String(value);
+    const option = [...select.options].find((item) =>
+      item.value === target ||
+      item.dataset?.groupId === target ||
+      item.textContent === target
+    );
+
+    if (option) {
+      select.value = option.value;
+      return;
+    }
+
+    const legacyOption = document.createElement("option");
+    legacyOption.value = String(value);
+    legacyOption.textContent = label || String(value);
+    legacyOption.dataset.legacy = "true";
+    if (/^[1-9]\d*$/.test(target)) {
+      legacyOption.dataset.groupId = target;
+    } else {
+      legacyOption.dataset.groupCode = target;
+    }
+    select.appendChild(legacyOption);
+    select.value = legacyOption.value;
+  }
+
+  async function loadDepartments(plantId, restoreValue = "") {
+    if (!deptSelect) return;
+
+    const requestId = ++departmentRequestId;
+
+    if (!plantId) {
+      setSelectMessage(deptSelect, "-- Pilih Plant Terlebih Dahulu --");
+      return;
+    }
+
+    setSelectMessage(deptSelect, "Memuat Departemen...");
+    deptSelect.disabled = true;
+
+    try {
+      const departments = await fetchMasterData(`/plants/${plantId}/departments`);
+
+      if (requestId !== departmentRequestId) return;
+
+      setSelectMessage(
+        deptSelect,
+        departments.length ? "-- Pilih Departemen --" : "Tidak ada Departemen tersedia"
+      );
+
+      departments.forEach((department) => {
+        const option = document.createElement("option");
+        option.value = String(department.id);
+        option.textContent = department.departmentname;
+        deptSelect.appendChild(option);
+      });
+
+      setSelectedOption(deptSelect, restoreValue);
+    } catch (error) {
+      if (requestId !== departmentRequestId) return;
+
+      console.error("Gagal memuat department:", error);
+      setSelectMessage(deptSelect, "Gagal memuat Departemen");
+      setStatus("Gagal memuat Departemen dari server");
+    } finally {
+      if (requestId === departmentRequestId) {
+        deptSelect.disabled = false;
+      }
+    }
+  }
+
+  async function updateDepartment(restoreValue = "") {
     if (!plantSelect || !deptSelect) return;
 
-    const selectedPlant = plantSelect.value;
-    const description = selectedPlant.split(" - ")[1] || "";
+    const plant = findPlant(plantSelect.value);
 
-    if (plantDesc) plantDesc.value = description;
+    if (plantDesc) {
+      plantDesc.value = plant?.plantname || "";
+    }
 
-    deptSelect.innerHTML =
-      '<option value="">-- Pilih Departemen --</option>';
-
-    (PLANT_DATA[selectedPlant] || []).forEach(department => {
-      const option = document.createElement("option");
-      option.value = department;
-      option.textContent = department;
-      deptSelect.appendChild(option);
-    });
-
-    if (restoreValue) deptSelect.value = restoreValue;
+    await loadDepartments(plant?.id, restoreValue);
   }
 
   // =====================================================
@@ -1097,12 +1195,10 @@ updateShowHiddenCounter(hiddenCount);
   }
 
   function updateCategory() {
-    const selected = getSelectedCategories();
+    const selected = getSelectedCategories()[0] || "";
 
     $$('[name="category"]', questionnaire).forEach(field => {
-      field.checked = selected.some(
-        category => CATEGORY_MAPPING[category] === field.value
-      );
+      field.checked = field.value === selected;
     });
   }
 
@@ -1116,8 +1212,69 @@ updateShowHiddenCounter(hiddenCount);
     }
 
     updateCategory();
+    loadMaterialGroups(event.target.value);
     saveDraft();
   });
+
+  async function loadMaterialGroups(categoryId, restoreValue = "") {
+    if (!materialGroupSelect) return;
+
+    const requestId = ++materialGroupRequestId;
+
+    if (!categoryId) {
+      setSelectMessage(
+        materialGroupSelect,
+        "-- Pilih Material Category terlebih dahulu --"
+      );
+      updateMaterialGroupOther(false);
+      updateMaterialGroupMatrix();
+      return;
+    }
+
+    setSelectMessage(materialGroupSelect, "Memuat Material Group...");
+    materialGroupSelect.disabled = true;
+
+    try {
+      const groups = await fetchMasterData(
+        `/material-groups/categories/${encodeURIComponent(categoryId)}`
+      );
+
+      if (requestId !== materialGroupRequestId) return;
+
+      setSelectMessage(
+        materialGroupSelect,
+        groups.length ? "-- Pilih Material Group --" : "Tidak ada Material Group tersedia"
+      );
+
+      groups.forEach((group) => {
+        const code = group.sapgroupcode ? String(group.sapgroupcode) : "";
+        const option = document.createElement("option");
+        option.value = code || String(group.id);
+        option.textContent =
+          code ||
+          group.dashboardgroupname ||
+          group.description ||
+          String(group.id);
+        option.dataset.groupId = String(group.id);
+        option.dataset.groupCode = code;
+        materialGroupSelect.appendChild(option);
+      });
+
+      setSelectedOption(materialGroupSelect, restoreValue);
+      updateMaterialGroupOther(false);
+      updateMaterialGroupMatrix();
+    } catch (error) {
+      if (requestId !== materialGroupRequestId) return;
+
+      console.error("Gagal memuat material group:", error);
+      setSelectMessage(materialGroupSelect, "Gagal memuat Material Group");
+      setStatus("Gagal memuat Material Group dari server");
+    } finally {
+      if (requestId === materialGroupRequestId) {
+        materialGroupSelect.disabled = false;
+      }
+    }
+  }
 
   // =====================================================
   // REASON TO PROCURE
@@ -1126,7 +1283,8 @@ updateShowHiddenCounter(hiddenCount);
   function updateReason() {
     if (!reasonChoice || !reasonFinal) return;
 
-    const isOthers = reasonChoice.value === "Others";
+    const selectedOption = reasonChoice.selectedOptions[0];
+    const isOthers = selectedOption?.dataset.allowsCustom === "true";
 
     if (reasonOthers) reasonOthers.hidden = !isOthers;
 
@@ -1366,6 +1524,22 @@ updateShowHiddenCounter(hiddenCount);
       .filter(item => item.type && item.value);
   }
 
+  function formatDimensionItems(items) {
+    return items.map((item) => {
+      const unit = item.unit === "Others" ? item.otherUnit : item.unit;
+      return [item.type, item.value, unit, item.symbol].filter(Boolean).join(" ");
+    }).join("; ");
+  }
+
+  function syncDimensionField() {
+    const value = formatDimensionItems(collectDimensionItems());
+    const dimensionField = $("#dimensionFinal", questionnaire);
+
+    if (dimensionField) dimensionField.value = value;
+
+    return value;
+  }
+
   function updateDimension() {
     if (!dimensionContainer) return;
 
@@ -1373,6 +1547,8 @@ updateShowHiddenCounter(hiddenCount);
     const addButton = $("#addDimensionBtn");
 
     if (addButton) addButton.disabled = totalRows >= 3;
+
+    syncDimensionField();
   }
 
   // =====================================================
@@ -2059,7 +2235,7 @@ updateShowHiddenCounter(hiddenCount);
     const detail2 =
       $('[name="uniqueDetail2"]', questionnaire)?.value.trim() || "";
 
-    if (name1 || detail1) attributes.push({ name: name1, detail: detail1 });
+    if (detail1) attributes.push({ name: name1, detail: detail1 });
     if (name2 || detail2) attributes.push({ name: name2, detail: detail2 });
 
     $$(".custom-unique-row", questionnaire).forEach(row => {
@@ -2138,6 +2314,20 @@ updateShowHiddenCounter(hiddenCount);
       questionnaire
     ).map(field => field.value);
 
+    const selectedGroupOption =
+      materialGroupSelect?.selectedOptions?.[0] || null;
+    const selectedGroupValue = selectedGroupOption?.value || "";
+    const selectedGroupId = selectedGroupOption?.dataset?.groupId || "";
+    const selectedGroupCode =
+      selectedGroupOption?.dataset?.groupCode ||
+      (/^[1-9]\d*$/.test(selectedGroupValue) ? "" : selectedGroupValue);
+    const selectedGroupValueIsNumeric = /^[1-9]\d*$/.test(selectedGroupValue);
+
+    data.materialGroup =
+      selectedGroupId ||
+      (selectedGroupValueIsNumeric ? selectedGroupValue : "");
+    data.materialGroupCode = selectedGroupCode;
+
     data.electricalAttributes = electricalAttributes;
     data.technicalAttributes = technicalAttributes;
     data.mechanicalAttributes = mechanicalAttributes;
@@ -2145,7 +2335,10 @@ updateShowHiddenCounter(hiddenCount);
 
     // Tetap simpan Dimension meskipun field sedang disembunyikan.
     data.dimensionItems = collectDimensionItems();
+    data.dimension = formatDimensionItems(data.dimensionItems);
+    const dimensionField = $("#dimensionFinal", questionnaire);
 
+    if (dimensionField) dimensionField.value = data.dimension;
     data.requiredDocuments = collectRequiredDocuments();
     data.drawingImage = drawingImage;
     data.specType = "Barang";
@@ -2153,6 +2346,269 @@ updateShowHiddenCounter(hiddenCount);
     return data;
   }
 
+  function getAttributeValues(formData) {
+    const values = {};
+    const add = (code, value) => {
+      if (value === undefined || value === null || value === "") return;
+      values[code] = value;
+    };
+
+    add("VERSION", formData.version);
+    add("CREATED_DATE", formData.createdDate);
+    add("PLANT", formData.plant);
+    add("REQUESTOR", formData.requestor);
+    add("DEPARTMENT", formData.department);
+    add("MATERIAL_GROUP", formData.materialGroupCode || formData.materialGroup);
+    add("MATERIAL_CATEGORY", formData.materialCategory?.[0]);
+    add("REASON_TO_PROCURE", formData.reason || formData.reasonChoice);
+    add("MATERIAL_DESCRIPTION", formData.materialDescription);
+    add("TYPE_MODEL_PART_NUMBER", formData.partNumber);
+    add("VARIANS", formData.variant);
+    add("DIMENSION", formData.dimension);
+    add("BRAND", formData.brand);
+    add("CATALOGUE", formData.catalogue);
+    add("UOM", formData.uomOther || formData.uom);
+    add("PACK_SIZE", formData.packSize);
+    add("KONSENTRASI", formData.concentration);
+    add("VISCOSITAS", formData.viscosity);
+    add("ADDITIONAL_SERVICE", formData.additionalService);
+    add("HSE_STANDARD", formData.hse);
+    add("LICENSE_REGULATION", formData.license);
+    add("WARRANTY_AFTER_SALES", formData.warranty);
+
+    const technicalCodeByLabel = {
+      Voltage: "VOLTAGE",
+      Phase: "PHASE",
+      Power: "POWER",
+      Current: "CURRENT",
+      Frequency: "FREQUENCY",
+      Temperature: "TEMPERATURE",
+      Capacity: "CAPACITY",
+      "Connection Type": "CONNECTION_TYPE",
+      Pressure: "PRESSURE",
+      Flowrate: "FLOWRATE",
+      Speed: "SPEED",
+      Tolerance: "TOLERANCE",
+      Konsentrasi: "KONSENTRASI",
+      Viscositas: "VISCOSITAS"
+    };
+
+    formData.technicalAttributes?.forEach((attribute) => {
+      const code = technicalCodeByLabel[attribute.label];
+
+      if (code && attribute.value !== "") {
+        add(code, attribute);
+      }
+    });
+
+    if (formData.requiredDocuments?.length) {
+      values.REQUIRED_DOCUMENTS = formData.requiredDocuments;
+    }
+
+    const technicalOthers = formData.technicalAttributes
+      ?.filter((item) => item.category === "Other") || [];
+
+    if (technicalOthers.length) values.TECHNICAL_OTHERS = technicalOthers;
+    return values;
+  }
+
+  function getCurrentDraftOwnerId() {
+    return String(window.ESpecDevAuth?.getProfile()?.userId || "").trim();
+  }
+
+  function confirmDiscardChanges() {
+    return !hasUnsavedChanges || confirm(
+      "Perubahan belum disimpan ke server akan hilang. Lanjutkan?"
+    );
+  }
+
+  function parseDetailFormData(detail) {
+    let formData = detail?.formData || detail?.form_data || {};
+
+    if (typeof formData === "string") {
+      formData = safeJSONParse(formData, {});
+    }
+
+    if (!formData || typeof formData !== "object" || Array.isArray(formData)) {
+      formData = {};
+    }
+
+    return {
+      ...formData,
+      persistedDocumentNo: detail?.documentNo || formData.persistedDocumentNo || ""
+    };
+  }
+
+  async function reapplyServerMasterData(data) {
+    if (!masterDataReady) return;
+
+    const savedPlant = String(data.plant || plantSelect?.value || "");
+    await loadDepartments(findPlant(savedPlant)?.id, data.department || deptSelect?.value || "");
+
+    const savedGroup = String(
+      pendingMaterialGroupValue || data.materialGroup || materialGroupSelect?.value || ""
+    );
+    await loadMaterialGroups(getSelectedCategories()[0], savedGroup);
+    pendingMaterialCategoryValue = "";
+    pendingMaterialGroupValue = "";
+  }
+
+  function getDraftDocumentNumber(formData) {
+    const existing = String(persistedDocumentNo || formData.persistedDocumentNo || "").trim();
+
+    return existing || `${formData.docNo || "DRAFT"}-${Date.now()}`;
+  }
+
+  async function saveDraftToServer() {
+    if (!barangSpecificationTypeId) {
+      throw new Error("Tipe spesifikasi Barang belum tersedia.");
+    }
+
+    const currentOwnerId = getCurrentDraftOwnerId();
+
+    if (!currentOwnerId) {
+      throw new Error("Identitas development tidak tersedia untuk menyimpan Draft.");
+    }
+
+    const formData = getFormData();
+    const documentNo = getDraftDocumentNumber(formData);
+    persistedDocumentNo = documentNo;
+    formData.persistedDocumentNo = documentNo;
+    const isUpdate = Boolean(persistedDraftId);
+
+    setStatus(
+      isUpdate
+        ? "Menyimpan perubahan Draft ke server..."
+        : "Menyimpan Draft baru ke server..."
+    );
+
+    const response = await fetch(
+      isUpdate
+        ? `${API_BASE_URL}/specifications/${encodeURIComponent(persistedDraftId)}`
+        : `${API_BASE_URL}/specifications`,
+      {
+        method: isUpdate ? "PUT" : "POST",
+        headers: getApiHeaders(),
+        body: JSON.stringify({
+          ...(isUpdate ? {} : { specificationTypeId: barangSpecificationTypeId }),
+          documentNo,
+          formData,
+          attributeValues: getAttributeValues(formData)
+        })
+      }
+    );
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      if (response.status === 403 && /pemilik|akses/i.test(result.message || "")) {
+        persistedDraftId = null;
+        persistedDocumentNo = null;
+        hasUnsavedChanges = true;
+        showDraftOwnershipIssue(
+          "Server menolak pembaruan karena Draft bukan milik identitas ini. Pilih Draft yang dimiliki atau buat Draft baru."
+        );
+      }
+
+      throw new Error(result.message || "Gagal menyimpan draft ke server.");
+    }
+
+    persistedDraftId = result.data?.id || persistedDraftId;
+
+    if (!persistedDraftId) {
+      throw new Error("Server tidak mengembalikan ID spesifikasi.");
+    }
+
+    persistedDocumentNo = result.data?.documentNo || documentNo;
+    formData.persistedDocumentNo = persistedDocumentNo;
+    hasUnsavedChanges = false;
+    clearDraftOwnershipIssue();
+
+    if (legacyPendingClear) {
+      window.ESpecDraftWorkspace?.clearLegacy?.("barang");
+      legacyPendingClear = false;
+    }
+
+    window.ESpecDraftWorkspace?.refreshActive?.();
+
+    return { isUpdate };
+  }
+
+  async function getSubmissionAction(id) {
+    const response = await fetch(
+      `${API_BASE_URL}/specifications/${encodeURIComponent(id)}`,
+      { headers: getApiHeaders() }
+    );
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(result.message || "Gagal memeriksa status dokumen.");
+    }
+
+    const status = result.data?.status;
+
+    if (status === "Draft") return "submit";
+    if (status === "Revision Required") return "resubmit";
+
+    throw new Error(
+      `Dokumen berstatus ${status || "tidak diketahui"} dan tidak dapat diajukan.`
+    );
+  }
+
+  async function submitForApproval() {
+    if (submitting) return;
+    if (!validateForm()) return;
+
+    submitting = true;
+    const originalText = submitBtn?.textContent;
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Mengajukan...";
+    }
+
+    try {
+      initializeDocumentInfo();
+      saveDraft();
+      setStatus("Menyimpan draft dan memeriksa status dokumen...");
+
+      await saveDraftToServer();
+      const action = await getSubmissionAction(persistedDraftId);
+
+      const response = await fetch(
+        `${API_BASE_URL}/specifications/${encodeURIComponent(persistedDraftId)}/${action}`,
+        {
+          method: "POST",
+          headers: getApiHeaders(),
+          body: JSON.stringify({})
+        }
+      );
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.message || "Gagal mengajukan spesifikasi.");
+      }
+
+      const message = result.message || (
+        action === "resubmit"
+          ? "Spesifikasi berhasil diajukan ulang untuk approval."
+          : "Spesifikasi berhasil diajukan untuk approval."
+      );
+
+      setStatus(message);
+      alert(message);
+    } catch (error) {
+      console.error("Gagal mengajukan spesifikasi Barang:", error);
+      setStatus("Perubahan belum tersimpan, tetapi pengajuan gagal", true);
+      alert(`Gagal mengajukan spesifikasi.\n\n${error.message}`);
+    } finally {
+      submitting = false;
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    }
+  }
 
   // =====================================================
   // RESTORE FIELD VALUE
@@ -2372,6 +2828,17 @@ updateShowHiddenCounter(hiddenCount);
   function restoreForm(data) {
     if (!data || typeof data !== "object") return;
 
+    const rawCategory = Array.isArray(data.materialCategory)
+      ? data.materialCategory[0]
+      : data.materialCategory;
+
+    pendingMaterialCategoryValue = String(
+      rawCategory || data.category || ""
+    ).trim();
+    pendingMaterialGroupValue = String(
+      data.materialGroupCode || data.materialGroup || ""
+    ).trim();
+
     restoreDynamicAttributes(data);
     restoreRequiredDocuments(data);
 
@@ -2480,47 +2947,214 @@ updateShowHiddenCounter(hiddenCount);
   function saveDraft() {
     if (loadingDocument) return;
 
+    hasUnsavedChanges = true;
+    setStatus("Perubahan belum disimpan");
+  }
+
+  function applyFormDataToQuestionnaire(data) {
+    loadingDocument = true;
+
     try {
-      const data = getFormData();
-
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-
-      setStatus("Draft tersimpan otomatis di browser");
+      restoreForm(data);
+      return true;
     } catch (error) {
-      console.error("Gagal menyimpan draft:", error);
-
-      setStatus(
-        "Draft gagal disimpan. Periksa ukuran gambar atau penyimpanan browser."
-      );
+      console.error("Gagal menerapkan data Draft:", error);
+      return false;
+    } finally {
+      loadingDocument = false;
     }
   }
 
-  function restoreDraft() {
+  async function resumeServerDraft(detail) {
+    if (!confirmDiscardChanges()) return;
+
+    const data = parseDetailFormData(detail);
+
+    if (!applyFormDataToQuestionnaire(data)) {
+      setStatus("Draft server gagal dipulihkan ke formulir.", true);
+      return;
+    }
+
+    persistedDraftId = detail?.id || null;
+    persistedDocumentNo = detail?.documentNo || null;
+    await reapplyServerMasterData(data);
+    hasUnsavedChanges = false;
+    clearDraftOwnershipIssue();
+
+    setStatus(
+      `Draft ${detail?.documentNo || detail?.id || ""} dimuat dari server. Terakhir diperbarui ${
+        window.ESpecDraftWorkspace?.formatUpdatedAt?.(detail?.updatedAt) || "-"
+      }.`
+    );
+  }
+
+  async function resumeDraftFromQuery(id) {
+    if (!/^[1-9]\d*$/.test(String(id))) {
+      setStatus("ID Draft tidak valid.", true);
+      return;
+    }
+
     try {
-      const saved =
-        localStorage.getItem(STORAGE_KEY) ||
-        localStorage.getItem(OLD_STORAGE_KEY);
+      setStatus("Memuat Draft dari server...");
 
-      if (!saved) return false;
+      const response = await fetch(
+        `${API_BASE_URL}/specifications/my-drafts/${encodeURIComponent(id)}`,
+        { headers: getApiHeaders() }
+      );
+      const result = await response.json().catch(() => ({}));
 
-      const data = safeJSONParse(saved, null);
+      if (!response.ok || result.success !== true) {
+        throw new Error(result.message || "Draft tidak ditemukan.");
+      }
 
-      if (!data) return false;
-
-      loadingDocument = true;
-      restoreForm(data);
-      loadingDocument = false;
-
-      setStatus("Draft sebelumnya berhasil dipulihkan");
-
-      return true;
+      await resumeServerDraft(result.data);
     } catch (error) {
-      loadingDocument = false;
+      setStatus(error.message || "Gagal memuat Draft dari server.", true);
+    }
+  }
 
-      console.error("Gagal memulihkan draft:", error);
-      setStatus("Draft sebelumnya gagal dipulihkan");
+  async function importLegacyBarang(legacy) {
+    if (!legacy?.formData) {
+      setStatus("Tidak ada data Draft lama di browser untuk dipulihkan.", true);
+      return;
+    }
 
-      return false;
+    if (!confirmDiscardChanges()) return;
+
+    clearFormForNewDraft();
+    persistedDraftId = null;
+    persistedDocumentNo = null;
+    legacyPendingClear = true;
+
+    const source = legacy?.formData && typeof legacy.formData === "object"
+      ? legacy.formData
+      : {};
+    const legacyFormData = { ...source };
+
+    delete legacyFormData.persistedDocumentNo;
+
+    const data = parseDetailFormData({ formData: legacyFormData, documentNo: "" });
+
+    if (!applyFormDataToQuestionnaire(data)) {
+      legacyPendingClear = false;
+      setStatus("Data Draft lama gagal dipulihkan ke formulir.", true);
+      return;
+    }
+
+    await reapplyServerMasterData(data);
+    hasUnsavedChanges = true;
+
+    setStatus(
+      "Data Draft lama dimuat sebagai Draft baru. Klik Save As Draft untuk menyimpannya ke server."
+    );
+  }
+
+  async function loadMasterData() {
+    try {
+      const [types, plantRows, categoryRows] = await Promise.all([
+        fetchMasterData("/specification-types"),
+        fetchMasterData("/plants"),
+        fetchMasterData("/material-categories")
+      ]);
+
+      const barangType = types.find((type) =>
+        String(type.typename).toLowerCase() === "barang" ||
+        String(type.typecode).toLowerCase() === "brg"
+      );
+
+      if (!barangType) {
+        throw new Error("Tipe spesifikasi Barang tidak ditemukan.");
+      }
+
+      barangSpecificationTypeId = barangType.id;
+      plants = plantRows;
+      categories = categoryRows.filter((category) =>
+        Number(category.specificationtypeid) === Number(barangSpecificationTypeId)
+      );
+
+      const savedPlant = plantSelect?.value || "";
+      const savedDepartment = deptSelect?.value || "";
+      const savedCategory =
+        pendingMaterialCategoryValue || getSelectedCategories()[0] || "";
+      const savedGroup =
+        pendingMaterialGroupValue || materialGroupSelect?.value || "";
+      const savedReason = reasonChoice?.value || "";
+
+      if (plantSelect) {
+        setSelectMessage(plantSelect, "-- Pilih Plant --");
+
+        plants.forEach((plant) => {
+          const option = document.createElement("option");
+          option.value = String(plant.id);
+          option.textContent = `${plant.plantid} - ${plant.plantname}`;
+          plantSelect.appendChild(option);
+        });
+
+        setSelectedOption(plantSelect, savedPlant);
+      }
+
+      if (materialCategoryOptions) {
+        materialCategoryOptions.innerHTML = "";
+
+        categories.forEach((category) => {
+          const label = document.createElement("label");
+          label.className = "q-check";
+
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.name = "materialCategory";
+          input.value = String(category.id);
+          input.dataset.categoryName = category.categoryname;
+
+          if (
+            String(category.id) === String(savedCategory) ||
+            category.categoryname === savedCategory
+          ) {
+            input.checked = true;
+          }
+
+          label.append(input, document.createTextNode(` ${category.categoryname}`));
+          materialCategoryOptions.appendChild(label);
+        });
+      }
+
+      if (reasonChoice) {
+        setSelectMessage(reasonChoice, "-- Pilih Reason --");
+
+        const reasons = await fetchMasterData(
+          `/reason-to-procure/specification-types/${barangSpecificationTypeId}`
+        );
+
+        reasons.forEach((reason) => {
+          const option = document.createElement("option");
+          option.value = String(reason.id);
+          option.textContent = reason.optionname;
+          option.dataset.allowsCustom = String(reason.allowscustomtext);
+          reasonChoice.appendChild(option);
+        });
+
+        const matchingReason = reasons.find((reason) =>
+          String(reason.id) === String(savedReason) ||
+          reason.optionname === savedReason
+        );
+
+        setSelectedOption(reasonChoice, matchingReason?.id || savedReason);
+      }
+
+      const selectedPlant = findPlant(plantSelect?.value);
+      await loadDepartments(selectedPlant?.id, savedDepartment);
+
+      const selectedCategory = getSelectedCategories()[0];
+      await loadMaterialGroups(selectedCategory, savedGroup);
+      pendingMaterialCategoryValue = "";
+      pendingMaterialGroupValue = "";
+
+      normalizeMaterialCategory();
+      updateReason();
+      masterDataReady = true;
+    } catch (error) {
+      console.error("Gagal memuat master data Barang:", error);
+      setStatus("Gagal memuat master data dari server. Coba muat ulang halaman.");
     }
   }
 
@@ -2573,6 +3207,8 @@ updateShowHiddenCounter(hiddenCount);
     updateMaterialGroupOther();
     updateMaterialGroupMatrix();
 
+    syncDimensionField();
+
     if (!questionnaire.reportValidity()) return false;
 
     // VALIDASI DIMENSION
@@ -2598,7 +3234,7 @@ updateShowHiddenCounter(hiddenCount);
     }
 
     if (
-      reasonChoice?.value === "Others" &&
+      reasonChoice?.selectedOptions[0]?.dataset.allowsCustom === "true" &&
       !reasonOther?.value.trim()
     ) {
       alert("Reason Others wajib diisi.");
@@ -2606,7 +3242,79 @@ updateShowHiddenCounter(hiddenCount);
       return false;
     }
 
+    if (!drawingImage) {
+      alert("Design / Drawing / Visual / Illustration wajib diunggah.");
+      drawingUpload?.focus();
+      return false;
+    }
+
+    const selectedGroup = (
+      materialGroupSelect?.value ||
+      materialGroupSelect?.selectedOptions[0]?.textContent ||
+      ""
+    ).trim();
+    const requiredFields =
+      MATERIAL_GROUP_REQUIRED_FIELDS[selectedGroup] ||
+      MATERIAL_GROUP_REQUIRED_FIELDS[materialGroupSelect?.selectedOptions[0]?.dataset?.groupCode] ||
+      MATERIAL_GROUP_REQUIRED_FIELDS[materialGroupSelect?.selectedOptions[0]?.textContent?.trim()] ||
+      [];
+
+    for (const field of requiredFields) {
+      const missing = getMissingRequiredField(field);
+
+      if (!missing) continue;
+
+      alert(`${getRequiredFieldLabel(field)} wajib diisi untuk Material Group ${selectedGroup}.`);
+      missing.focus?.();
+      return false;
+    }
+
     return true;
+  }
+
+  function getMissingRequiredField(field) {
+    if (field === "dimension") {
+      const hasDimension = collectDimensionItems().length > 0;
+
+      return hasDimension ? null : $(".dimension-type", dimensionContainer) || $(".dimension-value", dimensionContainer);
+    }
+
+    if (field.startsWith("technical:")) {
+      const label = field.slice("technical:".length);
+
+      return !$$("[data-tech-label]", questionnaire).some((input) =>
+        input.dataset.techLabel === label && input.value.trim()
+      ) && !$$("[data-electric-row]", questionnaire).some((row) =>
+        row.dataset.electricRow === label &&
+        $$('[data-electric-value]', row).some((input) => input.value.trim())
+      ) && !$$("[data-mechanical-row]", questionnaire).some((row) =>
+        row.dataset.mechanicalRow === label &&
+        $$('[data-mechanical-value]', row).some((input) => input.value.trim())
+      )
+        ? $("[data-tech-label]", questionnaire) || $("[data-electric-value]", questionnaire)
+        : null;
+    }
+
+    const fieldElement = $(`[name="${escapeSelector(field)}"]`, questionnaire);
+
+    return !fieldElement?.value.trim() ? fieldElement : null;
+  }
+
+  function getRequiredFieldLabel(field) {
+    const labels = {
+      materialDescription: "Material Description",
+      partNumber: "Type/Model/Part Number",
+      variant: "Varians",
+      dimension: "Dimension",
+      brand: "Brand",
+      catalogue: "Catalogue",
+      uom: "UoM",
+      packSize: "Pack Size"
+    };
+
+    return field.startsWith("technical:")
+      ? field.slice("technical:".length)
+      : labels[field] || field;
   }
 
   // =====================================================
@@ -2615,28 +3323,8 @@ updateShowHiddenCounter(hiddenCount);
 
   function saveTransactionLocally() {
     try {
-      const data = getFormData();
-
       const versionInput = getVersionInput();
-      const createdDateInput = getCreatedDateInput();
-
       const currentVersion = Number(versionInput?.value || 0);
-
-      const history = safeJSONParse(
-        localStorage.getItem(HISTORY_KEY),
-        []
-      );
-
-      history.push({
-        id: Date.now(),
-        version: String(currentVersion).padStart(2, "0"),
-        createdDate: createdDateInput?.value || todayISO(),
-        submittedAt: new Date().toISOString(),
-        formData: data
-      });
-
-      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-
       const nextVersion = currentVersion + 1;
 
       localStorage.setItem(
@@ -2648,16 +3336,9 @@ updateShowHiddenCounter(hiddenCount);
         versionInput.value = String(nextVersion).padStart(2, "0");
       }
 
-      saveDraft();
-
       return true;
     } catch (error) {
-      console.error("Gagal menyimpan transaksi:", error);
-
-      alert(
-        "Transaksi gagal disimpan di browser. Periksa kapasitas penyimpanan."
-      );
-
+      console.error("Gagal memperbarui versi dokumen:", error);
       return false;
     }
   }
@@ -2695,10 +3376,16 @@ updateShowHiddenCounter(hiddenCount);
     );
 
     if (materialGroupPrint) {
+      const materialGroupLabel =
+        data.materialGroupCode ||
+        materialGroupSelect?.selectedOptions?.[0]?.textContent?.trim() ||
+        data.materialGroup ||
+        "";
+
       materialGroupPrint.value =
         data.materialGroup === "Others"
           ? (data.materialGroupOther || "Others")
-          : (data.materialGroup || "");
+          : materialGroupLabel;
     }
 
     const categoryField = $(
@@ -2963,20 +3650,16 @@ $("#addTechnicalBtn")?.addEventListener("click", () => {
   // RESET
   // =====================================================
 
-  resetBtn?.addEventListener("click", () => {
-    const confirmed = confirm(
-      "Yakin ingin mengosongkan seluruh jawaban spesifikasi barang?"
-    );
-
-    if (!confirmed) return;
-
+  function clearFormForNewDraft() {
     questionnaire.reset();
 
     updateMaterialGroupOther();
     updateMaterialGroupMatrix();
 
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(OLD_STORAGE_KEY);
+    persistedDraftId = null;
+    persistedDocumentNo = null;
+    hasUnsavedChanges = false;
+    clearDraftOwnershipIssue();
 
     drawingImage = "";
 
@@ -3008,9 +3691,24 @@ $("#addTechnicalBtn")?.addEventListener("click", () => {
     updateDimension();
     updatePackSize();
     updateAllMechanicalOthers();
+    transferToPrint({});
+  }
 
-    saveDraft();
+  function startNewDraft() {
+    if (!confirmDiscardChanges()) return;
 
+    clearFormForNewDraft();
+    setStatus("Draft baru siap dibuat. Klik Save As Draft untuk menyimpannya ke server.");
+  }
+
+  resetBtn?.addEventListener("click", () => {
+    const confirmed = confirm(
+      "Yakin ingin mengosongkan seluruh jawaban spesifikasi barang?"
+    );
+
+    if (!confirmed) return;
+
+    clearFormForNewDraft();
     setStatus("Form berhasil direset");
 
     window.scrollTo({
@@ -3023,7 +3721,7 @@ $("#addTechnicalBtn")?.addEventListener("click", () => {
   // SAVE FOR ADMIN
   // =====================================================
 
-  saveBtn?.addEventListener("click", () => {
+  saveBtn?.addEventListener("click", async () => {
     if (saving) return;
     if (!validateForm()) return;
 
@@ -3033,13 +3731,27 @@ $("#addTechnicalBtn")?.addEventListener("click", () => {
     try {
       initializeDocumentInfo();
 
-      if (!saveTransactionLocally()) return;
+      saveDraft();
+      setStatus("Menyimpan draft ke server...");
 
-      alert(
-        "Transaksi berhasil disimpan di browser!\n" +
-        "Version berikutnya: " +
-        (getVersionInput()?.value || "00")
+      const { isUpdate } = await saveDraftToServer();
+
+      if (!isUpdate && !saveTransactionLocally()) return;
+
+      setStatus(
+        isUpdate
+          ? "Draft berhasil diperbarui di server"
+          : "Draft berhasil disimpan di server"
       );
+      alert(
+        isUpdate
+          ? "Draft spesifikasi berhasil diperbarui di server."
+          : "Draft spesifikasi berhasil disimpan di server."
+      );
+    } catch (error) {
+      console.error("Gagal menyimpan draft Barang:", error);
+      setStatus("Perubahan belum tersimpan, penyimpanan server gagal", true);
+      alert(`Gagal menyimpan draft ke server.\n\n${error.message}`);
     } finally {
       saving = false;
       saveBtn.disabled = false;
@@ -3058,7 +3770,8 @@ $("#addTechnicalBtn")?.addEventListener("click", () => {
       setStatus("Mengambil dokumen dari database...");
 
       const response = await fetch(
-        `http://localhost:3000/api/documents/${encodeURIComponent(id)}`
+        `${API_BASE_URL}/specifications/my-documents/${encodeURIComponent(id)}`,
+        { headers: getApiHeaders() }
       );
 
       const result = await response.json();
@@ -3071,11 +3784,11 @@ $("#addTechnicalBtn")?.addEventListener("click", () => {
         );
       }
 
-      const row = result.document || result;
+      const row = result.data || result.document || result;
 
       let formData =
-        row.form_data ||
         row.formData ||
+        row.form_data ||
         {};
 
       if (typeof formData === "string") {
@@ -3088,11 +3801,12 @@ $("#addTechnicalBtn")?.addEventListener("click", () => {
         id: row.id,
 
         docNo:
-          row.doc_no ??
+          row.documentNo ??
+          row.document_no ??
           row.docNo ??
           "",
 
-        revision: row.revision ?? "",
+        revision: row.revisionNo ?? row.revision ?? "",
 
         plant:
           row.plant ??
@@ -3110,16 +3824,18 @@ $("#addTechnicalBtn")?.addEventListener("click", () => {
           "",
 
         materialDescription:
+          row.materialDescription ??
           row.material_description ??
           formData.materialDescription ??
           "",
 
         materialCode:
+          row.materialCode ??
           row.material_code ??
           formData.materialCode ??
           "",
 
-        specType: row.spec_type || "Barang"
+        specType: row.specificationTypeName || row.spec_type || "Barang"
       };
 
       restoreForm(data);
@@ -3142,13 +3858,10 @@ $("#addTechnicalBtn")?.addEventListener("click", () => {
     }
   }
 
-  // =====================================================
-  // INITIALIZATION
-  // =====================================================
-
-  function initialize() {
+  async function initialize() {
     const params = new URLSearchParams(window.location.search);
     const printId = params.get("printId");
+    const legacyImport = params.get("legacyImport");
 
     initializeMechanicalUomOptions();
 
@@ -3162,16 +3875,9 @@ $("#addTechnicalBtn")?.addEventListener("click", () => {
       return;
     }
 
-    updateDepartment();
     initializeDocumentInfo();
 
-    const restored = restoreDraft();
-
-    if (
-      !restored &&
-      dimensionContainer &&
-      !$(".dimension-row", dimensionContainer)
-    ) {
+    if (dimensionContainer && !$(".dimension-row", dimensionContainer)) {
       createDimensionRow();
     }
 
@@ -3187,30 +3893,23 @@ $("#addTechnicalBtn")?.addEventListener("click", () => {
     updatePackSize();
     updateAllMechanicalOthers();
 
-    saveDraft();
+    loadMasterData().then(async () => {
+      if (legacyImport) {
+        await importLegacyBarang(window.ESpecDraftWorkspace?.readLegacy?.("barang"));
+      }
+
+      const resumeId = params.get("resumeId");
+
+      if (resumeId) await resumeDraftFromQuery(resumeId);
+    });
   }
 
-  // =====================================================
-  // PDF BUTTON
-  // =====================================================
-
-  pdfBtn?.addEventListener("click", () => {
-    if (!validateForm()) return;
-
-    initializeDocumentInfo();
-
-    const data = getFormData();
-
-    saveDraft();
-    transferToPrint(data);
-
-    window.print();
-  });
+  submitBtn?.addEventListener("click", submitForApproval);
 
   // =====================================================
   // START APPLICATION
   // =====================================================
 
-  initialize();
+  Promise.resolve(window.ESpecRoleNav?.ready).then(() => initialize());
 
 })();

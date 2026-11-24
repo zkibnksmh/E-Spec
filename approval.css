@@ -34,15 +34,12 @@
   height: 21px;
   margin-left: auto;
   padding: 0 6px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 20px;
   background: rgba(255, 255, 255, .2);
   color: #fff;
-
   font-size: 10px;
   font-weight: 800;
 }
@@ -72,15 +69,11 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-
   padding: 9px 13px;
-
   border: 1px solid #dff3e9;
   border-radius: 30px;
-
   background: #f0fbf5;
   color: #16845f;
-
   font-size: 10px;
   font-weight: 700;
 }
@@ -181,13 +174,11 @@
 
 .approval-table-wrap th {
   padding: 14px 17px;
-
   color: #8a91a5;
   font-size: 9px;
   font-weight: 800;
   letter-spacing: .7px;
   text-align: left;
-
   border-top: 1px solid var(--approval-line);
   border-bottom: 1px solid var(--approval-line);
   white-space: nowrap;
@@ -195,11 +186,9 @@
 
 .approval-table-wrap td {
   padding: 15px 17px;
-
   color: #46516b;
   font-size: 11px;
   vertical-align: middle;
-
   border-bottom: 1px solid #f0f1f6;
 }
 
@@ -231,13 +220,10 @@
 .approval-stage-label {
   display: inline-flex;
   align-items: center;
-
   padding: 6px 10px;
   border-radius: 7px;
-
   background: #f1efff;
   color: #6558c9;
-
   font-size: 10px;
   font-weight: 700;
   white-space: nowrap;
@@ -251,13 +237,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   width: fit-content;
   max-width: 100%;
-
   padding: 6px 11px;
   border-radius: 30px;
-
   font-size: 10px;
   font-weight: 800;
   white-space: nowrap;
@@ -284,26 +267,21 @@
 }
 
 /* =========================================
-   TOMBOL TINJAU
+   TABLE ACTION
 ========================================= */
 
 .table-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   min-width: 75px;
   padding: 8px 13px;
-
   border: 1px solid #e2dfff;
   border-radius: 8px;
-
   background: #f5f3ff;
   color: var(--approval-primary);
-
   font-size: 10px;
   font-weight: 800;
-
   transition: all .2s ease;
 }
 
@@ -329,36 +307,36 @@
    EMPTY STATE
 ========================================= */
 
-#approvalEmptyState {
+#approvalEmptyState,
+#myEspecEmptyState {
   padding: 35px 20px;
   text-align: center;
 }
 
-#approvalEmptyState .empty-illustration {
+#approvalEmptyState .empty-illustration,
+#myEspecEmptyState .empty-illustration {
   width: 65px;
   height: 65px;
   margin: 0 auto 15px;
-
   display: grid;
   place-items: center;
-
   border-radius: 20px;
   background: var(--approval-primary-light);
   color: var(--approval-primary);
-
   font-size: 26px;
 }
 
-#approvalEmptyState h3 {
+#approvalEmptyState h3,
+#myEspecEmptyState h3 {
   margin-bottom: 7px;
   color: var(--approval-ink);
   font-size: 14px;
 }
 
-#approvalEmptyState p {
+#approvalEmptyState p,
+#myEspecEmptyState p {
   max-width: 350px;
   margin: 0 auto;
-
   color: var(--approval-muted);
   font-size: 11px;
   line-height: 1.7;
@@ -371,13 +349,10 @@
 .approval-detail-panel {
   margin-top: 25px;
   padding: 0 24px 24px;
-
   border: 1px solid var(--approval-line);
   border-radius: 17px;
-
   background: #fff;
   box-shadow: var(--approval-shadow);
-
   animation: approvalSlideIn .3s ease;
 }
 
@@ -400,7 +375,6 @@
 .approval-detail-panel > .panel-top {
   margin: 0 -24px;
   padding: 22px 24px;
-
   border-bottom: 1px solid var(--approval-line);
 }
 
@@ -422,24 +396,19 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 13px;
-
   margin: 22px 0 25px;
 }
 
 .approval-info-item {
   min-width: 0;
   min-height: 80px;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 8px;
-
   padding: 14px 16px;
-
   border: 1px solid #ececf5;
   border-radius: 12px;
-
   background: #fafaff;
 }
 
@@ -463,7 +432,6 @@
 
 .approval-info-item.rejection-reason {
   grid-column: 1 / -1;
-
   border-color: #f5d9de;
   background: #fff8f9;
 }
@@ -473,36 +441,28 @@
 }
 
 /* =========================================
-   TIMELINE APPROVAL
+   APPROVAL TIMELINE
 ========================================= */
 
 .approval-timeline {
   display: block !important;
-
   margin: 25px 0;
-
   padding: 23px;
-
   border: 1px solid #eceaf8;
   border-radius: 16px;
-
   background: linear-gradient(145deg, #faf9ff, #fff);
 }
 
 .approval-timeline h3 {
   margin: 0 0 25px;
-
   color: var(--approval-ink);
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 14px;
   font-weight: 800;
 }
 
-/* TIMELINE HORIZONTAL */
-
 .approval-steps {
   position: relative;
-
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
@@ -510,15 +470,12 @@
 
 .approval-steps::before {
   content: "";
-
   position: absolute;
   top: 23px;
   left: 12.5%;
   right: 12.5%;
-
   height: 3px;
   border-radius: 10px;
-
   background: #e7e7f0;
   z-index: 0;
 }
@@ -526,49 +483,34 @@
 .approval-step {
   position: relative;
   z-index: 1;
-
   min-width: 0;
   padding: 0 5px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
   text-align: center;
 }
-
-/* NOMOR TAHAP */
 
 .approval-step .step-number {
   width: 48px;
   height: 48px;
   flex-shrink: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   margin-bottom: 13px;
-
   border: 4px solid #fff;
   border-radius: 50%;
-
   background: #f0eff6;
   color: #9298aa;
-
   box-shadow: 0 0 0 1px #e4e3ee;
-
   font-size: 14px;
   font-weight: 800;
 }
 
-/* NAMA TAHAP */
-
 .approval-step strong {
   display: block;
-
   margin-bottom: 6px;
-
   color: #34405a;
   font-size: 11px;
   font-weight: 800;
@@ -576,15 +518,11 @@
 
 .approval-step small {
   display: block;
-
   max-width: 170px;
-
   color: #8991a5;
   font-size: 9px;
   line-height: 1.6;
 }
-
-/* TAHAP AKTIF */
 
 .approval-step.current .step-number {
   background: var(--approval-primary);
@@ -596,8 +534,6 @@
   color: var(--approval-primary);
 }
 
-/* TAHAP SELESAI */
-
 .approval-step.completed .step-number {
   background: var(--approval-green);
   color: #fff;
@@ -608,14 +544,8 @@
   color: #15956d;
 }
 
-/* TAHAP REVISI */
-
-.approval-step.current .step-number {
-  transition: .2s ease;
-}
-
 /* =========================================
-   AREA KEPUTUSAN APPROVAL
+   APPROVAL ACTION AREA
 ========================================= */
 
 .approval-action-area {
@@ -623,12 +553,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-
   padding: 21px;
-
   border: 1px solid #eeecfa;
   border-radius: 14px;
-
   background: #fafaff;
 }
 
@@ -639,7 +566,6 @@
 .approval-action-area strong {
   display: block;
   margin-bottom: 6px;
-
   color: var(--approval-ink);
   font-size: 13px;
   font-weight: 800;
@@ -652,7 +578,7 @@
 }
 
 /* =========================================
-   TOMBOL APPROVE & REJECT
+   APPROVAL BUTTONS
 ========================================= */
 
 .approval-buttons {
@@ -660,25 +586,23 @@
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
-
+  min-width: 0;
   flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .approve-btn,
-.reject-btn {
+.reject-btn,
+.revision-btn {
   min-height: 40px;
   padding: 10px 17px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
-
   border-radius: 9px;
-
   font-size: 11px;
   font-weight: 800;
-
   cursor: pointer;
   transition: all .2s ease;
 }
@@ -687,7 +611,6 @@
   border: 1px solid var(--approval-primary);
   background: var(--approval-primary);
   color: #fff;
-
   box-shadow: 0 5px 12px rgba(101, 88, 232, .15);
 }
 
@@ -708,8 +631,21 @@
   border-color: #e9aab5;
 }
 
+.revision-btn {
+  border: 1px solid #f3dfb9;
+  background: #fff8e9;
+  color: #bd791c;
+}
+
+.revision-btn:hover:not(:disabled) {
+  border-color: #e9c77f;
+  background: #fff0cf;
+  transform: translateY(-2px);
+}
+
 .approve-btn:disabled,
-.reject-btn:disabled {
+.reject-btn:disabled,
+.revision-btn:disabled {
   opacity: .4;
   cursor: not-allowed;
   box-shadow: none;
@@ -717,23 +653,185 @@
 }
 
 /* =========================================
-   CATATAN SIMULASI BACKEND
+   APPROVAL DEMO NOTE
 ========================================= */
 
 .approval-demo-note {
   display: block;
-
   margin-top: 16px;
   padding: 13px 16px;
-
   border: 1px solid #e3dfff;
   border-radius: 10px;
-
   background: #f5f3ff;
   color: #6558b8;
-
   font-size: 10px;
   line-height: 1.7;
+}
+
+/* =========================================
+   APPROVAL DETAIL CONTENT
+========================================= */
+
+.approval-detail-content {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.approval-detail-content,
+.approval-detail-content *,
+.approval-detail-content *::before,
+.approval-detail-content *::after {
+  box-sizing: border-box;
+}
+
+.approval-detail-content > .panel {
+  min-width: 0;
+  max-width: 100%;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.approval-detail-content > .panel > .panel-top {
+  margin: 0;
+  padding: 0 0 22px;
+}
+
+.approval-detail-content .panel-heading {
+  min-width: 0;
+}
+
+.approval-detail-content .approval-document-info,
+.approval-detail-content .approval-form-grid,
+.approval-detail-content .approval-form-fields {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: 14px;
+}
+
+.approval-form-section {
+  min-width: 0;
+  margin: 0 0 22px;
+  padding: 18px 16px;
+  border: 1px solid #ececf5;
+  border-radius: 14px;
+  background: #fcfcff;
+}
+
+.approval-section-title,
+.approval-subsection-title {
+  min-width: 0;
+  margin: 0 0 14px;
+  color: var(--approval-ink);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.approval-section-title {
+  font-size: 14px;
+}
+
+.approval-subsection-title {
+  margin-top: 18px;
+  font-size: 12px;
+}
+
+.approval-form-section:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================
+   READ ONLY FIELD
+========================================= */
+
+.readonly-field {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.readonly-field label {
+  color: var(--approval-muted, #64748b);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.readonly-field input,
+.readonly-field select,
+.readonly-field textarea,
+.decision-select,
+.decision-comment {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--approval-line, #e2e8f0);
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #334155;
+  font: inherit;
+}
+
+.approval-detail-content .readonly-field input,
+.approval-detail-content .readonly-field select,
+.approval-detail-content .readonly-field textarea {
+  cursor: default;
+  opacity: 1;
+  text-overflow: ellipsis;
+}
+
+.decision-comment {
+  margin-top: 10px;
+  resize: vertical;
+}
+
+/* =========================================
+   MY E-SPEC — EMPTY STATE
+========================================= */
+
+.my-espec-empty {
+  min-height: 215px;
+  padding: 35px 20px 45px;
+  text-align: center;
+}
+
+.my-espec-empty .empty-illustration {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 12px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #f0f3f8;
+  color: #8b9bb2;
+  font-size: 17px;
+}
+
+.my-espec-empty h3 {
+  margin: 0 0 8px;
+  color: #34425a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.my-espec-empty p {
+  max-width: 390px;
+  margin: 0 auto 15px;
+  color: #8b9bb2;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.my-espec-empty p strong {
+  color: #71829d;
+}
+
+.my-espec-empty .primary-btn {
+  display: none;
 }
 
 /* =========================================
@@ -745,11 +843,8 @@
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-
   padding: 14px 20px;
-
   border-top: 1px solid var(--approval-line);
-
   color: var(--approval-muted);
   font-size: 10px;
 }
@@ -760,183 +855,11 @@
 }
 
 /* =========================================
-   RESPONSIVE TABLET
-========================================= */
-
-@media (max-width: 1100px) {
-  .approval-document-info {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .approval-steps {
-    gap: 6px;
-  }
-
-  .approval-step strong {
-    font-size: 10px;
-  }
-}
-
-/* =========================================
-   RESPONSIVE MOBILE
-========================================= */
-
-@media (max-width: 700px) {
-  .approval-heading {
-    align-items: flex-start;
-  }
-
-  .approval-heading .secondary-btn {
-    width: 100%;
-  }
-
-  .approval-panel .panel-top {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .approval-panel .tools {
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .approval-panel .search-box,
-  .approval-panel .filter-box {
-    width: 100%;
-  }
-
-  .approval-panel .table-wrap {
-    overflow-x: auto;
-  }
-
-  .approval-document-info {
-    grid-template-columns: 1fr;
-  }
-
-  .approval-info-item.rejection-reason {
-    grid-column: auto;
-  }
-
-  .approval-detail-panel {
-    padding: 0 15px 17px;
-    border-radius: 14px;
-  }
-
-  .approval-detail-panel > .panel-top {
-    margin: 0 -15px;
-    padding: 17px 15px;
-  }
-
-  .approval-detail-panel > .panel-top {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .approval-timeline {
-    padding: 18px 14px;
-  }
-
-  /* Timeline menjadi vertikal di layar kecil */
-  .approval-steps {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-
-  .approval-steps::before {
-    top: 22px;
-    bottom: 35px;
-    left: 22px;
-    right: auto;
-
-    width: 3px;
-    height: auto;
-  }
-
-  .approval-step {
-    display: grid;
-    grid-template-columns: 46px minmax(0, 1fr);
-    grid-template-rows: auto auto;
-
-    column-gap: 13px;
-
-    padding: 0 0 23px;
-
-    text-align: left;
-    align-items: start;
-  }
-
-  .approval-step .step-number {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-
-    width: 45px;
-    height: 45px;
-
-    margin: 0;
-  }
-
-  .approval-step strong {
-    grid-column: 2;
-    grid-row: 1;
-
-    align-self: end;
-    margin: 3px 0 5px;
-
-    font-size: 11px;
-  }
-
-  .approval-step small {
-    grid-column: 2;
-    grid-row: 2;
-
-    max-width: none;
-    font-size: 10px;
-  }
-
-  .approval-action-area {
-    align-items: stretch;
-    flex-direction: column;
-
-    padding: 16px;
-  }
-
-  .approval-buttons {
-    width: 100%;
-    flex-direction: column-reverse;
-  }
-
-  .approval-buttons button {
-    width: 100%;
-  }
-
-  .approval-panel .panel-footer {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-}
-
-/* =========================================
-   REDUCED MOTION
-========================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .approval-detail-panel {
-    animation: none;
-  }
-
-  .approval-panel *,
-  .approval-detail-panel * {
-    scroll-behavior: auto !important;
-    transition-duration: .01ms !important;
-  }
-}
-
-/* =========================================
    WORKSPACE NAVIGATION
 ========================================= */
 
 .status-workspace-tabs {
-  display: grid;
+  display: none !important;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 15px;
   margin: 25px 0 35px;
@@ -1050,6 +973,11 @@
 
 .my-espec-panel {
   margin-bottom: 25px;
+  overflow: hidden;
+  border: 1px solid #e9ebf3;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(39, 42, 90, .045);
 }
 
 .approval-status-filter {
@@ -1161,168 +1089,11 @@
 }
 
 /* =========================================
-   REVISION BUTTON
+   MY E-SPEC — DRAFT WORKSPACE
 ========================================= */
 
-.revision-btn {
-  min-height: 40px;
-  padding: 10px 17px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  border: 1px solid #f3dfb9;
-  border-radius: 9px;
-  background: #fff8e9;
-  color: #bd791c;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all .2s ease;
-}
-
-.revision-btn:hover:not(:disabled) {
-  border-color: #e9c77f;
-  background: #fff0cf;
-  transform: translateY(-2px);
-}
-
-.revision-btn:disabled {
-  opacity: .4;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* =========================================
-   APPROVAL ACTION BUTTONS
-========================================= */
-
-.approval-buttons {
-  flex-wrap: wrap;
-}
-
-.approve-btn:disabled,
-.reject-btn:disabled,
-.revision-btn:disabled {
-  opacity: .4;
-  cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
-}
-
-/* =========================================
-   EMPTY STATE MY E-SPEC
-========================================= */
-
-#myEspecEmptyState {
-  padding: 35px 20px;
-  text-align: center;
-}
-
-#myEspecEmptyState .empty-illustration {
-  width: 65px;
-  height: 65px;
-  margin: 0 auto 15px;
-  display: grid;
-  place-items: center;
-  border-radius: 20px;
-  background: #f0eeff;
-  color: #6558e8;
-  font-size: 26px;
-}
-
-#myEspecEmptyState h3 {
-  margin-bottom: 7px;
-  color: #202b45;
-  font-size: 14px;
-}
-
-#myEspecEmptyState p {
-  max-width: 350px;
-  margin: 0 auto 15px;
-  color: #8791a5;
-  font-size: 11px;
-  line-height: 1.7;
-}
-
-/* =========================================
-   RESPONSIVE STATUS WORKSPACE
-========================================= */
-
-@media (max-width: 900px) {
-  .status-workspace-tabs {
-    gap: 10px;
-  }
-
-  .status-workspace-tab {
-    padding: 15px;
-  }
-
-  .approval-document-info {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 700px) {
-  .status-workspace-tabs {
-    grid-template-columns: 1fr;
-    margin: 20px 0 28px;
-  }
-
-  .status-workspace-tab {
-    min-height: 75px;
-  }
-
-  .status-section-heading h2 {
-    font-size: 18px;
-  }
-
-  .approval-status-filter {
-    overflow-x: auto;
-    padding: 12px 15px;
-  }
-
-  .approval-status-tab {
-    flex-shrink: 0;
-  }
-
-  .approval-row-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .approval-row-actions .table-action {
-    width: 100%;
-  }
-
-  .approval-buttons {
-    flex-direction: column-reverse;
-  }
-
-  .approval-buttons button {
-    width: 100%;
-  }
-
-  .approval-document-info {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Sembunyikan kartu navigasi My E-Spec dan My Approval */
-.status-workspace-tabs {
-  display: none !important;
-}
-
-
-/* =====================================================
-   MY E-SPEC — TABLE WORKSPACE
-   Tambahan styling khusus halaman approval.html
-   Tema utama E-Spec tetap dipertahankan
-===================================================== */
-
-/* PANEL */
-.my-espec-panel {
+.my-draft-panel {
+  margin-bottom: 20px;
   overflow: hidden;
   border: 1px solid #e9ebf3;
   border-radius: 16px;
@@ -1330,7 +1101,57 @@
   box-shadow: 0 10px 30px rgba(39, 42, 90, .045);
 }
 
-/* PANEL HEADER */
+.my-draft-panel > .panel-top {
+  padding: 20px 22px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.my-draft-panel .panel-heading h2 {
+  color: #202b45;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.my-draft-panel .panel-heading p {
+  color: #8791a5;
+  font-size: 10px;
+}
+
+.draft-source-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px 0;
+}
+
+.draft-source-switch label {
+  color: #202b45;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.draft-source-switch select {
+  padding: 9px 11px;
+  border: 1px solid #e9ebf3;
+  border-radius: 10px;
+  background: #fff;
+  color: #202b45;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.draft-source-panel {
+  padding: 14px 22px 20px;
+}
+
+.draft-source-panel[hidden] {
+  display: none;
+}
+
+/* =========================================
+   MY E-SPEC — TABLE WORKSPACE
+========================================= */
+
 .my-espec-panel > .panel-top {
   padding: 20px 22px;
   border-bottom: 1px solid #edf0f5;
@@ -1347,23 +1168,21 @@
   font-size: 10px;
 }
 
-/* TOOLBAR */
 .my-espec-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 15px;
-  padding: 14px 16px;
+  gap: 16px;
+  padding: 15px 16px;
   background: #fff;
 }
 
-/* STATUS TABS */
 .my-espec-panel .approval-status-filter {
   display: flex;
   flex: 1;
   align-items: center;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 7px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -1396,7 +1215,6 @@
   color: #fff;
 }
 
-/* WARNA KHUSUS TAB */
 .my-espec-panel .approval-status-tab.waiting-tab:not(.active) {
   border-color: #f4dfaa;
   background: #fffaf0;
@@ -1415,10 +1233,10 @@
   color: #16845f;
 }
 
-/* SEARCH */
 .my-espec-search {
   position: relative;
-  flex: 0 1 290px;
+  flex: 0 0 290px;
+  max-width: 290px;
   min-width: 190px;
 }
 
@@ -1455,71 +1273,87 @@
   box-shadow: 0 0 0 3px rgba(101, 88, 232, .08);
 }
 
-/* TABLE WRAPPER */
+/* MY E-SPEC TABLE */
+
 .my-espec-panel .my-espec-table-wrap {
   width: auto;
   margin: 0 16px;
   overflow-x: auto;
+  border-radius: 9px;
 }
 
 .my-espec-table {
   width: 100%;
   min-width: 850px;
-  border-collapse: collapse;
-  table-layout: auto;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
-/* TABLE HEADER */
 .my-espec-table thead {
   background: #f5f7fa;
 }
 
 .my-espec-table th {
-  padding: 13px 15px;
+  padding: 14px 12px;
   border: 0;
   color: #64738b;
   font-size: 9px;
   font-weight: 800;
   letter-spacing: .45px;
   text-align: left;
+  white-space: normal;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+
+.my-espec-table th:nth-child(1),
+.my-espec-table td:nth-child(1) {
+  width: 14%;
+}
+
+.my-espec-table th:nth-child(2),
+.my-espec-table td:nth-child(2) {
+  width: 25%;
+}
+
+.my-espec-table th:nth-child(3),
+.my-espec-table td:nth-child(3) {
+  width: 14%;
+}
+
+.my-espec-table th:nth-child(4),
+.my-espec-table td:nth-child(4) {
+  width: 17%;
+}
+
+.my-espec-table th:nth-child(5),
+.my-espec-table td:nth-child(5) {
+  width: 17%;
   white-space: nowrap;
 }
 
-.my-espec-table th:first-child {
-  min-width: 170px;
-}
-
-.my-espec-table th:nth-child(2) {
-  min-width: 190px;
-}
-
-.my-espec-table th:nth-child(3) {
-  min-width: 120px;
-}
-
-.my-espec-table th:nth-child(4) {
-  min-width: 240px;
-}
-
-.my-espec-table th.action-column {
-  min-width: 75px;
+.my-espec-table th:nth-child(6),
+.my-espec-table td:nth-child(6) {
+  width: 13%;
   text-align: center;
 }
 
-/* TABLE BODY */
 .my-espec-table td {
-  padding: 14px 15px;
+  padding: 15px 12px;
   border-bottom: 1px solid #edf0f5;
   color: #46516b;
   font-size: 11px;
   vertical-align: middle;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .my-espec-table tbody tr {
   transition: background .2s ease;
 }
 
-.my-espec-table tbody tr:hover {
+.my-espec-table tbody tr:hover td {
   background: #fafbfe;
 }
 
@@ -1532,11 +1366,10 @@
   color: #34425a;
   font-size: 11px;
   font-weight: 700;
-  line-height: 1.5;
+  line-height: 1.6;
   overflow-wrap: anywhere;
 }
 
-/* NOMOR DOKUMEN */
 .my-espec-table .doc-number {
   color: #344e70;
   font-size: 11px;
@@ -1549,7 +1382,6 @@
   font-size: 9px;
 }
 
-/* STATUS BADGE */
 .my-espec-table .approval-status {
   padding: 6px 10px;
   border-radius: 7px;
@@ -1577,7 +1409,6 @@
   color: #68758a;
 }
 
-/* PROGRESS / CATATAN */
 .my-espec-progress {
   display: flex;
   flex-direction: column;
@@ -1600,7 +1431,6 @@
   color: #16845f;
 }
 
-/* ACTION */
 .my-espec-table .action-column,
 .my-espec-table td:last-child {
   text-align: center;
@@ -1622,49 +1452,6 @@
   color: #6558e8;
 }
 
-/* EMPTY STATE */
-.my-espec-empty {
-  min-height: 215px;
-  padding: 35px 20px 45px;
-  text-align: center;
-}
-
-.my-espec-empty .empty-illustration {
-  width: 42px;
-  height: 42px;
-  margin: 0 auto 12px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: #f0f3f8;
-  color: #8b9bb2;
-  font-size: 17px;
-}
-
-.my-espec-empty h3 {
-  margin: 0 0 8px;
-  color: #34425a;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.my-espec-empty p {
-  max-width: 390px;
-  margin: 0 auto 15px;
-  color: #8b9bb2;
-  font-size: 10px;
-  line-height: 1.6;
-}
-
-.my-espec-empty p strong {
-  color: #71829d;
-}
-
-.my-espec-empty .primary-btn {
-  display: none;
-}
-
-/* FOOTER */
 .my-espec-panel .my-espec-footer {
   margin-top: 0;
   padding: 13px 18px;
@@ -1673,227 +1460,30 @@
   font-size: 10px;
 }
 
-/* LOADING */
 .my-espec-table .loading-state {
   height: 100px;
   color: #8791a5 !important;
   text-align: center;
 }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .my-espec-toolbar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+/* =========================================
+   MY APPROVAL TABLE
+========================================= */
 
-  .my-espec-panel .approval-status-filter {
-    width: 100%;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-
-  .my-espec-search {
-    width: 100%;
-    max-width: none;
-    flex-basis: auto;
-  }
-}
-
-@media (max-width: 600px) {
-  .my-espec-panel > .panel-top {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .my-espec-toolbar {
-    padding: 12px;
-  }
-
-  .my-espec-panel .my-espec-table-wrap {
-    margin: 0 12px;
-  }
-
-  .my-espec-empty {
-    min-height: 190px;
-    padding: 30px 12px;
-  }
-
-  .my-espec-panel .my-espec-footer {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-}
-
-
-/* =====================================================
-   MY E-SPEC — TABLE ALIGNMENT REFINEMENT
-   Perapihan proporsi kolom dan jarak tabel
-===================================================== */
-
-/* Area tabel */
-.my-espec-panel .my-espec-table-wrap {
+.approval-panel .approval-table-wrap {
+  width: auto;
   margin: 0 16px;
   overflow-x: auto;
   border-radius: 9px;
 }
 
-/* Pembagian lebar kolom */
-.my-espec-table {
+.approval-panel .my-approval-table {
   width: 100%;
-  min-width: 850px;
+  min-width: 900px;
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
 }
-
-/* Lebar masing-masing kolom */
-.my-espec-table th:nth-child(1),
-.my-espec-table td:nth-child(1) {
-  width: 14%;
-}
-
-.my-espec-table th:nth-child(2),
-.my-espec-table td:nth-child(2) {
-  width: 25%;
-}
-
-.my-espec-table th:nth-child(3),
-.my-espec-table td:nth-child(3) {
-  width: 14%;
-}
-
-.my-espec-table th:nth-child(4),
-.my-espec-table td:nth-child(4) {
-  width: 17%;
-}
-
-.my-espec-table th:nth-child(5),
-.my-espec-table td:nth-child(5) {
-  width: 17%;
-}
-
-.my-espec-table th:nth-child(6),
-.my-espec-table td:nth-child(6) {
-  width: 13%;
-}
-
-/* Header tabel */
-.my-espec-table th {
-  padding: 14px 12px;
-  vertical-align: middle;
-  line-height: 1.5;
-  white-space: normal;
-}
-
-/* Isi tabel */
-.my-espec-table td {
-  padding: 15px 12px;
-  vertical-align: middle;
-  line-height: 1.6;
-  overflow-wrap: anywhere;
-}
-
-/* Nama material atau jasa */
-.my-espec-table .document-name {
-  line-height: 1.6;
-  overflow-wrap: anywhere;
-}
-
-/* Status */
-.my-espec-table td:nth-child(5) {
-  white-space: nowrap;
-}
-
-/* Action */
-.my-espec-table th:nth-child(6),
-.my-espec-table td:nth-child(6) {
-  text-align: center;
-}
-
-/* Jarak toolbar */
-.my-espec-toolbar {
-  padding: 15px 16px;
-  gap: 16px;
-}
-
-/* Filter agar sejajar */
-.my-espec-panel .approval-status-filter {
-  align-items: center;
-  gap: 7px;
-}
-
-/* Pencarian */
-.my-espec-search {
-  flex: 0 0 290px;
-  max-width: 290px;
-}
-
-/* Hover baris */
-.my-espec-table tbody tr:hover td {
-  background: #fafbfe;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .my-espec-search {
-    flex: 1 1 100%;
-    max-width: none;
-  }
-}
-
-@media (max-width: 600px) {
-  .my-espec-panel .my-espec-table-wrap {
-    margin: 0 12px;
-  }
-
-  .my-espec-table {
-    min-width: 850px;
-  }
-
-  .my-espec-table th,
-  .my-espec-table td {
-    padding: 12px 10px;
-  }
-}
-
-/* =====================================================
-   MY APPROVAL — TABLE HEADER
-===================================================== */
-
-.approval-panel .my-approval-table thead {
-  display: table-header-group !important;
-}
-
-.approval-panel .my-approval-table thead tr {
-  display: table-row !important;
-}
-
-.approval-panel .my-approval-table thead th {
-  display: table-cell !important;
-  padding: 16px 14px !important;
-  background: #f5f6fb !important;
-  color: #59627a !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  text-align: left !important;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  white-space: normal !important;
-  border-bottom: 1px solid #e9eaf1;
-  vertical-align: middle;
-}
-
-.approval-panel .my-approval-table thead th:last-child {
-  text-align: center !important;
-}
-
-
-/* =====================================================
-   MY APPROVAL — 5 COLUMN TABLE
-===================================================== */
 
 .my-approval-table {
   width: 100%;
@@ -1903,74 +1493,6 @@
   border-spacing: 0;
 }
 
-.my-approval-table th:nth-child(1),
-.my-approval-table td:nth-child(1) {
-  width: 15%;
-}
-
-.my-approval-table th:nth-child(2),
-.my-approval-table td:nth-child(2) {
-  width: 30%;
-}
-
-.my-approval-table th:nth-child(3),
-.my-approval-table td:nth-child(3) {
-  width: 18%;
-}
-
-.my-approval-table th:nth-child(4),
-.my-approval-table td:nth-child(4) {
-  width: 19%;
-}
-
-.my-approval-table th:nth-child(5),
-.my-approval-table td:nth-child(5) {
-  width: 18%;
-  text-align: center;
-}
-
-.my-approval-table .document-name {
-  display: block;
-  color: #34425a;
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1.6;
-  overflow-wrap: anywhere;
-}
-
-.my-approval-table td {
-  vertical-align: middle;
-}
-
-.my-approval-table .approval-row-actions {
-  justify-content: center;
-}
-
-
-/* =====================================================
-   MY APPROVAL — TABLE ALIGNMENT REFINEMENT
-   Menyesuaikan tabel dengan struktur terbaru:
-   Submit Date | Description | Requestor | Department | Aksi
-===================================================== */
-
-/* Area tabel */
-.approval-panel .approval-table-wrap {
-  width: auto;
-  margin: 0 16px;
-  overflow-x: auto;
-  border-radius: 9px;
-}
-
-/* Struktur utama tabel */
-.approval-panel .my-approval-table {
-  width: 100%;
-  min-width: 900px;
-  table-layout: fixed;
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-/* Lebar setiap kolom */
 .approval-panel .my-approval-table th:nth-child(1),
 .approval-panel .my-approval-table td:nth-child(1) {
   width: 15%;
@@ -1997,7 +1519,6 @@
   text-align: center;
 }
 
-/* Header tabel */
 .approval-panel .my-approval-table thead {
   display: table-header-group !important;
   background: #f5f7fa;
@@ -2028,7 +1549,32 @@
   text-align: center !important;
 }
 
-/* Isi tabel */
+.my-approval-table th:nth-child(1),
+.my-approval-table td:nth-child(1) {
+  width: 15%;
+}
+
+.my-approval-table th:nth-child(2),
+.my-approval-table td:nth-child(2) {
+  width: 30%;
+}
+
+.my-approval-table th:nth-child(3),
+.my-approval-table td:nth-child(3) {
+  width: 18%;
+}
+
+.my-approval-table th:nth-child(4),
+.my-approval-table td:nth-child(4) {
+  width: 19%;
+}
+
+.my-approval-table th:nth-child(5),
+.my-approval-table td:nth-child(5) {
+  width: 18%;
+  text-align: center;
+}
+
 .approval-panel .my-approval-table td {
   padding: 15px 12px;
   border-bottom: 1px solid #edf0f5;
@@ -2039,7 +1585,11 @@
   overflow-wrap: anywhere;
 }
 
-/* Nama material atau jasa */
+.my-approval-table td {
+  vertical-align: middle;
+}
+
+.my-approval-table .document-name,
 .approval-panel .my-approval-table .document-name {
   display: block;
   color: #34425a;
@@ -2049,7 +1599,6 @@
   overflow-wrap: anywhere;
 }
 
-/* Keterangan Barang / Jasa */
 .approval-panel .my-approval-table .secondary-text {
   display: block;
   margin-top: 4px;
@@ -2058,17 +1607,16 @@
   line-height: 1.5;
 }
 
-/* Kolom tanggal */
 .approval-panel .my-approval-table td:first-child {
   color: #64738b;
   white-space: normal;
 }
 
-/* Kolom aksi */
 .approval-panel .my-approval-table td:last-child {
   text-align: center;
 }
 
+.my-approval-table .approval-row-actions,
 .approval-panel .my-approval-table .approval-row-actions {
   display: flex;
   align-items: center;
@@ -2082,7 +1630,6 @@
   white-space: nowrap;
 }
 
-/* Hover baris */
 .approval-panel .my-approval-table tbody tr:hover td {
   background: #fafbfe;
 }
@@ -2091,8 +1638,139 @@
   border-bottom: none;
 }
 
-/* Responsive */
+/* =========================================
+   DECISION CHECKBOX
+========================================= */
+
+.decision-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.decision-checkbox input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: #6558e8;
+  cursor: pointer;
+}
+
+.decision-checkbox.approve {
+  color: #15956d;
+}
+
+.decision-checkbox.reject {
+  color: #d64c61;
+}
+
+.decision-checkbox.revision {
+  color: #bd791c;
+}
+
+/* =========================================
+   RESPONSIVE TABLET
+========================================= */
+
+@media (max-width: 1100px) {
+  .approval-document-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .approval-steps {
+    gap: 6px;
+  }
+
+  .approval-step strong {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 900px) {
+  .my-espec-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .my-espec-panel .approval-status-filter {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .my-espec-search {
+    width: 100%;
+    max-width: none;
+    flex: 1 1 100%;
+  }
+
+  .status-workspace-tab {
+    padding: 15px;
+  }
+
+  .approval-detail-content .approval-document-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .approval-detail-content .approval-action-area {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .approval-detail-content .approval-buttons {
+    width: 100%;
+    min-width: 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .approval-detail-content .decision-select {
+    flex: 1 1 260px;
+  }
+
+  .approval-detail-content .decision-comment {
+    flex: 1 1 100%;
+  }
+}
+
+/* =========================================
+   RESPONSIVE MOBILE
+========================================= */
+
 @media (max-width: 700px) {
+  .approval-heading {
+    align-items: flex-start;
+  }
+
+  .approval-heading .secondary-btn {
+    width: 100%;
+  }
+
+  .approval-panel .panel-top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .approval-panel .tools {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .approval-panel .search-box,
+  .approval-panel .filter-box {
+    width: 100%;
+  }
+
+  .approval-panel .table-wrap {
+    overflow-x: auto;
+  }
+
   .approval-panel .approval-table-wrap {
     margin: 0 12px;
   }
@@ -2104,5 +1782,194 @@
   .approval-panel .my-approval-table th,
   .approval-panel .my-approval-table td {
     padding: 12px 10px;
+  }
+
+  .my-espec-panel > .panel-top {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .my-espec-toolbar {
+    padding: 12px;
+  }
+
+  .my-espec-panel .my-espec-table-wrap {
+    margin: 0 12px;
+  }
+
+  .my-espec-table {
+    min-width: 850px;
+  }
+
+  .my-espec-table th,
+  .my-espec-table td {
+    padding: 12px 10px;
+  }
+
+  .my-espec-empty {
+    min-height: 190px;
+    padding: 30px 12px;
+  }
+
+  .my-espec-panel .my-espec-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .status-workspace-tabs {
+    grid-template-columns: 1fr;
+    margin: 20px 0 28px;
+  }
+
+  .status-workspace-tab {
+    min-height: 75px;
+  }
+
+  .status-section-heading h2 {
+    font-size: 18px;
+  }
+
+  .approval-status-filter {
+    overflow-x: auto;
+    padding: 12px 15px;
+  }
+
+  .approval-status-tab {
+    flex-shrink: 0;
+  }
+
+  .approval-row-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .approval-row-actions .table-action {
+    width: 100%;
+  }
+
+  .approval-buttons {
+    width: 100%;
+    flex-direction: column-reverse;
+  }
+
+  .approval-buttons button {
+    width: 100%;
+  }
+
+  .approval-document-info {
+    grid-template-columns: 1fr;
+  }
+
+  .approval-detail-content .approval-document-info,
+  .approval-detail-content .approval-form-grid,
+  .approval-detail-content .approval-form-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .approval-info-item.rejection-reason {
+    grid-column: auto;
+  }
+
+  .approval-detail-content > .panel {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .approval-detail-content > .panel > .panel-top {
+    margin: 0;
+    padding: 0 0 16px;
+  }
+
+  .approval-detail-panel > .panel-top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .approval-timeline {
+    padding: 18px 14px;
+  }
+
+  .approval-steps {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .approval-steps::before {
+    top: 22px;
+    bottom: 35px;
+    left: 22px;
+    right: auto;
+    width: 3px;
+    height: auto;
+  }
+
+  .approval-step {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 13px;
+    padding: 0 0 23px;
+    text-align: left;
+    align-items: start;
+  }
+
+  .approval-step .step-number {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 45px;
+    height: 45px;
+    margin: 0;
+  }
+
+  .approval-step strong {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+    margin: 3px 0 5px;
+    font-size: 11px;
+  }
+
+  .approval-step small {
+    grid-column: 2;
+    grid-row: 2;
+    max-width: none;
+    font-size: 10px;
+  }
+
+  .approval-action-area {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .approval-panel .panel-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.approval-panel .footer-check {
+  color: var(--approval-green);
+  font-weight: 800;
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .approval-detail-panel {
+    animation: none;
+  }
+
+  .approval-panel *,
+  .approval-detail-panel * {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
   }
 }

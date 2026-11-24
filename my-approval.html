@@ -8,6 +8,8 @@
 
   <link rel="stylesheet" href="admin.css">
   <link rel="stylesheet" href="approval.css">
+  <link rel="stylesheet" href="dev-auth.css">
+  <script src="dev-auth.js"></script>
 </head>
 
 <body>
@@ -115,9 +117,11 @@
         <div class="avatar">R</div>
 
         <div class="profile-info">
-          <strong>Requestor</strong>
-          <small>Pengguna E-Spec</small>
+          <strong data-dev-identity-name>Requestor</strong>
+          <small data-dev-identity-role>Pengguna E-Spec</small>
         </div>
+
+        <button type="button" class="dev-logout" data-dev-logout>Logout</button>
 
         <span class="profile-arrow">⌄</span>
       </div>
@@ -197,7 +201,7 @@
           <div class="toolbar-title">
             <strong>Daftar Approval</strong>
             <small>
-              Pilih keputusan untuk setiap dokumen.
+              Dokumen yang sedang menunggu keputusan Anda.
             </small>
           </div>
 
@@ -211,16 +215,6 @@
                 id="approvalSearch"
                 placeholder="Cari nomor dokumen atau requestor..."
               >
-            </div>
-
-            <div class="filter-box">
-              <select id="approvalFilter">
-                <option value="all">Semua status</option>
-                <option value="pending">Menunggu Approval</option>
-                <option value="approved">Disetujui</option>
-                <option value="rejected">Ditolak</option>
-                <option value="revision">Perlu Revisi</option>
-              </select>
             </div>
 
           </div>
@@ -240,6 +234,7 @@
         <th>AKSI</th>
       </tr>
     </thead>
+
 
     <tbody id="approvalRows"></tbody>
   </table>
@@ -282,100 +277,6 @@
       </section>
 
 
-      <!-- APPROVAL DETAIL -->
-      <section
-        class="panel approval-detail-panel"
-        id="approvalDetailPanel"
-        hidden>
-
-        <div class="panel-top">
-
-          <div class="panel-heading">
-            <div class="panel-heading-icon">▤</div>
-
-            <div>
-              <h2>Detail Alur Persetujuan</h2>
-              <p id="approvalDetailSubtitle">
-                Informasi tahapan approval dokumen.
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            class="secondary-btn"
-            id="closeApprovalDetail">
-            Tutup Detail
-          </button>
-
-        </div>
-
-
-        <!-- DOCUMENT INFORMATION -->
-        <div
-          class="approval-document-info"
-          id="approvalDocumentInfo">
-        </div>
-
-
-        <!-- APPROVAL TIMELINE -->
-        <div class="approval-timeline">
-
-          <h3>Alur Persetujuan Dokumen</h3>
-
-          <div
-            class="approval-steps"
-            id="approvalSteps">
-          </div>
-
-        </div>
-
-
-        <!-- APPROVAL ACTION -->
-        <div class="approval-action-area">
-
-          <div>
-            <strong>Keputusan Approval</strong>
-            <p>
-              Pilih salah satu keputusan setelah memeriksa
-              dokumen spesifikasi.
-            </p>
-          </div>
-
-          <div class="approval-buttons">
-
-            <button
-              type="button"
-              class="reject-btn"
-              id="rejectApprovalBtn">
-              ✕ Reject
-            </button>
-
-            <button
-              type="button"
-              class="revision-btn"
-              id="revisionApprovalBtn">
-              ↻ Revision
-            </button>
-
-            <button
-              type="button"
-              class="approve-btn"
-              id="approveApprovalBtn">
-              ✓ Approve
-            </button>
-
-          </div>
-
-        </div>
-
-        <p class="approval-demo-note">
-          Keputusan saat ini menggunakan simulasi workflow
-          pada browser dan belum disimpan permanen ke database.
-        </p>
-
-      </section>
-
 
       <!-- FOOTER -->
       <footer class="page-footer">
@@ -394,6 +295,9 @@
 
 
 <!-- SCRIPT -->
+<script src="frontend.local.js"></script>
+<script src="role-nav.js"></script>
+<script src="document-workspace.js"></script>
 <script src="my-approval.js"></script>
 
 <script>

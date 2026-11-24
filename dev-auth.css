@@ -1,0 +1,130 @@
+.dev-logout {
+  appearance: none;
+  border: 1px solid var(--line, #e9ebf3);
+  border-radius: 10px;
+  background: var(--white, #ffffff);
+  color: var(--ink, #202b45);
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.dev-logout:hover {
+  border-color: var(--primary, #6558e8);
+  background: var(--primary-light, #f0eeff);
+  color: var(--primary-dark, #5042d0);
+}
+
+.dev-logout:focus-visible {
+  outline: 3px solid rgba(101, 88, 232, 0.18);
+  outline-offset: 2px;
+}
+
+.draft-session-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.draft-status {
+  margin: 0;
+  color: var(--muted, #8791a5);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.draft-status.warning {
+  padding: 9px 12px;
+  border: 1px solid #f3dfc6;
+  border-radius: 10px;
+  background: var(--orange-light, #fff4e8);
+  color: #9a5a16;
+  font-weight: 600;
+}
+
+.draft-recovery-btn {
+  appearance: none;
+  border: 1px solid var(--primary, #6558e8);
+  border-radius: 10px;
+  background: var(--primary, #6558e8);
+  color: var(--white, #ffffff);
+  padding: 9px 13px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.draft-recovery-btn:hover {
+  background: var(--primary-dark, #5042d0);
+}
+
+.draft-recovery-btn:focus-visible {
+  outline: 3px solid rgba(101, 88, 232, 0.18);
+  outline-offset: 2px;
+}
+
+.draft-recovery-btn:disabled,
+.draft-workspace select:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.draft-workspace {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 14px;
+  border: 1px solid var(--line, #e9ebf3);
+  border-radius: 14px;
+  background: var(--white, #ffffff);
+}
+
+.draft-workspace-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.draft-workspace-toolbar label {
+  color: var(--ink, #202b45);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.draft-workspace select {
+  flex: 1 1 320px;
+  min-width: 220px;
+  padding: 9px 11px;
+  border: 1px solid var(--line, #e9ebf3);
+  border-radius: 10px;
+  background: var(--white, #ffffff);
+  color: var(--ink, #202b45);
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.draft-legacy-recovery {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line, #e9ebf3);
+}
+
+.draft-legacy-recovery span {
+  flex: 1 1 240px;
+  color: var(--muted, #8791a5);
+  font-size: 11px;
+  line-height: 1.5;
+}
