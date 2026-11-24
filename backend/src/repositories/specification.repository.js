@@ -150,13 +150,23 @@ const resolveAttributes = async (client, specificationTypeId, attributeValues) =
   return entries.flatMap(([code, value]) => {
     const attribute = attributes.get(code);
 
-    if (attribute.inputtype === "json") {
-      return [{
-        attributeId: attribute.id,
-        value,
-        sortOrder: 0,
-      }];
+if (attribute.inputtype === "json") {
+  let jsonValue = value;
+
+  if (typeof value === "string") {
+    try {
+      jsonValue = JSON.parse(value);
+    } catch {
+      jsonValue = value;
     }
+  }
+
+  return [{
+    attributeId: attribute.id,
+    value: jsonValue,
+    sortOrder: 0,
+  }];
+}
 
     const values = Array.isArray(value) ? value : [value];
 
@@ -199,7 +209,7 @@ const insertValues = async (client, specificationId, values) => {
       : String(value ?? "");
     const valueNumber = typeof value === "number" ? value : null;
     const valueBoolean = typeof value === "boolean" ? value : null;
-    const valueJson = isJson ? value : null;
+    const valueJson = isJson ? JSON.stringify(value) : null;
 
     await client.query(
       `

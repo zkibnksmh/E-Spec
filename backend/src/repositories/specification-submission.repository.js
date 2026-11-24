@@ -1,4 +1,4 @@
-const pool = require("../config/database");
+﻿const pool = require("../config/database");
 const {
   validateBarang,
   validateJasa,
@@ -64,12 +64,14 @@ const loadSubmissionMasterData = async (client, specification) => {
      WHERE id = $1 AND isactive = TRUE`,
     [specification.materialcategoryid]
   );
-  const groupResult = await client.query(
-    `SELECT id, sapgroupcode, materialcategoryid
-     FROM material_groups
-     WHERE id = $1 AND isactive = TRUE`,
-    [specification.materialgroupid]
-  );
+  const groupResult = specification.materialgroupid
+    ? await client.query(
+      `SELECT id, sapgroupcode, materialcategoryid
+       FROM material_groups
+       WHERE id = $1 AND isactive = TRUE`,
+      [specification.materialgroupid]
+    )
+    : { rows: [] };
 
   const type = typeResult.rows[0];
   const plant = plantResult.rows[0];
@@ -81,20 +83,21 @@ const loadSubmissionMasterData = async (client, specification) => {
   if (!plant) throw createValidationError("Plant tidak ditemukan.");
   if (!department) throw createValidationError("Department tidak aktif atau tidak sesuai Plant.");
   if (!category) throw createValidationError("Material Category tidak aktif atau tidak ditemukan.");
-  if (!group) throw createValidationError("Material Group tidak aktif atau tidak ditemukan.");
+  if (specification.materialgroupid && !group) throw createValidationError("Material Group tidak aktif atau tidak ditemukan.");
 
   if (Number(category.specificationtypeid) !== Number(type.id)) {
     throw createValidationError("Material Category tidak sesuai dengan tipe spesifikasi.");
   }
 
-  if (Number(group.materialcategoryid) !== Number(category.id)) {
+  if (group && Number(group.materialcategoryid) !== Number(category.id)) {
     throw createValidationError("Material Group tidak sesuai dengan Material Category.");
   }
 
   return {
     typeCode: type.typecode,
     categoryName: category.categoryname,
-    groupCode: group.sapgroupcode,
+    materialGroup: group?.id || null,
+    groupCode: group?.sapgroupcode || null,
   };
 };
 
@@ -335,3 +338,5 @@ const submit = async ({ specificationId, actor, comment, buildRoute, resubmissio
 module.exports = {
   submit,
 };
+
+

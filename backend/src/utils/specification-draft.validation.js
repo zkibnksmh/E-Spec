@@ -86,12 +86,12 @@ const validateBarang = (formData) => {
   }
 };
 
+
 const validateJasa = (formData, masterData) => {
   const requiredFields = [
     "plant",
     "requestor",
     "department",
-    "materialGroup",
     "materialCategory",
     "reasonChoice",
     "projectName",
@@ -105,14 +105,23 @@ const validateJasa = (formData, masterData) => {
     }
   }
 
-  if (masterData.categoryName !== "OPEX - JASA") {
+  const categoryName = String(masterData.categoryName || "").trim();
+  const groupCode = String(masterData.groupCode || "").trim().toUpperCase();
+
+  if (!["Asset Jasa", "OPEX - JASA"].includes(categoryName)) {
     throw createValidationError("Kategori Jasa tidak didukung.");
   }
 
-  if (!["SERVICE", "SERVICEPM"].includes(masterData.groupCode)) {
-    throw createValidationError("Material Group Jasa tidak didukung.");
+  // Asset Jasa dan Expense Jasa sama-sama wajib menggunakan Material Group.
+  if (!isFilled(formData.materialGroup) || !masterData.materialGroup) {
+    throw createValidationError(
+      "Material Group wajib dipilih untuk kategori Jasa."
+    );
   }
 
+  if (!["SERVICE", "SERVICEPM"].includes(groupCode)) {
+    throw createValidationError("Material Group Jasa tidak didukung.");
+  }
   for (const attachment of formData.attachmentDocuments || []) {
     const hasCategory = isFilled(attachment?.type);
     const hasFileMetadata = isFilled(attachment?.fileName);
@@ -124,6 +133,7 @@ const validateJasa = (formData, masterData) => {
     }
   }
 };
+
 
 module.exports = {
   createValidationError,

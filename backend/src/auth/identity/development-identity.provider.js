@@ -1,3 +1,4 @@
+﻿
 const DEVELOPMENT_IDENTITIES = Object.freeze({
   requestor: Object.freeze({
     userId: "DEV-REQ-001",
@@ -9,24 +10,26 @@ const DEVELOPMENT_IDENTITIES = Object.freeze({
     departmentIds: Object.freeze([7301]),
     identitySource: "development",
   }),
+
   manager: Object.freeze({
     userId: "DEV-MGR-001",
     employeeId: "DEV-EMP-MGR-001",
     displayName: "Development Manager",
     email: "dev.manager@example.test",
     roles: Object.freeze(["Manager"]),
-    plantIds: Object.freeze([7201]),
-    departmentIds: Object.freeze([7301]),
+    plantIds: Object.freeze([7201, 7206]),
+    departmentIds: Object.freeze([7301, 7302, 7303, 7304, 7305, 7306, 7307, 7308, 7309, 7310, 7311, 7312, 7313, 7314, 7315, 7316, 7317, 7318, 7319, 7320, 7321, 7322, 7323, 7324, 7325, 7326, 7327, 7328, 7329, 7330, 7331, 7332, 7333, 7334, 7335, 7336, 7337, 7338, 7339]),
     identitySource: "development",
   }),
+
   "head-engineering": Object.freeze({
     userId: "DEV-HE-001",
     employeeId: "DEV-EMP-HE-001",
     displayName: "Development Head Engineering",
     email: "dev.headengineering@example.test",
     roles: Object.freeze(["HeadEngineering"]),
-    plantIds: Object.freeze([7201]),
-    departmentIds: Object.freeze([7301]),
+    plantIds: Object.freeze([7201, 7206]),
+    departmentIds: Object.freeze([7301, 7302, 7303, 7304, 7305, 7306, 7307, 7308, 7309, 7310, 7311, 7312, 7313, 7314, 7315, 7316, 7317, 7318, 7319, 7320, 7321, 7322, 7323, 7324, 7325, 7326, 7327, 7328, 7329, 7330, 7331, 7332, 7333, 7334, 7335, 7336, 7337, 7338, 7339]),
     identitySource: "development",
   }),
 });
@@ -71,3 +74,4 @@ module.exports = {
   isDevelopmentIdentityEnabled,
   resolveDevelopmentIdentity,
 };
+
