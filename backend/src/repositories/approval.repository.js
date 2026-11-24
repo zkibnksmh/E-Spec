@@ -267,6 +267,7 @@ const findInbox = async (actor) => {
        s.id AS specification_id,
        s.documentno AS document_no,
        st.typename AS specification_type,
+       s.requestor,
        s.materialdescription,
        mg.sapgroupcode AS material_group,
        p.plantname AS plant,

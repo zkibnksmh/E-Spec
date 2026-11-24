@@ -10,6 +10,12 @@
   const $ = (selector, parent = document) =>
     parent.querySelector(selector);
 
+  const API_BASE_URL = window.ESpecDevAuth?.getApiBaseUrl?.() ||
+    window.ESPEC_CONFIG?.API_BASE_URL || "http://localhost:3001/api";
+  const getApiHeaders = () => window.ESpecDevAuth?.getApiHeaders?.() || {
+    "Content-Type": "application/json"
+  };
+
   let documents = [];
   let myEspecStatus = "all";
 
@@ -93,16 +99,12 @@
 
     if ([
       "revision",
+      "revision required",
       "revisi",
       "need revision",
       "perlu revisi",
       "returned",
-      "dikembalikan"
-    ].includes(status)) {
-      return "revision";
-    }
-
-    if ([
+      "dikembalikan",
       "rejected",
       "reject",
       "ditolak"
@@ -110,10 +112,12 @@
       return "revision";
     }
 
+
     if (
       status.includes("waiting") ||
       status.includes("pending") ||
       status.includes("menunggu") ||
+      status === "in approval" ||
       status === "submitted" ||
       status === "diajukan"
     ) {
@@ -381,12 +385,10 @@ function renderMyEspec() {
         </td>
 
         <td>
-          <button
-            type="button"
-            class="table-action"
-            data-espec-detail="${escapeHTML(doc.id)}">
-            Detail
-          </button>
+          ${status === "draft" || status === "revision"
+            ? `<button type="button" class="table-action" data-espec-action="resume" data-espec-id="${escapeHTML(doc.id)}">Resume / Edit</button>`
+            : `<button type="button" class="table-action" data-espec-action="print" data-espec-id="${escapeHTML(doc.id)}">View / Print</button>`}
+          <button type="button" class="table-action" data-espec-action="history" data-espec-id="${escapeHTML(doc.id)}">History</button>
         </td>
       </tr>
     `;
@@ -426,6 +428,44 @@ function renderMyEspec() {
     alert(detail);
   }
 
+  async function showWorkflowHistory(doc) {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL.replace(/\/$/, "")}/specifications/${encodeURIComponent(doc.id)}/workflow`,
+        { headers: getApiHeaders() }
+      );
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.success !== true) {
+        throw new Error(result.message || "Riwayat workflow tidak dapat dimuat.");
+      }
+
+      const workflow = result.data || {};
+      const lines = [
+        `Nomor Dokumen: ${doc.docNo || doc.documentNo || "—"}`,
+        `Status: ${workflow.status || doc.status || "—"}`,
+        "",
+        "RIWAYAT APPROVAL"
+      ];
+      const cycles = Array.isArray(workflow.cycles) ? workflow.cycles : [];
+      if (!cycles.length) lines.push("Belum ada siklus approval.");
+
+      cycles.forEach((cycle) => {
+        lines.push(`Siklus ${cycle.cycleno} — ${cycle.status}`);
+        (cycle.steps || []).forEach((step) => {
+          lines.push(`  Step ${step.stepno}: ${step.approverrole || step.approvername || "Approver"} — ${step.approvalstatus}`);
+          if (step.comments) lines.push(`  Catatan: ${step.comments}`);
+        });
+        (cycle.events || []).forEach((item) => {
+          if (item.comments) lines.push(`  ${item.eventtype}: ${item.comments}`);
+        });
+      });
+
+      alert(lines.join("\n"));
+    } catch (error) {
+      alert(error.message || "Gagal memuat riwayat approval.");
+    }
+  }
+
   // =====================================================
   // EVENTS
   // =====================================================
@@ -447,13 +487,33 @@ function renderMyEspec() {
       });
     });
 
-    // DETAIL BUTTON
-    $("#myEspecRows")?.addEventListener("click", event => {
-      const button = event.target.closest("[data-espec-detail]");
-
+    // DOCUMENT ACTIONS
+    $("#myEspecRows")?.addEventListener("click", async event => {
+      const button = event.target.closest("[data-espec-action]");
       if (!button) return;
 
-      showDocumentDetail(button.dataset.especDetail);
+      const doc = documents.find((item) =>
+        String(item.id) === String(button.dataset.especId)
+      );
+      if (!doc) return;
+
+      const action = button.dataset.especAction;
+      if (action === "resume") {
+        const page = normalizeText(doc.specType).includes("jasa") ? "jasa.html" : "barang.html";
+        const url = new URL(page, window.location.href);
+        url.searchParams.set("resumeId", doc.id);
+        window.location.href = url.toString();
+        return;
+      }
+
+      if (action === "print") {
+        window.ESpecDocumentWorkspace?.openPrintPreview?.(doc);
+        return;
+      }
+
+      if (action === "history") {
+        await showWorkflowHistory(doc);
+      }
     });
   }
 
@@ -461,10 +521,45 @@ function renderMyEspec() {
   // INITIALIZATION
   // =====================================================
 
+  async function loadMyDocuments() {
+    const rows = $("#myEspecRows");
+    if (rows) rows.innerHTML = '<tr><td colspan="6">Memuat dokumen...</td></tr>';
+
+    try {
+      const response = await fetch(`${API_BASE_URL.replace(/\/$/, "")}/specifications/my-documents`, {
+        headers: getApiHeaders()
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.success !== true) {
+        throw new Error(result.message || `Gagal memuat dokumen (HTTP ${response.status}).`);
+      }
+
+      documents = (Array.isArray(result.data) ? result.data : []).map((item) => ({
+        ...item,
+        docNo: item.documentNo || item.document_no || "-",
+        revision: item.revisionNo || item.revision_no || "-",
+        specType: item.specificationTypeName || item.specification_type_name || item.specificationTypeCode || "Barang",
+        materialDescription: item.materialDescription || item.material_description || "",
+        materialCode: item.materialCode || item.material_code || "",
+        createdAt: item.createdAt || item.created_at || null,
+        submittedAt: item.submittedAt || item.submitted_at || null
+      }));
+      renderStatusTabs();
+      renderMyEspec();
+    } catch (error) {
+      console.error("Gagal memuat My E-Spec:", error);
+      documents = [];
+      renderMyEspec();
+      alert(error.message || "Gagal memuat dokumen dari server.");
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     initializeEvents();
     renderStatusTabs();
-    renderMyEspec();
+    Promise.resolve(window.ESpecRoleNav?.ready).then((profile) => {
+      if (profile) loadMyDocuments();
+    });
   });
 
 })();

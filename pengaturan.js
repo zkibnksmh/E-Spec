@@ -1,8 +1,9 @@
 (() => {
   "use strict";
 
-  const API_BASE_URL = window.ESPEC_CONFIG?.API_BASE_URL || "http://localhost:3000/api";
-  const API_URL = `${API_BASE_URL.replace(/\/$/, "")}/documents`;
+  const API_BASE_URL = window.ESpecDevAuth?.getApiBaseUrl?.() ||
+    window.ESPEC_CONFIG?.API_BASE_URL || "http://localhost:3001/api";
+  const API_URL = `${API_BASE_URL.replace(/\/$/, "")}/specifications/my-documents`;
 
   const getApiHeaders = () => (
     window.ESpecDevAuth?.getApiHeaders?.() || { "Content-Type": "application/json" }
@@ -48,17 +49,26 @@
       }
 
       const result = await response.json();
-      const documents = result.documents || [];
+      const documents = Array.isArray(result.data) ? result.data : [];
+      const details = await Promise.all(documents.map(async (document) => {
+        const detailResponse = await fetch(
+          `${API_BASE_URL.replace(/\/$/, "")}/specifications/my-documents/${encodeURIComponent(document.id)}`,
+          { headers: getApiHeaders() }
+        );
+        const detailResult = await detailResponse.json().catch(() => ({}));
+        if (!detailResponse.ok || detailResult.success !== true) {
+          throw new Error(detailResult.message || `Gagal mengekspor dokumen ${document.id}.`);
+        }
+        return detailResult.data;
+      }));
 
       downloadJSON("e-spec-backup.json", {
         app: "E-Spec",
         exportedAt: new Date().toISOString(),
-        documents
+        documents: details
       });
 
-      showStatus(
-        `${documents.length} dokumen berhasil diekspor.`
-      );
+      showStatus(`${details.length} dokumen berhasil diekspor.`);
 
     } catch (error) {
       console.error(error);
@@ -74,82 +84,26 @@
     $("#importFile").click();
   });
 
-  // IMPOR DATA KE DATABASE
+  // Backend belum menyediakan endpoint import. Validasi file tanpa mengirim
+  // payload yang tidak sesuai kontrak API atau membuat draft tanpa pemilik.
   $("#importFile").addEventListener("change", async event => {
     const file = event.target.files?.[0];
-
     if (!file) return;
-
-    const button = $("#importBtn");
-    button.disabled = true;
 
     try {
       const parsed = JSON.parse(await file.text());
-
-      const incoming = Array.isArray(parsed)
-        ? parsed
-        : parsed.documents;
-
+      const incoming = Array.isArray(parsed) ? parsed : parsed.documents;
       if (!Array.isArray(incoming)) {
         throw new Error("Format JSON tidak sesuai.");
       }
 
-      const confirmed = confirm(
-        `Impor ${incoming.length} dokumen ke database E-Spec?`
-      );
-
-      if (!confirmed) return;
-
-      let imported = 0;
-      let failed = 0;
-
-      for (const doc of incoming) {
-        const formData = doc.formData || doc;
-
-        const specType =
-          doc.specType ||
-          formData.specType ||
-          "Barang";
-
-        if (
-          specType.toLowerCase() !== "jasa" &&
-          !formData.materialDescription
-        ) {
-          failed++;
-          continue;
-        }
-
-        try {
-          const response = await fetch(API_URL, {
-            method: "POST",
-            headers: getApiHeaders(),
-            body: JSON.stringify({
-              specType,
-              formData
-            })
-          });
-
-          if (response.ok) {
-            imported++;
-          } else {
-            failed++;
-          }
-
-        } catch (error) {
-          failed++;
-        }
-      }
-
       showStatus(
-        `${imported} dokumen berhasil diimpor. ${failed} dokumen gagal.`
+        `File JSON valid (${incoming.length} dokumen), tetapi impor ke database belum tersedia pada backend.`
       );
-
     } catch (error) {
       console.error(error);
-      showStatus("Impor gagal. Periksa format file JSON.");
-
+      showStatus("Impor gagal. File JSON tidak valid.");
     } finally {
-      button.disabled = false;
       event.target.value = "";
     }
   });

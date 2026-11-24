@@ -118,7 +118,7 @@
 
   const getApiBaseUrl = () => {
     const configured = window.ESpecDevAuth?.getApiBaseUrl?.();
-    const fallback = window.ESPEC_CONFIG?.API_BASE_URL || "http://localhost:3000/api";
+    const fallback = window.ESPEC_CONFIG?.API_BASE_URL || "http://localhost:3001/api";
     return String(configured || fallback).replace(/\/$/, "");
   };
 

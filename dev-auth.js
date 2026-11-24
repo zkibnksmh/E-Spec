@@ -8,7 +8,7 @@
     manager: { name: "Manager", role: "Manager" },
     "head-engineering": { name: "Head Engineering", role: "HeadEngineering" }
   };
-  const DEFAULT_API_BASE_URL = "http://localhost:3000/api";
+  const DEFAULT_API_BASE_URL = "http://localhost:3001/api";
 
   let configValue = window.ESPEC_CONFIG && typeof window.ESPEC_CONFIG === "object"
     ? { ...window.ESPEC_CONFIG }

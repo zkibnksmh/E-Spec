@@ -8,7 +8,7 @@
 
   const API_BASE_URL =
     window.ESPEC_CONFIG?.API_BASE_URL ||
-    "http://localhost:3000/api";
+    "http://localhost:3001/api";
   const DEV_IDENTITY_ALIASES = ["requestor", "manager", "head-engineering"];
 
   function getApiHeaders() {

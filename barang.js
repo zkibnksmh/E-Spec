@@ -6,7 +6,7 @@
   // =====================================================
 
   const VERSION_STORAGE_KEY = "eSpecBarangVersion.v1";
-  const API_BASE_URL = window.ESPEC_CONFIG?.API_BASE_URL || "http://localhost:3000/api";
+  const API_BASE_URL = window.ESPEC_CONFIG?.API_BASE_URL || "http://localhost:3001/api";
   const DEV_IDENTITY_ALIASES = ["requestor", "manager", "head-engineering"];
 
   function getApiHeaders() {

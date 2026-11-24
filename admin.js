@@ -2,7 +2,12 @@
 (() => {
   "use strict";
 
-  const API_URL = "http://localhost:3000/api/documents";
+  const API_BASE_URL = window.ESpecDevAuth?.getApiBaseUrl?.() ||
+    window.ESPEC_CONFIG?.API_BASE_URL || "http://localhost:3001/api";
+  const API_URL = `${API_BASE_URL.replace(/\/$/, "")}/specifications/my-documents`;
+  const getApiHeaders = () => window.ESpecDevAuth?.getApiHeaders?.() || {
+    "Content-Type": "application/json"
+  };
 
   let documents = [];
   let activeType = "barang";
@@ -88,6 +93,8 @@
     const rawType =
       doc.spec_type ||
       doc.specType ||
+      doc.specification_type_name ||
+      doc.specification_type_code ||
       doc.document_type ||
       formData.specType ||
       formData.documentType ||
@@ -112,11 +119,13 @@
       docNo:
         doc.doc_no ||
         doc.docNo ||
+        doc.document_no ||
         formData.docNo ||
         "-",
 
       revision:
         doc.revision ||
+        doc.revision_no ||
         formData.revision ||
         "-",
 
@@ -197,7 +206,7 @@
     }
 
     try {
-      const response = await fetch(API_URL);
+      const response = await fetch(API_URL, { headers: getApiHeaders() });
 
       if (!response.ok) {
         throw new Error(`Gagal mengambil data. HTTP ${response.status}`);
@@ -496,13 +505,6 @@
                 PDF
               </button>
 
-              <button
-                type="button"
-                class="action-btn delete-action"
-                data-action="delete"
-                data-index="${index}">
-                Hapus
-              </button>
             </div>
           </td>
         </tr>
@@ -613,22 +615,44 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
-  function exportSingleDocument(index) {
-    const doc = documents[index];
-
-    if (!doc) return;
-
-    downloadJSON(
-      doc,
-      `${String(doc.docNo).replaceAll("/", "-")}.json`
+  async function fetchDocumentDetail(id) {
+    const response = await fetch(
+      `${API_BASE_URL.replace(/\/$/, "")}/specifications/my-documents/${encodeURIComponent(id)}`,
+      { headers: getApiHeaders() }
     );
-
-    showToast("Dokumen berhasil diekspor.");
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.success !== true) {
+      throw new Error(result.message || `Gagal mengambil detail dokumen ${id}.`);
+    }
+    return result.data;
   }
 
-  function exportAllDocuments() {
-    downloadJSON(documents, "e-spec-data.json");
-    showToast("Semua data berhasil diekspor.");
+  async function exportSingleDocument(index) {
+    const doc = documents[index];
+    if (!doc) return;
+
+    try {
+      const detail = await fetchDocumentDetail(doc.id);
+      downloadJSON(
+        detail,
+        `${String(doc.docNo).replaceAll("/", "-")}.json`
+      );
+      showToast("Dokumen berhasil diekspor.");
+    } catch (error) {
+      showToast(error.message || "Dokumen gagal diekspor.", "error");
+    }
+  }
+
+  async function exportAllDocuments() {
+    try {
+      const details = await Promise.all(
+        documents.map((doc) => fetchDocumentDetail(doc.id))
+      );
+      downloadJSON(details, "e-spec-data.json");
+      showToast("Semua data berhasil diekspor.");
+    } catch (error) {
+      showToast(error.message || "Data gagal diekspor.", "error");
+    }
   }
 
   // =========================================
@@ -786,8 +810,6 @@
       } else if (action === "print") {
         printDocument(index);
 
-      } else if (action === "delete") {
-        deleteDocument(index);
       }
     });
 
@@ -815,10 +837,11 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     initializeEvents();
-
     setActiveType("barang");
 
-    loadDocuments();
+    Promise.resolve(window.ESpecRoleNav?.ready).then((profile) => {
+      if (profile) loadDocuments();
+    });
   });
 
 })();

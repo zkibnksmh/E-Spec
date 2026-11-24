@@ -7,14 +7,13 @@
     "barang.html",
     "jasa.html"
   ]);
-  const APPROVER_PAGES = new Set(["my-approval.html", "approval-detail.html"]);
+  const APPROVER_PAGES = new Set(["my-approval.html"]);
   const HREF_ROLES = {
     "approval.html": "requestor",
     "pilih-spesifikasi.html": "requestor",
     "barang.html": "requestor",
     "jasa.html": "requestor",
-    "my-approval.html": "approver",
-    "approval-detail.html": "approver"
+    "my-approval.html": "approver"
   };
 
   const currentPage = window.location.pathname.split("/").pop() || "admin.html";

@@ -21,8 +21,11 @@
   const typeKey = (document) => {
     const value = [
       document?.specificationTypeName,
+      document?.specification_type_name,
       document?.specification_type,
       document?.specificationTypeCode,
+      document?.specification_type_code,
+      document?.specType,
       document?.type
     ]
       .filter(Boolean)
