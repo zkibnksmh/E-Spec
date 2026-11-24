@@ -7,9 +7,6 @@ backend/node_modules/
 .env.*
 !.env.example
 
-# Local frontend API overrides
-/frontend.local.js
-
 # Logs
 *.log
 npm-debug.log*
@@ -20,6 +17,3 @@ Thumbs.db
 
 # Editor
 .vscode/
-# Internal reference workbooks
-/docs/reference/*.xlsx
-/docs/refrence/*.xlsx

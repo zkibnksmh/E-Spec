@@ -46,17 +46,12 @@
   padding: 0;
 }
 
-[hidden] {
-  display: none !important;
-}
-
 html {
   scroll-behavior: smooth;
 }
 
 body {
   min-height: 100vh;
-  overflow-x: hidden;
   background: var(--bg);
   color: var(--ink);
   font-family: 'DM Sans', sans-serif;

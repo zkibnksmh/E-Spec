@@ -2,12 +2,7 @@
 (() => {
   "use strict";
 
-  const API_BASE_URL = window.ESPEC_CONFIG?.API_BASE_URL || "http://localhost:3000/api";
-  const API_URL = `${API_BASE_URL.replace(/\/$/, "")}/specifications/my-documents`;
-
-  const getApiHeaders = () => (
-    window.ESpecDevAuth?.getApiHeaders?.() || { "Content-Type": "application/json" }
-  );
+  const API_URL = "http://localhost:3000/api/documents";
 
   let documents = [];
   let activeType = "barang";
@@ -115,15 +110,12 @@
       id: doc.id ?? doc.document_id ?? null,
 
       docNo:
-        doc.documentNo ||
-        doc.document_no ||
         doc.doc_no ||
         doc.docNo ||
         formData.docNo ||
         "-",
 
       revision:
-        doc.revision_no ||
         doc.revision ||
         formData.revision ||
         "-",
@@ -159,33 +151,22 @@
         "-",
 
       createdAt:
-        doc.createdAt ||
         doc.created_at ||
         doc.saved_at ||
+        doc.createdAt ||
         formData.createdDate ||
-        null,
-
-      updatedAt:
-        doc.updatedAt ||
-        doc.updated_at ||
         null,
 
       status:
         doc.status ||
         "Draft",
 
-      specType: normalizeType(
-        doc.specification_type_name ||
-        doc.specification_type_code ||
-        rawType
-      )
+      specType: normalizeType(rawType)
     };
   }
 
   function getDocumentType(doc) {
     return normalizeType(
-      doc.specification_type_name ||
-      doc.specification_type_code ||
       doc.specType ||
       doc.spec_type ||
       doc.document_type ||
@@ -208,7 +189,7 @@
     if (rows) {
       rows.innerHTML = `
         <tr>
-          <td colspan="6" class="loading-state">
+          <td colspan="5" class="loading-state">
             Memuat data dokumen...
           </td>
         </tr>
@@ -216,7 +197,7 @@
     }
 
     try {
-      const response = await fetch(API_URL, { headers: getApiHeaders() });
+      const response = await fetch(API_URL);
 
       if (!response.ok) {
         throw new Error(`Gagal mengambil data. HTTP ${response.status}`);
@@ -225,7 +206,17 @@
       const result = await response.json();
 
       // Mendukung beberapa format respons backend
-      const rawDocuments = Array.isArray(result.data) ? result.data : [];
+      let rawDocuments = [];
+
+      if (Array.isArray(result)) {
+        rawDocuments = result;
+      } else if (Array.isArray(result.data)) {
+        rawDocuments = result.data;
+      } else if (Array.isArray(result.documents)) {
+        rawDocuments = result.documents;
+      } else if (Array.isArray(result.rows)) {
+        rawDocuments = result.rows;
+      }
 
       documents = rawDocuments.map(normalizeDocument);
 
@@ -237,7 +228,7 @@
       if (rows) {
         rows.innerHTML = `
           <tr>
-            <td colspan="6" class="empty-message">
+            <td colspan="5" class="empty-message">
               Gagal memuat data dokumen.
             </td>
           </tr>
@@ -452,9 +443,10 @@
 
     rows.innerHTML = filteredDocuments.map((doc) => {
       const index = documents.indexOf(doc);
-      const typeLabel = doc.specificationTypeName || getDocumentType(doc) === "jasa"
-        ? (doc.specificationTypeName || "Spesifikasi Jasa")
-        : (doc.specificationTypeName || doc.materialCode || "Spesifikasi Barang");
+
+      const typeLabel = getDocumentType(doc) === "jasa"
+        ? "Spesifikasi Jasa"
+        : (doc.materialCode || "Spesifikasi Barang");
 
       return `
         <tr>
@@ -465,25 +457,51 @@
             <small>Rev. ${escapeHTML(doc.revision)}</small>
           </td>
 
-          <td>${escapeHTML(typeLabel)}</td>
-
           <td>
             <strong class="material-name">
               ${escapeHTML(doc.materialDescription)}
             </strong>
+            <small class="secondary-text">
+              ${escapeHTML(typeLabel)}
+            </small>
           </td>
 
           <td>${escapeHTML(doc.requestor)}</td>
-          <td>${escapeHTML(doc.department)}</td>
+
+          <td>${formatDate(doc.createdAt)}</td>
 
           <td>
             <div class="table-actions">
               <button
                 type="button"
                 class="action-btn"
+                data-action="detail"
+                data-index="${index}">
+                Detail
+              </button>
+
+              <button
+                type="button"
+                class="action-btn"
+                data-action="json"
+                data-index="${index}">
+                JSON
+              </button>
+
+              <button
+                type="button"
+                class="action-btn"
                 data-action="print"
                 data-index="${index}">
-                Print
+                PDF
+              </button>
+
+              <button
+                type="button"
+                class="action-btn delete-action"
+                data-action="delete"
+                data-index="${index}">
+                Hapus
               </button>
             </div>
           </td>
@@ -620,12 +638,27 @@
   function printDocument(index) {
     const doc = documents[index];
 
-    if (!doc?.id) {
+    if (!doc) return;
+
+    if (!doc.id) {
       showToast("ID dokumen tidak ditemukan.", "error");
       return;
     }
 
-    window.ESpecDocumentWorkspace?.openPrintPreview?.(doc);
+    const type = getDocumentType(doc);
+
+    const page = type === "jasa"
+      ? "jasa.html"
+      : "barang.html";
+
+    const params = new URLSearchParams({
+      printId: doc.id
+    });
+
+    window.open(
+      `${page}?${params.toString()}`,
+      "_blank"
+    );
   }
 
   // =========================================
@@ -648,8 +681,7 @@
 
     try {
       const response = await fetch(`${API_URL}/${encodeURIComponent(doc.id)}`, {
-        method: "DELETE",
-        headers: getApiHeaders()
+        method: "DELETE"
       });
 
       const result = await response.json().catch(() => ({}));
@@ -745,8 +777,17 @@
       const index = Number(button.dataset.index);
       const action = button.dataset.action;
 
-      if (action === "print") {
+      if (action === "detail") {
+        showDetail(index);
+
+      } else if (action === "json") {
+        exportSingleDocument(index);
+
+      } else if (action === "print") {
         printDocument(index);
+
+      } else if (action === "delete") {
+        deleteDocument(index);
       }
     });
 
@@ -773,13 +814,11 @@
   // =========================================
 
   document.addEventListener("DOMContentLoaded", () => {
-    Promise.resolve(window.ESpecRoleNav?.ready).then(() => {
-      initializeEvents();
+    initializeEvents();
 
-      setActiveType("barang");
+    setActiveType("barang");
 
-      loadDocuments();
-    });
+    loadDocuments();
   });
 
 })();

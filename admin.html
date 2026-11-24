@@ -6,8 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>E-Spec | Requestor Dashboard</title>
   <link rel="stylesheet" href="admin.css">
-  <link rel="stylesheet" href="dev-auth.css">
-  <script src="dev-auth.js"></script>
 </head>
 
 <body>
@@ -176,11 +174,9 @@
         <div class="avatar">R</div>
 
         <div class="profile-info">
-          <strong data-dev-identity-name>Requestor</strong>
-          <small data-dev-identity-role>Pengguna E-Spec</small>
+          <strong>Requestor</strong>
+          <small>Pengguna E-Spec</small>
         </div>
-
-        <button type="button" class="dev-logout" data-dev-logout>Logout</button>
 
         <span class="profile-arrow">⌄</span>
 
@@ -403,25 +399,6 @@
 
 </div>
 
-    <thead>
-      <tr>
-        <th>NO. DOCUMENT</th>
-        <th>CATEGORY</th>
-        <th id="nameColumn">MATERIAL / SERVICE DESCRIPTION</th>
-        <th>REQUESTOR</th>
-        <th>DEPARTMENT</th>
-        <th>ACTION</th>
-      </tr>
-    </thead>
-
-    <tbody id="documentRows">
-      <!-- Data dokumen ditampilkan melalui admin.js -->
-    </tbody>
-
-  </table>
-
-</div>
-
 
 
         <!-- EMPTY STATE -->
@@ -515,9 +492,6 @@
 
 
 <!-- ADMIN JAVASCRIPT -->
-<script src="frontend.local.js"></script>
-<script src="role-nav.js"></script>
-<script src="document-workspace.js"></script>
 <script src="admin.js"></script>
 
 
